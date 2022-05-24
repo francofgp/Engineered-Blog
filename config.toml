@@ -147,3 +147,7 @@ link = "https://www.linkedin.com/in/francofgp/"
 title = "Portfolio"
 icon = "ti-world" # themify icon : https://themify.me/themify-icons
 link = "https://francofgp.github.io/"
+
+
+[markup.highlight]
+style = 'dracula' # see https://xyproto.github.io/splash/docs/all.html or try 'manni'
