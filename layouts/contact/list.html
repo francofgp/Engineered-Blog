@@ -9,11 +9,19 @@
           {{ .Content }}
         </div>
         <div class="row">
+          {{ if .Site.Params.mobile }}
           <div class="col-lg-4 small-post-border">
             <i class="ti-mobile h1 text-primary"></i>
             <h5 class="font-weight-light my-3">Phone</h5>
             {{ .Site.Params.mobile }}
           </div>
+          {{else}}
+          <div class="col-lg-4 small-post-border">
+            <i class="ti-linkedin h1 text-primary"></i>
+            <h5 class="font-weight-light my-3">LinkedIn</h5>
+            <a href="{{ (index .Site.Params.social 4).link }}">francofgp</a>
+          </div>
+          {{ end }}
           <div class="col-lg-4 small-post-border">
             <i class="ti-email h1 text-primary"></i>
             <h5 class="font-weight-light my-3">Email</h5>
@@ -30,6 +38,7 @@
   </div>
 </section>
 
+{{ if .Site.Params.newsletter.enable }}
 
 <section class="section-sm pb-0">
   <div class="container">
@@ -57,5 +66,5 @@
     </div>
   </div>
 </section>
-
+{{ end }}
 {{ end }}

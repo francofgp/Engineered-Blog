@@ -1,7 +1,7 @@
 ######################## default configuration ####################
 baseURL = "https://demo.gethugothemes.com/liva/examplesite/"
 languageCode = "en-us"
-title = "Liva | Personal blog template"
+title = "Engineered | Giuliano Pertile"
 summaryLength = "10"
 paginate = 6
 disqusShortname = ""
@@ -80,16 +80,16 @@ weight = 3
 logo = "images/logo.png"
 home = "Home"
 # Meta data
-description = "This is meta description"
-author = "Themefisher"
+description = "Engineered is my personal blog, where I will be sharing my journey as a software engineer."
+author = "Franco Giuliano Pertile"
 # Google Analitycs
 googleAnalitycsID = "Your ID"
 # Contact Information
-mobile = "0124857985320"
-email = "demo@email.com"
-location = "Dhaka, Bangladedsh"
+mobile = "" #Add phone carefully
+email = "giulianopertile@gmail.com"
+location = "Villa María, Córdoba, Argentina"
 # copyright
-copyright = "| copyright &copy; 2021 [Themefisher](https://themefisher.com/hugo-themes/) All Rights Reserved |"
+copyright = "| copyright &copy; 2021 [giulianopertile.com](https://github.com/francofgp/Engineered-Blog) All Rights Reserved |"
 
 # Preloader
 [params.preloader]
@@ -102,39 +102,48 @@ enable = true
 
 ############################ news letter ########################
 [params.newsletter]
-enable = true
+enable = false
 title = "Join Our Newsletter"
 content = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero"
+
+############################ Contact me ########################
+[params.contact]
+enable = false
 
 
 # cookies
 [params.cookies]
 enable = true
-expire_days = 2
+expire_days = 10
 
 
 ############################# social site ########################
 [[params.social]]
 title = "facebook"
 icon = "ti-facebook" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://www.facebook.com/Francofgp/"
 
 [[params.social]]
 title = "twitter"
 icon = "ti-twitter-alt" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://twitter.com/francofgp"
 
 [[params.social]]
 title = "instagram"
 icon = "ti-instagram" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://www.instagram.com/francofgp/"
 
 [[params.social]]
 title = "github"
 icon = "ti-github" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://github.com/francofgp"
 
 [[params.social]]
 title = "linkedin"
 icon = "ti-linkedin" # themify icon : https://themify.me/themify-icons
-link = "#"
+link = "https://www.linkedin.com/in/francofgp/"
+
+[[params.social]]
+title = "Portfolio"
+icon = "ti-world" # themify icon : https://themify.me/themify-icons
+link = "https://francofgp.github.io/"
