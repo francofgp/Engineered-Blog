@@ -78,6 +78,9 @@ weight = 3
 #################### default parameters ################################
 [params]
 logo = "images/logo.png"
+nameSite= "Engineered | Giuliano Pertile" # nameSite has priority
+
+
 home = "Home"
 # Meta data
 description = "Engineered is my personal blog, where I will be sharing my journey as a software engineer."
