@@ -1,167 +1,90 @@
 ---
-title: "How To Use Checklists To Improve Your UX"
-date: 2019-10-29T10:07:47+06:00
-draft: false
-
-# post thumb
-image: "images/post/post-1.jpg"
-
-# meta description
-description: "this is meta description"
-
-# taxonomies
-categories: 
-  - "Go Language"
+title: How To Use Checklists To Improve Your UX
+date: 2019-10-29T10:07:47.000+06:00
+image: images/post/post-1.jpg
+description: this is meta description
+categories:
+- Go Language
 tags:
-  - "Photos"
-  - "Game"
-  - "HTML"
-  - "Python"
-  - "New"
+- Photos
+- Game
+- HTML
+- Python
+- New
+type: post
 
-# post type
-type: "post"
 ---
+# Review: Architecture Patterns with Python
 
-# Heading 1
-## Heading 2
-### Heading 3
-#### Heading 4
-##### Heading 5
-###### Heading 6
+## Introduction
 
-<hr>
+Have you wanted to dive deep into architecture design patterns with Python, and you don't know where to start? Well, maybe this book give you some guidance to achieve such a goal
 
-##### Emphasis
+In this post I will be given my review of this book, what I learned, and if I recommend it.
 
-Emphasis, aka italics, with *asterisks* or _underscores_.
+## About the book
 
-Strong emphasis, aka bold, with **asterisks** or __underscores__.
+The book focuses on answering questions like the following:
 
-Combined emphasis with **asterisks and _underscores_**.
+* How do I structure my application?
+* How to test this structure, with ease.
+* How to manage complexity?
+* How to avoid the "Big Ball of Mud"?
 
-Strikethrough uses two tildes. ~~Scratch this.~~
+The authors discuss these topics by introducing different topics such as Domain Driven Design, Event-Driven Design, Unit tests, End-to-End tests and many others.
 
-<hr>
+The book is divided in two parts. The first part is about Domain-Driven Design, when you start building your application by modelling the domain, while discussing basic design patterns. You will be writing tests when a new concept appears, and gaining insides, about the why's we are building the application in such a manner.
 
-##### Link
-[I'm an inline-style link](https://www.google.com)
+In the second part of the book you will learn about  Event-Driven Design, the advantages and disadvantages of this design, along with its key concepts like event handling and message bus.
 
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+## The Good
 
-[I'm a reference-style link][Arbitrary case-insensitive reference text]
+### Old concepts, but new in Python
 
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
+None of the techniques and patterns discussed in this book are new, but they are mostly new to the Python world, but are quite known in other languages like  Java or C#. Techniques like Repository Pattern, Unit Of Work, Dependency Injection, CQRS, Coupling and Abstractions, Microservices, Command Handlers, Test Driven Development just to name a few.
 
-[You can use numbers for reference-style link definitions][1]
+I found those concepts quite useful, especially if you don't have much exposure to how to implement them in python.
 
-Or leave it empty and use the [link text itself].
+### Modeling your application
 
-URLs and URLs in angle brackets will automatically get turned into links. 
-http://www.example.com or <http://www.example.com> and sometimes 
-example.com (but not on Github, for example).
+Although this is not a book about Domain-Driven Design, Test Driven Development, or Event-Driven Design (said by the authors themselves), it is a good introduction to these subjects, about the different ways to architecture your application. The authors teach these concepts by building an application with a mixture of these different design patterns, and discussing their pro's and con's along the way, so you will have a good grasp of these concepts.
 
-Some text to show that the reference links can follow later.
+![Modeling-picture](/uploads/pexels-1.jpg "Modeling-picture")
 
-[arbitrary case-insensitive reference text]: https://www.mozilla.org
-[1]: http://slashdot.org
-[link text itself]: http://www.reddit.com
+### Flask and Django
 
-<hr>
+The application developed in this book is made with Flask API. And if you are like me, a person with only exposure to Django, don't worry, you will have no problems with the examples or understanding the concepts, and even more, the authors constantly compared the differences between Django and Flask, and give you hits about how to implement certain things in Django.
 
-##### Paragraph
+![](/uploads/django-logo-negative.png)
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil enim maxime corporis cumque totam aliquid nam sint inventore optio modi neque laborum officiis necessitatibus, facilis placeat pariatur! Voluptatem, sed harum pariatur adipisci voluptates voluptatum cumque, porro sint minima similique magni perferendis fuga! Optio vel ipsum excepturi tempore reiciendis id quidem? Vel in, doloribus debitis nesciunt fugit sequi magnam accusantium modi neque quis, vitae velit, pariatur harum autem a! Velit impedit atque maiores animi possimus asperiores natus repellendus excepturi sint architecto eligendi non, omnis nihil. Facilis, doloremque illum. Fugit optio laborum minus debitis natus illo perspiciatis corporis voluptatum rerum laboriosam.
+### Testing
 
-<hr>
+As you develop the application you will acquire different testing techniques, the pros and cons of each, and when to apply them.
 
-##### List
+You will also gain exposure to Test Driven Development if you are unfamiliar with it.
 
-1. List item
-2. List item
-3. List item
-4. List item
-5. List item
+## The Bad
 
-##### Unordered List
+The book gives you a lot of insights, and some examples, you just can't copy and paste them, I understand perfectly why I can't do this, the examples are domain-specific, so if you are working with your own application you will have to figure it out by yourself.
 
-* List item
-* List item
-* List item
-* List item
-* List item
+I really can't say much about the bad things of the book.
 
-<hr>
+## And The Ugly
 
-##### Code and Syntax Highlighting
+### The exercises
 
-Inline `code` has `back-ticks around` it.
+The exercises for the readers are tough, and what I mean by that is, for instance, an exercise would be "Now try to implement a repository pattern without an ORM", which is the kind of toughness I am talking about.
 
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
-```
- 
-```python
-s = "Python syntax highlighting"
-print s
-```
- 
-```
-No language indicated, so no syntax highlighting. 
-But let's throw in a <b>tag</b>.
-```
+Sometimes you don't have all the solutions, but I think I am being very picky here since there are no definitive answers because most of the solutions depend on your domain and there are always a lot of different ways to solve a problem, but they do provide tests to, well, test your solutions.
 
-<hr>
+![](/uploads/exercise-notebook.jpg)
 
-##### Blockquote
+## Conclusion
 
-> This is a blockquote example.
+If you are looking for a book that teaches you how to architecture your application in Python, this is definitely the book you need. The knowledge that I gained from it is priceless, you will have a very good knowledge of how to implement or discuss the topics discussed in this article with your co-workers with confidence.
 
-<hr>
+I highlight the testing part, which was my personal favourite.
 
-##### Inline HTML
+Do I recommend this book? Yes.
 
-You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
-
-<dl>
-  <dt>Definition list</dt>
-  <dd>Is something people use sometimes.</dd>
-
-  <dt>Markdown in HTML</dt>
-  <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
-
-
-<hr>
-
-##### Tables
-
-Colons can be used to align columns.
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-There must be at least 3 dashes separating each header cell.
-The outer pipes (|) are optional, and you don't need to make the 
-raw Markdown line up prettily. You can also use inline Markdown.
-
-Markdown | Less | Pretty
---- | --- | ---
-*Still* | `renders` | **nicely**
-1 | 2 | 3
-
-<hr>
-
-##### Image
-
-![image](../../images/post/post-1.jpg)
-
-<hr>
-
-##### Youtube video
-
-{{< youtube C0DPdy98e4c >}}
+Will I read it again? Probably yes, in the future.
