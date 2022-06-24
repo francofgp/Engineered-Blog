@@ -11,7 +11,7 @@ tags:
 - HTML
 - Python
 - New
-type: post
+type: featured
 
 ---
 # Review: Architecture Patterns with Python
