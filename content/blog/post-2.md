@@ -1,13 +1,28 @@
-+++
-categories = ["Go Language"]
-date = 2019-10-29T04:07:47Z
-description = "this is meta description"
-image = "images/post/post-4.jpg"
-tags = ["Photos", "Game", "HTML", "Python", "New"]
-title = "How To Use Checklists To Improve Your UX-(copy)"
-type = "featured"
+---
+title: "How To Use Checklists To Improve Your UX"
+date: 2019-10-29T10:07:47+06:00
+draft: false
 
-+++
+# post thumb
+image: "images/featured-post/post-2.jpg"
+
+# meta description
+description: "this is meta description"
+
+# taxonomies
+categories: 
+  - "HTML & CSS"
+tags:
+  - "Photos"
+  - "Game"
+  - "React"
+  - "Python"
+  - "New"
+
+# post type
+type: "featured"
+---
+
 # Heading 1
 ## Heading 2
 ### Heading 3
@@ -67,6 +82,7 @@ Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil enim maxime 
 3. List item
 4. List item
 5. List item
+
 
 ##### Unordered List
 
