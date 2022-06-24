@@ -2,7 +2,6 @@
 categories = ["Programming"]
 date = 2022-06-02T04:07:47Z
 description = "Review of the book Architecture Patterns with Python"
-draft = true
 image = "/uploads/architecture-patterns-with-python.png"
 tags = ["Python", "Architecture"]
 title = "Architecture Patterns with Python-(copy)"
