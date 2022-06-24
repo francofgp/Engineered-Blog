@@ -1,7 +1,7 @@
 ---
 title: Architecture Patterns with Python
-date: 2022-06-01T01:07:47-03:00
-image: " images/post/post-1.jpg"
+date: 2022-06-02T01:07:47-03:00
+image: "/uploads/architecture-patterns-with-python.png"
 description: Review of the book Architecture Patterns with Python
 categories:
 - Programming
