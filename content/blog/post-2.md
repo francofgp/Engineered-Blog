@@ -1,7 +1,7 @@
 ---
 title: Architecture Patterns with Python
 date: 2019-10-29T10:07:47.000+06:00
-image: "/uploads/architecture-patterns-with-python.png"
+image: "/uploads/architecture-patterns-with-python-485h.png"
 description: 'Review: Architecture Patterns with Python'
 categories:
 - Engineering
