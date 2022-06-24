@@ -1,8 +1,8 @@
 ---
-title: How To Use Checklists To Improve Your UX
+title: Architecture Patterns with Python
 date: 2019-10-29T10:07:47.000+06:00
 image: images/featured-post/post-2.jpg
-description: this is meta description
+description: 'Review: Architecture Patterns with Python'
 categories:
 - HTML & CSS
 tags:
