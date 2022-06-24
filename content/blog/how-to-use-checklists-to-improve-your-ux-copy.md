@@ -2,7 +2,6 @@
 categories = ["Go Language"]
 date = 2019-10-29T04:07:47Z
 description = "this is meta description"
-draft = true
 image = "images/post/post-4.jpg"
 tags = ["Photos", "Game", "HTML", "Python", "New"]
 title = "How To Use Checklists To Improve Your UX-(copy)"
