@@ -1,7 +1,7 @@
 ---
 title: Architecture Patterns with Python
 date: 2019-10-29T10:07:47.000+06:00
-image: "/uploads/architecture-patterns-with-python-485h.png"
+image: "/uploads/featured-post-architecture-patterns-with-python.jpg"
 description: 'Review: Architecture Patterns with Python'
 categories:
 - Engineering
@@ -18,6 +18,8 @@ type: featured
 Have you wanted to dive deep into architecture design patterns with Python, and you don't know where to start? Well, maybe this book give you some guidance to achieve such a goal
 
 In this post I will be given my review of this book, what I learned, and if I recommend it.
+
+![](/uploads/architecture-patterns-with-python-485h.png)
 
 ## About the book
 
