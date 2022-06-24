@@ -48,7 +48,7 @@ I found those concepts quite useful, especially if you don't have much exposure 
 
 Although this is not a book about Domain-Driven Design, Test Driven Development, or Event-Driven Design (said by the authors themselves), it is a good introduction to these subjects, about the different ways to architecture your application. The authors teach these concepts by building an application with a mixture of these different design patterns, and discussing their pro's and con's along the way, so you will have a good grasp of these concepts.
 
-![Modeling-picture](/uploads/pexels-1.jpg "Modeling-picture")
+![](/uploads/pexels-1.jpg)
 
 ### Flask and Django
 
