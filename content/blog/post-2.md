@@ -4,13 +4,10 @@ date: 2019-10-29T10:07:47.000+06:00
 image: images/featured-post/post-2.jpg
 description: 'Review: Architecture Patterns with Python'
 categories:
-- HTML & CSS
+- Engineering
 tags:
-- Photos
-- Game
-- React
 - Python
-- New
+- Django
 type: featured
 
 ---
