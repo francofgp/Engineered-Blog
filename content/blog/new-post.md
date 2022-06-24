@@ -11,8 +11,6 @@ tags:
 type: featured
 
 ---
-![Architecture Patterns with Python](/uploads/architecture-patterns-with-python.png "Architecture Patterns with Python")
-
 # Review: Architecture Patterns with Python
 
 ## Introduction
