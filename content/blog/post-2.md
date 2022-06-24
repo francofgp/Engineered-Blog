@@ -11,7 +11,7 @@ tags:
 type: featured
 
 ---
-# Review: Architecture Patterns with Python
+# Book Review: Architecture Patterns with Python
 
 ## Introduction
 
