@@ -1,204 +1,89 @@
 ---
-title: Desde forestry
-date: 2021-10-29T10:07:47.000+06:00
-image: images/featured-post/post-1.jpg
-description: this is meta description
+title: 'Review: Architecture Patterns with Python'
+date: 2022-06-01T01:07:47-03:00
+image: "/uploads/architecture-patterns-with-python.png"
+description: Review of the book Architecture Patterns with Python
 categories:
-- Android And Gaming
+- Programming
 tags:
-- Photos
-- Game
-- React
 - Python
-- New
+- Architecture
 type: featured
 
 ---
-# Heading 1
+![Architecture Patterns with Python](/uploads/architecture-patterns-with-python.png "Architecture Patterns with Python")
 
-## Heading 2
+# Review: Architecture Patterns with Python
 
-### Heading 3
+## Introduction
 
-#### Heading 4
+Have you wanted to dive deep into architecture design patterns with Python, and you don't know where to start? Well, maybe this book give you some guidance to achieve such a goal
 
-##### Heading 5
+In this post I will be given my review of this book, what I learned, and if I recommend it.
 
-###### Heading 6
+## About the book
 
-<hr>
+The book focuses on answering questions like the following:
 
-##### Emphasis
+* How do I structure my application?
+* How to test this structure, with ease.
+* How to manage complexity?
+* How to avoid the "Big Ball of Mud"?
 
-Emphasis, aka italics, with _asterisks_ or _underscores_.
+The authors discuss these topics by introducing different topics such as Domain Driven Design, Event-Driven Design, Unit tests, End-to-End tests and many others.
 
-Strong emphasis, aka bold, with **asterisks** or **underscores**.
+The book is divided in two parts. The first part is about Domain-Driven Design, when you start building your application by modelling the domain, while discussing basic design patterns. You will be writing tests when a new concept appears, and gaining insides, about the why's we are building the application in such a manner.
 
-Combined emphasis with **asterisks and _underscores_**.
+In the second part of the book you will learn about  Event-Driven Design, the advantages and disadvantages of this design, along with its key concepts like event handling and message bus.
 
-Strikethrough uses two tildes. ~~Scratch this.~~
+## The Good
 
-<hr>
+### Old concepts, but new in Python
 
-##### Link
+None of the techniques and patterns discussed in this book are new, but they are mostly new to the Python world, but are quite known in other languages like  Java or C#. Techniques like Repository Pattern, Unit Of Work, Dependency Injection, CQRS, Coupling and Abstractions, Microservices, Command Handlers, Test Driven Development just to name a few.
 
-[I'm an inline-style link](https://www.google.com)
+I found those concepts quite useful, especially if you don't have much exposure to how to implement them in python.
 
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+### Modeling your application
 
-[I'm a reference-style link](https://www.mozilla.org)
+Although this is not a book about Domain-Driven Design, Test Driven Development, or Event-Driven Design (said by the authors themselves), it is a good introduction to these subjects, about the different ways to architecture your application. The authors teach these concepts by building an application with a mixture of these different design patterns, and discussing their pro's and con's along the way, so you will have a good grasp of these concepts.
 
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
+![Modeling-picture](/uploads/pexels-1.jpg "Modeling-picture")
 
-[You can use numbers for reference-style link definitions](http://slashdot.org)
+### Flask and Django
 
-Or leave it empty and use the [link text itself](http://www.reddit.com).
+The application developed in this book is made with Flask API. And if you are like me, a person with only exposure to Django, don't worry, you will have no problems with the examples or understanding the concepts, and even more, the authors constantly compared the differences between Django and Flask, and give you hits about how to implement certain things in Django.
 
-URLs and URLs in angle brackets will automatically get turned into links.
-http://www.example.com or [http://www.example.com](http://www.example.com) and sometimes
-example.com (but not on Github, for example).
+![](/uploads/django-logo-negative.png)
 
-Some text to show that the reference links can follow later.
+### Testing
 
-<hr>
+As you develop the application you will acquire different testing techniques, the pros and cons of each, and when to apply them.
 
-##### Paragraph
+You will also gain exposure to Test Driven Development if you are unfamiliar with it.
 
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil enim maxime corporis cumque totam aliquid nam sint inventore optio modi neque laborum officiis necessitatibus, facilis placeat pariatur! Voluptatem, sed harum pariatur adipisci voluptates voluptatum cumque, porro sint minima similique magni perferendis fuga! Optio vel ipsum excepturi tempore reiciendis id quidem? Vel in, doloribus debitis nesciunt fugit sequi magnam accusantium modi neque quis, vitae velit, pariatur harum autem a! Velit impedit atque maiores animi possimus asperiores natus repellendus excepturi sint architecto eligendi non, omnis nihil. Facilis, doloremque illum. Fugit optio laborum minus debitis natus illo perspiciatis corporis voluptatum rerum laboriosam.
+## The Bad
 
-<hr>
+The book gives you a lot of insights, and some examples, you just can't copy and paste them, I understand perfectly why I can't do this, the examples are domain-specific, so if you are working with your own application you will have to figure it out by yourself.
 
-##### List
+I really can't say much about the bad things of the book.
 
-1. List item
-2. List item
-3. List item
-4. List item
-5. List item
+## And The Ugly
 
-##### Unordered List
+### The exercises
 
-* List item
-* List item
-* List item
-* List item
-* List item
+The exercises for the readers are tough, and what I mean by that is, for instance, an exercise would be "Now try to implement a repository pattern without an ORM", which is the kind of toughness I am talking about.
 
-<hr>
+Sometimes you don't have all the solutions, but I think I am being very picky here since there are no definitive answers because most of the solutions depend on your domain and there are always a lot of different ways to solve a problem, but they do provide tests to, well, test your solutions.
 
-##### Code and Syntax Highlighting
+![](/uploads/exercise-notebook.jpg)
 
-Inline `code` has `back-ticks around` it.
+## Conclusion
 
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
-```
+If you are looking for a book that teaches you how to architecture your application in Python, this is definitely the book you need. The knowledge that I gained from it is priceless, you will have a very good knowledge of how to implement or discuss the topics discussed in this article with your co-workers with confidence.
 
-```python
-from datetime import datetime
-import os
+I highlight the testing part, which was my personal favourite.
 
-arrivo = open("arrivo.txt", "a")
-atencion = open("atencion.txt", "a")
-cobro = open("cobro.txt", "a")
-cantidad = open("cantidad.txt", "a")
+Do I recommend this book? Yes.
 
-now = datetime.now()
-now.strftime("%H:%M:%S")
-estado = 1
-
-while estado >= 1:
-
-    print("1 = ingreso a fila")
-    print("2 = ingreso al local")
-    print("3 = salida del local")
-    print("4 = 2 o menos bolétas")
-    print("5 = 3 o más bolétas")
-    print("6 = cancelar")
-
-    lectura_de_teclado = input("Choose a number")
-
-    print(lectura_de_teclado)
-    if lectura_de_teclado == "1" or lectura_de_teclado == 1:
-        now = datetime.now()
-        arrivo.write(now.strftime("%H:%M:%S") + os.linesep)
-    if lectura_de_teclado == "2" or lectura_de_teclado == 2:
-        now = datetime.now()
-        atencion.write(now.strftime("%H:%M:%S") + os.linesep)
-    if lectura_de_teclado == "3" or lectura_de_teclado == 3:
-        now = datetime.now()
-        cobro.write(now.strftime("%H:%M:%S") + os.linesep)
-    if lectura_de_teclado == "6" or lectura_de_teclado == 6:
-        estado = -5
-        print(estado)
-    if lectura_de_teclado == "4" or lectura_de_teclado == 4:
-        now = datetime.now()
-        cantidad.write(" 2 o menos boletas\n")
-    if lectura_de_teclado == "5" or lectura_de_teclado == 5:
-        now = datetime.now()
-        cantidad.write(" 3 o más boletas\n")
-
-arrivo.close()
-atencion.close()
-cobro.close()
-cantidad.close()
-```
-
-    No language indicated, so no syntax highlighting.
-    But let's throw in a <b>tag</b>.
-
-<hr>
-
-##### Blockquote
-
-> This is a blockquote example.
-
-<hr>
-
-##### Inline HTML
-
-You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
-
-<dl>
-<dt>Definition list</dt>
-<dd>Is something people use sometimes.</dd>
-
-<dt>Markdown in HTML</dt>
-<dd>Does _not_ work **very** well. Use HTML <em>tags</em>.</dd>
-</dl>
-
-<hr>
-
-##### Tables
-
-Colons can be used to align columns.
-
-| Tables | Are | Cool |
-| --- | :---: | ---: |
-| col 3 is | right-aligned | $1600 |
-| col 2 is | centered | $12 |
-| zebra stripes | are neat | $1 |
-
-There must be at least 3 dashes separating each header cell.
-The outer pipes (|) are optional, and you don't need to make the
-raw Markdown line up prettily. You can also use inline Markdown.
-
-| Markdown | Less | Pretty |
-| --- | --- | --- |
-| Still | renders | nicely |
-| 1 | 2 | 3 |
-
-<hr>
-
-##### Image
-
-![image](../../images/post/post-1.jpg)
-
-<hr>
-
-##### Youtube video
-
-{{< youtube C0DPdy98e4c >}}
-
-tiene popita de que naad aaa
+Will I read it again? Probably yes, in the future.
