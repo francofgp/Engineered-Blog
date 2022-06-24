@@ -1,6 +1,6 @@
 ---
 title: Architecture Patterns with Python
-date: 2019-10-29T10:07:47.000+06:00
+date: 2022-06-01T01:07:47-03:00
 image: "/uploads/featured-post-architecture-patterns-with-python.jpg"
 description: 'Review: Architecture Patterns with Python'
 categories:
