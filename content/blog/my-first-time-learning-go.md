@@ -45,7 +45,7 @@ In Go there are primitive types like **int, byte, and string**. There are also s
 Like any strongly typed language, the type system allows the compiler helps catch entire classes of bugs.
 
 In Go you can declare a variable in many ways.
-
+```go
     package main
     import ("fmt")
     
@@ -58,7 +58,7 @@ In Go you can declare a variable in many ways.
       fmt.Println(truck)
       fmt.Println(x)
     }
-
+```
 As you can see, looks clean, especially if you use the short form, which is almost identical to Python.
 
 ## Minimalistic
@@ -85,7 +85,7 @@ Python is easy to learn as well, but I think Go is a little harder, especially w
 The idea of pointers was completely new to me, and something that I had to wrap my head around
 
 The concept itself is not difficult, but to use it well, takes time, and to be honest the syntax looks strange and ugly to me.
-
+```go
     // Example without Pointers
     func changeToWorld(x string) {
       x = "world"
@@ -105,7 +105,7 @@ The concept itself is not difficult, but to use it well, takes time, and to be h
       changeToWorld(&x)
       fmt.Println(x) // x is "world"
     }
-
+```
 ### Not many Libraries/Frameworks
 
 Coming from Python where there is a library for practically anything is a big deal.
@@ -115,7 +115,7 @@ Also, to me (mostly from [Reddit](https://www.reddit.com/r/golang "Golang Subred
 To build my application, I used the standard library, and I was surprised by how easy it is to start an HTTP server.
 
 For example.
-
+```go
     package main
     
     import (
@@ -137,7 +137,7 @@ For example.
     func main() {
         handleRequests()
     }
-
+```
 Maybe this change in the near future, since the Go community is growing every day.
 
 ### Job Market
