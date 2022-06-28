@@ -8,8 +8,6 @@ title = "My First Time Learning Go as a Python Developer"
 type = "post"
 
 +++
-## Introduction
-
 Have you ever wanted to learn Go, but you are still not sure if that is your thing? Well, today I am going to share my experience learning this programming language, and I will give my opinions on some aspects of the language, and the things I like and dislike about it.
 
 ## Why Go?
