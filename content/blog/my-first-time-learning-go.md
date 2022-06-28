@@ -29,13 +29,13 @@ While I was building the app, I was constantly comparing the differences between
 ## The Syntax
 
 As a person who also works with Java and C#, I can say that the minimalism of the syntax reminds me of Python, everything looks so clean and with less boilerplate than in other languages like Java.
-
+```go
     package main
     import "fmt"
     func main() {
         fmt.Println("Hey There! 👋")
     }
-
+```
 ## Strongly and statically typed
 
 Python is dynamically typed (language checks the types and looks for type errors during runtime), whereas Go is strongly and statically typed (language checks the types and looks for type errors during compile time).
