@@ -13,4 +13,6 @@ description: "this is meta description"
 type : "about"
 ---
 
-Engineered is my personal blog, where I will be sharing my journey as a software engineer.
+Welcome to my personal blog.
+
+With love for developing cool stuff, I love to write and teach others what I have learnt or simply share my experience.

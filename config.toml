@@ -1,7 +1,7 @@
 ######################## default configuration ####################
 baseURL = "https://www.giulianopertile.com/"
 languageCode = "en-us"
-title = "Engineered | Giuliano Pertile"
+title = "Giuliano Pertile"
 summaryLength = "10"
 paginate = 6
 disqusShortname = ""
@@ -78,12 +78,12 @@ weight = 3
 #################### default parameters ################################
 [params]
 logo = "images/logo.png"
-nameSite= "Engineered | Giuliano Pertile" # nameSite has priority
+nameSite= "Giuliano Pertile" # nameSite has priority over the logo, therefore, will show up first
 
 
 home = "Home"
 # Meta data
-description = "Engineered is my personal blog, where I will be sharing my journey as a software engineer."
+description = "This is my personal blog, where I will be sharing my journey as a software engineer."
 author = "Franco Giuliano Pertile"
 # Google Analitycs
 googleAnalitycsID = "Your ID"
