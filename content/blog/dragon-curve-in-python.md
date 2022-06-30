@@ -60,14 +60,17 @@ Steps:
 
 1. _Each iteration can be found by copying the previous iteration:_
 
-       sequence = sequence
+```python
+sequence = sequence
+```
 2. _then an R_
-
-       sequence = sequence+R
+```python
+sequence = sequence+R
+```
 3. _then a second copy of the previous iteration in reverse order with the L and R letters swapped._
-
-       sequence = sequence+R+swapLetters(sequence[::-1])
-
+```python
+sequence = sequence+R+swapLetters(sequence[::-1])
+```
 If we put it all together in a python function, we get the following:
 
 ```python
@@ -123,7 +126,7 @@ from turtle import Turtle, Screen
 1. Turtle setup: Here we define the drawing speed of the turtle, the color of the dragon curve, and we hide the turtle.
 
 ```python
-# Setup turtle
+# Turtle Setup
 turtle = Turtle("turtle")
 turtle.hideturtle()
 turtle.speed("fastest")
@@ -133,7 +136,7 @@ turtle.color("#ff69aa")
 1. Screen setup: We add a title, a background color, followed by the screen size (resize the canvas the turtles are drawing on),  and the setup, that sets the size and position of the main window.
 
 ```python
-# Setup Screen
+# Screen Setup
 screen = Screen()
 screen.title("Dragon Curve")
 screen.bgcolor("black")

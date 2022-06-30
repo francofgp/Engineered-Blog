@@ -12,3 +12,4 @@ type : "contact"
 
 Discuss a project or just want to say hi? My inbox is open for all.
 
+Don't forget to check out [my portfolio 📃](https://francofgp.github.io).

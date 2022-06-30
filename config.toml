@@ -92,7 +92,7 @@ mobile = "" #Add phone carefully
 email = "giulianopertile@gmail.com"
 location = "Villa María, Córdoba, Argentina"
 # copyright
-copyright = "| copyright &copy; 2021 [giulianopertile.com](https://github.com/francofgp/Engineered-Blog) All Rights Reserved |"
+copyright = "| copyright &copy; 2022 [giulianopertile.com](https://github.com/francofgp/Engineered-Blog) All Rights Reserved |"
 
 # Preloader
 [params.preloader]
