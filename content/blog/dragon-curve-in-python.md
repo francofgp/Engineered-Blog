@@ -1,6 +1,6 @@
 +++
 categories = ["Programming"]
-date = 2022-06-30T03:00:00Z
+date = 2022-06-29T03:00:00Z
 description = "Learn how to create a dragon curve in python"
 image = "/uploads/dragon-curve.jpg"
 tags = ["Python"]
@@ -34,9 +34,8 @@ This article was inspired after the following Numberphile video:
 
 The dragon curve can be constructed by folding a strip of paper, which is how it was originally discovered. Take a strip of paper and fold it in half to the right. Fold it in half again to the right. If the strip was opened out now, unbending each fold to become a 90-degree turn, the turn sequence would be RRL, i.e. the second iteration of the dragon curve. Fold the strip in half again to the right, and the turn sequence of the unfolded strip is now RRLRRLL – the third iteration of the dragon curve. Continuing folding the strip in half to the right to create further iterations of the curve.
 
-[![Dragon curve paper strip.png](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Dragon_curve_paper_strip.png/800px-Dragon_curve_paper_strip.png =800x187)](https://en.wikipedia.org/wiki/File:Dragon_curve_paper_strip.png)
-
-![](https://upload.wikimedia.org/wikipedia/commons/9/97/Dragon_curve_iterations_%282%29.svg)
+![Dragon curve paper strip.png](https://upload.wikimedia.org/wikipedia/commons/f/f1/Dragon_curve_paper_strip.png)
+![Dragon_curve_iterations](https://upload.wikimedia.org/wikipedia/commons/9/97/Dragon_curve_iterations_%282%29.svg)
 
 ### The algorithm
 
@@ -70,7 +69,7 @@ Steps:
        sequence = sequence+R+swapLetters(sequence[::-1])
 
 If we put it all together in a python function, we get the following:
-
+```python
     R = "R"
     L = "L"
     
@@ -86,9 +85,10 @@ If we put it all together in a python function, we get the following:
             else:
                 newSequence = newSequence + R
         return newSequence
-
+```
 We can create another function to generate a particular iteration, like so:
 
+```python
     def dragon(n_iterations: int) -> str:
         """Takes in a number n, an return the dragon curve sequence i.e.:
         When n=2, returns "RRL"
@@ -103,7 +103,7 @@ We can create another function to generate a particular iteration, like so:
         for i in range(0, n_iterations):
             initial_sequence = iterate(initial_sequence)
         return initial_sequence
-
+```
 We can put everything in a python file named [dragon.py](https://github.com/francofgp/dragon-curve/blob/main/dragon.py "Github").
 
 ### Let's implement the graphics
@@ -112,25 +112,29 @@ To implement the graphics, we are going to use a python module called [turtle](h
 
 1. Import the libraries
 
-       from dragon import dragon, R
-       from turtle import Turtle, Screen
+```python
+from dragon import dragon, R
+from turtle import Turtle, Screen
+```
 2. Turtle setup: Here we define the drawing speed of the turtle, the color of the dragon curve, and we hide the turtle.
-
-       # Setup turtle
-       turtle = Turtle("turtle")
-       turtle.hideturtle()
-       turtle.speed("fastest")
-       turtle.color("#ff69aa")
+```python
+# Setup turtle
+turtle = Turtle("turtle")
+turtle.hideturtle()
+turtle.speed("fastest")
+turtle.color("#ff69aa")
+```
 3. Screen setup: We add a title, a background color, followed by the screen size (resize the canvas the turtles are drawing on),  and the setup, that sets the size and position of the main window.
-
+```python
        # Setup Screen
        screen = Screen()
        screen.title("Dragon Curve")
        screen.bgcolor("black")
        screen.screensize(1920*3, 1080*3)
        screen.setup(width=1.0, height=1.0, startx=None, starty=None)
+```
 4. Draw the dragon curve: Here we iterate through are sequence, and we go right or left depending on if the letter is R or L.
-
+```python
        # Draw
        LENGHT = 10
        turtle.forward(LENGHT)
@@ -141,18 +145,20 @@ To implement the graphics, we are going to use a python module called [turtle](h
            else:
                turtle.left(90)
                turtle.forward(LENGHT)
+```
 5. To exit the program when finished:
-
+```python
        turtle.color("white")
        turtle.write("click to exit", font=("Calibri", 16, "bold"))
        screen.exitonclick()
+```
 
 ### Final Result
 
 If we put everything in two file we get:
 
 **_dragon.py_**
-
+```python
     R = "R"
     L = "L"
     
@@ -176,9 +182,9 @@ If we put everything in two file we get:
         for i in range(0, n_iterations):
             initial_sequence = iterate(initial_sequence)
         return initial_sequence
-
+```
 **_app.py_**
-
+```python
     from dragon import dragon, R
     from turtle import Turtle, Screen
     
@@ -203,19 +209,15 @@ If we put everything in two file we get:
         if element == R:
             turtle.right(90)
             turtle.forward(LENGHT)
-            # if you want circles use the line below instead
-            # turtle.circle(-4, 90, 36)
         else:
             turtle.left(90)
             turtle.forward(LENGHT)
-            # if you want circles use the line below instead
-            # turtle.circle(4, 90, 36)
     
     # When finished, click to exit
     turtle.color("white")
     turtle.write("click to exit", font=("Calibri", 16, "bold"))
     screen.exitonclick()
-
+```
 And that will look like:
 
 ![](/uploads/dragon_curve_asset.png)
@@ -225,7 +227,7 @@ And that will look like:
 Make it more round
 
 If you like, you can change the style, instead of using straight lines you can use circles, just by changing the following code:
-
+```python
     # Draw
     LENGHT = 10
     for element in dragon(17):
@@ -233,6 +235,7 @@ If you like, you can change the style, instead of using straight lines you can u
             turtle.circle(-4, 90, 36)
         else:
             turtle.circle(4, 90, 36)
+```
 
 And the end result will look like the image below
 
