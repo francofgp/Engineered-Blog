@@ -1,9 +1,9 @@
 +++
-categories = []
+categories = ["Programming"]
 date = 2022-06-30T03:00:00Z
 description = "Learn how to create a dragon curve in python"
 image = "/uploads/dragon-curve.jpg"
-tags = []
+tags = ["Python"]
 title = "Dragon Curve in Python"
 type = "post"
 
