@@ -70,39 +70,39 @@ Steps:
 
 If we put it all together in a python function, we get the following:
 ```python
-    R = "R"
-    L = "L"
+R = "R"
+L = "L"
+
+def iterate(sequence: str) -> str:
+    sequence = sequence+R+swapLetters(sequence[::-1])
+    return sequence
     
-    def iterate(sequence: str) -> str:
-        sequence = sequence+R+swapLetters(sequence[::-1])
-        return sequence
-        
-    def swapLetters(sequence: str) -> str:
-        newSequence = ""
-        for letter in sequence:
-            if letter == R:
-                newSequence = newSequence + L
-            else:
-                newSequence = newSequence + R
-        return newSequence
+def swapLetters(sequence: str) -> str:
+    newSequence = ""
+    for letter in sequence:
+        if letter == R:
+            newSequence = newSequence + L
+        else:
+            newSequence = newSequence + R
+    return newSequence
 ```
 We can create another function to generate a particular iteration, like so:
 
 ```python
-    def dragon(n_iterations: int) -> str:
-        """Takes in a number n, an return the dragon curve sequence i.e.:
-        When n=2, returns "RRL"
-    
-        Args:
-            n_iterations (int): number of iterations of the dragon curve
-    
-        Returns:
-            str: The dragon curve Sequence
-        """
-        initial_sequence = R
-        for i in range(0, n_iterations):
-            initial_sequence = iterate(initial_sequence)
-        return initial_sequence
+def dragon(n_iterations: int) -> str:
+    """Takes in a number n, an return the dragon curve sequence i.e.:
+    When n=2, returns "RRL"
+
+    Args:
+        n_iterations (int): number of iterations of the dragon curve
+
+    Returns:
+        str: The dragon curve Sequence
+    """
+    initial_sequence = R
+    for i in range(0, n_iterations):
+        initial_sequence = iterate(initial_sequence)
+    return initial_sequence
 ```
 We can put everything in a python file named [dragon.py](https://github.com/francofgp/dragon-curve/blob/main/dragon.py "Github").
 
@@ -126,31 +126,31 @@ turtle.color("#ff69aa")
 ```
 3. Screen setup: We add a title, a background color, followed by the screen size (resize the canvas the turtles are drawing on),  and the setup, that sets the size and position of the main window.
 ```python
-       # Setup Screen
-       screen = Screen()
-       screen.title("Dragon Curve")
-       screen.bgcolor("black")
-       screen.screensize(1920*3, 1080*3)
-       screen.setup(width=1.0, height=1.0, startx=None, starty=None)
+# Setup Screen
+screen = Screen()
+screen.title("Dragon Curve")
+screen.bgcolor("black")
+screen.screensize(1920*3, 1080*3)
+screen.setup(width=1.0, height=1.0, startx=None, starty=None)
 ```
 4. Draw the dragon curve: Here we iterate through are sequence, and we go right or left depending on if the letter is R or L.
 ```python
-       # Draw
-       LENGHT = 10
-       turtle.forward(LENGHT)
-       for element in dragon(17):
-           if element == R:
-               turtle.right(90)
-               turtle.forward(LENGHT)
-           else:
-               turtle.left(90)
-               turtle.forward(LENGHT)
+# Draw
+LENGHT = 10
+turtle.forward(LENGHT)
+for element in dragon(17):
+    if element == R:
+        turtle.right(90)
+        turtle.forward(LENGHT)
+    else:
+        turtle.left(90)
+        turtle.forward(LENGHT)
 ```
 5. To exit the program when finished:
 ```python
-       turtle.color("white")
-       turtle.write("click to exit", font=("Calibri", 16, "bold"))
-       screen.exitonclick()
+turtle.color("white")
+turtle.write("click to exit", font=("Calibri", 16, "bold"))
+screen.exitonclick()
 ```
 
 ### Final Result
@@ -159,64 +159,64 @@ If we put everything in two file we get:
 
 **_dragon.py_**
 ```python
-    R = "R"
-    L = "L"
-    
-    def iterate(sequence: str) -> str:
-        sequence = sequence+R+swapLetters(sequence[::-1])
-        return sequence
-    
-    
-    def swapLetters(sequence: str) -> str:
-        newSequence = ""
-        for letter in sequence:
-            if letter == R:
-                newSequence = newSequence + L
-            else:
-                newSequence = newSequence + R
-        return newSequence
-    
-    
-    def dragon(n_iterations: int) -> str:
-        initial_sequence = R
-        for i in range(0, n_iterations):
-            initial_sequence = iterate(initial_sequence)
-        return initial_sequence
+R = "R"
+L = "L"
+
+def iterate(sequence: str) -> str:
+    sequence = sequence+R+swapLetters(sequence[::-1])
+    return sequence
+
+
+def swapLetters(sequence: str) -> str:
+    newSequence = ""
+    for letter in sequence:
+        if letter == R:
+            newSequence = newSequence + L
+        else:
+            newSequence = newSequence + R
+    return newSequence
+
+
+def dragon(n_iterations: int) -> str:
+    initial_sequence = R
+    for i in range(0, n_iterations):
+        initial_sequence = iterate(initial_sequence)
+    return initial_sequence
 ```
 **_app.py_**
 ```python
-    from dragon import dragon, R
-    from turtle import Turtle, Screen
-    
-    # Turtle setup
-    turtle = Turtle("turtle")
-    turtle.hideturtle()
-    turtle.speed("fastest")
-    turtle.color("#ff69aa")
-    
-    # Screen setup
-    screen = Screen()
-    screen.title("Dragon Curve")
-    screen.bgcolor("black")
-    screen.screensize(1920*3, 1080*3)
-    screen.setup(width=1.0, height=1.0, startx=None, starty=None)
-    
-    
-    # Draw
-    LENGHT = 10
-    turtle.forward(LENGHT)
-    for element in dragon(17):
-        if element == R:
-            turtle.right(90)
-            turtle.forward(LENGHT)
-        else:
-            turtle.left(90)
-            turtle.forward(LENGHT)
-    
-    # When finished, click to exit
-    turtle.color("white")
-    turtle.write("click to exit", font=("Calibri", 16, "bold"))
-    screen.exitonclick()
+from dragon import dragon, R
+from turtle import Turtle, Screen
+
+# Turtle setup
+turtle = Turtle("turtle")
+turtle.hideturtle()
+turtle.speed("fastest")
+turtle.color("#ff69aa")
+
+# Screen setup
+screen = Screen()
+screen.title("Dragon Curve")
+screen.bgcolor("black")
+screen.screensize(1920*3, 1080*3)
+screen.setup(width=1.0, height=1.0, startx=None, starty=None)
+
+
+# Draw
+LENGHT = 10
+turtle.forward(LENGHT)
+for element in dragon(17):
+    if element == R:
+        turtle.right(90)
+        turtle.forward(LENGHT)
+    else:
+        turtle.left(90)
+        turtle.forward(LENGHT)
+
+# When finished, click to exit
+turtle.color("white")
+turtle.write("click to exit", font=("Calibri", 16, "bold"))
+screen.exitonclick()
 ```
 And that will look like:
 
@@ -228,13 +228,13 @@ Make it more round
 
 If you like, you can change the style, instead of using straight lines you can use circles, just by changing the following code:
 ```python
-    # Draw
-    LENGHT = 10
-    for element in dragon(17):
-        if element == R:
-            turtle.circle(-4, 90, 36)
-        else:
-            turtle.circle(4, 90, 36)
+# Draw
+LENGHT = 10
+for element in dragon(17):
+    if element == R:
+        turtle.circle(-4, 90, 36)
+    else:
+        turtle.circle(4, 90, 36)
 ```
 
 And the end result will look like the image below
