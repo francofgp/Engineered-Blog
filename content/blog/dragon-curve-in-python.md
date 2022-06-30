@@ -12,7 +12,7 @@ Today you are going to learn how to create this amazing figures in Python. More 
 
 ![](https://upload.wikimedia.org/wikipedia/commons/6/6f/Full_tiling_dragon.svg)
 
-What is the Dragon Curve ?
+## What is the Dragon Curve ?
 
 Foremost, the Dragon Curve is a fractal, in mathematics, **fractal** is a term used to describe geometric shapes containing detailed structure at arbitrarily small scales. Many fractals appear similar at various scales, as illustrated in successive magnifications of the Mandelbrot set (See the image below 👇).
 
@@ -106,7 +106,7 @@ We can create another function to generate a particular iteration, like so:
 
 We can put everything in a python file named [dragon.py](https://github.com/francofgp/dragon-curve/blob/main/dragon.py "Github").
 
-### Let's implement the graphics 
+### Let's implement the graphics
 
 To implement the graphics, we are going to use a python module called [turtle](https://docs.python.org/3/library/turtle.html "Turtle docs"), which provides turtle graphics primitives
 
