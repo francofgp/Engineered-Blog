@@ -166,7 +166,7 @@ screen.exitonclick()
 
 ### Final Result
 
-If we put everything in two file we get:
+If we put everything in two files we get:
 
 **_dragon.py_**
 
