@@ -148,15 +148,15 @@ screen.setup(width=1.0, height=1.0, startx=None, starty=None)
 
 ```python
 # Draw
-LENGHT = 10
-turtle.forward(LENGHT)
+LENGTH = 10
+turtle.forward(LENGTH)
 for element in dragon(17):
     if element == R:
         turtle.right(90)
-        turtle.forward(LENGHT)
+        turtle.forward(LENGTH)
     else:
         turtle.left(90)
-        turtle.forward(LENGHT)
+        turtle.forward(LENGTH)
 ```
 
 1. To exit the program when finished:
@@ -220,15 +220,15 @@ screen.setup(width=1.0, height=1.0, startx=None, starty=None)
 
 
 # Draw
-LENGHT = 10
-turtle.forward(LENGHT)
+LENGTH = 10
+turtle.forward(LENGTH)
 for element in dragon(17):
     if element == R:
         turtle.right(90)
-        turtle.forward(LENGHT)
+        turtle.forward(LENGTH)
     else:
         turtle.left(90)
-        turtle.forward(LENGHT)
+        turtle.forward(LENGTH)
 
 # When finished, click to exit
 turtle.color("white")
@@ -248,7 +248,7 @@ If you like, you can change the style, instead of using straight lines you can u
 
 ```python
 # Draw
-LENGHT = 10
+LENGTH = 10
 for element in dragon(17):
     if element == R:
         turtle.circle(-4, 90, 36)
