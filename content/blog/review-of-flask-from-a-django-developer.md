@@ -280,7 +280,7 @@ Whereas in Flask, if you want to build something tons of features you will spend
 ![man-discussing](/uploads/post/review-of-flask-from-a-django-developer/trade-off.jpg)
 
 
-## Conlusion
+## Conclusion
 
 After using both framework I conclude that in Flask you start from scratch, and you add more functionality/packages when you need them, and putting together the structure of your project your way, whereas with Django, you start a project with a well-defined structure that you must follow, and comes with tons of features that you may or may not end up using them, and you will probably also have to add external libraries for a particular feature.
 
