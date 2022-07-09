@@ -1,6 +1,6 @@
 ---
 title: Review of Flask, From a Django Developer
-date: 2021-10-29T10:07:47.000+06:00
+date: 2022-07-09T02:07:47.000+06:00
 image: /uploads/post/review-of-flask-from-a-django-developer/flask-logo-version-2.png
 description: this is meta description
 categories:
