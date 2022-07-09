@@ -2,7 +2,7 @@
 categories = ["Programming"]
 date = 2022-06-29T03:00:00Z
 description = "Learn how to create a dragon curve in python"
-image = "/uploads/dragon-curve.jpg"
+image = "/uploads/post/dragon-curve-in-python/dragon-curve.jpg"
 tags = ["Python"]
 title = "Dragon Curve in Python"
 type = "post"
@@ -238,7 +238,7 @@ screen.exitonclick()
 
 And that will look like:
 
-![](/uploads/dragon_curve_asset.png)
+![](/uploadsuploaddragon_curve_asset.png)
 
 ![](https://i.imgur.com/zzy3vGS.gif)
 
@@ -260,7 +260,7 @@ for element in dragon(17):
 
 And the end result will look like the image below
 
-![](/uploads/dragon_curve_asset_round.png)
+![](/uploads/post/dragon-curve-in-python/dragon_curve_asset_round.png)
 
 You can check the [**source code in my GitHub**](https://github.com/francofgp/dragon-curve "Source Code")
 
