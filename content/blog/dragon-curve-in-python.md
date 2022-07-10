@@ -238,7 +238,7 @@ screen.exitonclick()
 
 And that will look like:
 
-![](/uploadsuploaddragon_curve_asset.png)
+![](/uploads/post/dragon-curve-in-python/dragon_curve_asset.png)
 
 ![](https://i.imgur.com/zzy3vGS.gif)
 
