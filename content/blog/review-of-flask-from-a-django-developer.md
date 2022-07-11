@@ -15,7 +15,7 @@ draft: false
 ---
 Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is?
 
-Well today I am going to share my experience with Flask, omparing different aspects of both frameworks, so you can decide which one suits your needs.
+Well today I am going to share my experience with Flask, comparing different aspects of both frameworks, so you can decide which one suits your needs.
 
 ## Why I chose Flask?
 
