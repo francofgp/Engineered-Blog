@@ -9,5 +9,6 @@ tags:
 - DevOps
 - Django
 type: post
+draft: true
 
 ---
