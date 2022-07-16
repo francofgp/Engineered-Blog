@@ -228,12 +228,17 @@
 }
 
 
+
 /* markdown style */
 .content {
   * {
     margin-bottom: 20px;
   }
 
+  /* Fix extra space in code snippet */
+  code span{
+    margin-bottom: 0px;
+  }
   h1,
   h2,
   h3,
