@@ -146,14 +146,18 @@ Whether you’re trying to generate  profits  or  not,  any  organization  today
 
 The following diagram shows how Software Delivery Performance *drives* Organizational Performance and Noncommercial Performance.
 
+````
 ```goat
+      .               .                .               .--- 1          .-- 1     / 1
+     / \              |                |           .---+            .-+         +
+    /   \         .---+---.         .--+--.        |   '--- 2      |   '-- 2   / \ 2
+   +     +        |       |        |       |    ---+            ---+          +
+  / \   / \     .-+-.   .-+-.     .+.     .+.      |   .--- 3      |   .-- 3   \ / 3
+ /   \ /   \    |   |   |   |    |   |   |   |     '---+            '-+         +
+ 1   2 3   4    1   2   3   4    1   2   3   4         '--- 4          '-- 4     \ 4
 
-                                    .---> Organizational Performance
-                                    |
-Software Delivery Performance    ---+
-                                    |
-                                    .---> Noncommercial Performance
 ```
+````
 
 ## Conclusion
 
