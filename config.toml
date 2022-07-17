@@ -154,3 +154,13 @@ link = "https://francofgp.github.io/"
 
 [markup.highlight]
 style = 'manni' # see https://xyproto.github.io/splash/docs/all.html or try 'dracula'
+
+
+############################# robots.txt ########################
+enableRobotsTXT = true
+
+
+[sitemap]
+  changefreq = 'always'
+  filename = 'sitemap.xml'
+  priority = 0.5
