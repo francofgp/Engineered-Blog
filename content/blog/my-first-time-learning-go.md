@@ -1,7 +1,7 @@
 +++
 categories = ["Programming"]
 date = 2022-06-17T01:03:47Z
-description = "What I thing of Go, as a Python developer"
+description = "What I think of Go, as a Python developer"
 image = "/uploads/golang-post.jpg"
 tags = ["Python", "Go"]
 title = "My First Time Learning Go as a Python Developer"
