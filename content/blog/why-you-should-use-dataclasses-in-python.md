@@ -1,7 +1,7 @@
 +++
 categories = ["Programming"]
 date = 2022-06-29T03:00:00Z
-description = "Why you should use dataclasses in python"
+description = "Why you should use Data Classes in python"
 image = "/uploads/post/dragon-curve-in-python/dragon-curve.jpg"
 tags = ["Python"]
 title = "Why you should use dataclasses in python"
@@ -13,10 +13,11 @@ Today you are going to learn how to create this amazing figures in Python. More 
 
 ![]()
 
-## What are Dataclasses?
+## What are Data Classes?
 
 Dataclasses are like normal classes, but designed to store data, rather than contain a lot of logic.
 When you create a class that mostly consists of attributes, you make a data class.
+An example of a typical dataclass can be seen below 👇
 
 ```python
 from dataclasses import dataclass
@@ -28,17 +29,26 @@ class ChemicalElement:
     symbol: str
     weight: float
     atomic_number: int 
-
-Hydrogen = ChemicalElement("Hidrogen", "H", 1.008, 1)
-Hydrogen
 ```
-
-What the dataclasses module does is to make it easier to create data classes. It takes care of a lot of boilerplate for you.
-Dataclass module is introduced in Python 3.7 as a utility tool to make structured classes specially for storing data. 
+To use a Data Class, we need to use the `dataclasses` module that was introduces in Python 3.7, this module  make it easier to create data classes.
+It takes care of a lot of boilerplate for you.
 These classes hold certain properties and functions to deal specifically with the data and its representation.
-![](https://upload.wikimedia.org/wikipedia/commons/a/a4/Mandelbrot_sequence_new.gif)
+![]()
 
 ## What is the difference with a regular class?
+
+The Data class presented above can be written using a normal python class, as follows:
+
+```python
+class ChemicalElementNormalClass:
+    '''A normal python class that represents a chemical element'''
+    def __init__(self, name, symbol, weight, atomic_number):
+        self.name = name
+        self.symbol = symbol
+        self.weight = weight
+        self.atomic_number = atomic_number
+```
+
 
 The DataClasses are implemented by using decorators with classes. Attributes are declared using Type Hints in Python which is essentially, specifying data type for variables in python.
 
