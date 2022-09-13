@@ -264,7 +264,7 @@ And the end result will look like the image below
 
 You can check the [**source code in my GitHub**](https://github.com/francofgp/dragon-curve "Source Code")
 
-### Conclusion
+## Conclusion
 
 Something that at first glance seemed frightening turned out to be simple, by breaking up step by step we have learned how to create this amazing fractal in Python easily.
 
