@@ -22,6 +22,13 @@
         <div class="content mb-5">
           {{ .Content }}
 
+          {{ if .Page.Store.Get "hasMermaid" }}
+          <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+          <script>
+            mermaid.initialize({ startOnLoad: true });
+          </script>
+          {{ end }}
+
         </div>
         <div class="content">
           <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
