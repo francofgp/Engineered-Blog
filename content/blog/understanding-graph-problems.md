@@ -785,6 +785,215 @@ print(connected_components_counts(graph))
 
 #### Largest Component
 
+IIn this exercise we have to calculate the size of the largest component, this gives us the idea that we should initialize a variable, to keep track of the largest component so far, and that is exactly what we are going to do.
+
+We need to write a function **get_largests_component** that takes in a **graph** as a parameter, and it must return the the size of the largest component.
+
+For example, the graph we are going to take as an example is the one below, we can see that the maximum size of the component is 6, which is the component on the left.
+
+
+```mermaid
+ graph TD;
+        A((1))
+        B((2))
+        C((3))
+        D((4))
+        E((5))
+        F((6))
+        G((7))
+        H((8))
+        I((9))
+        J((10))
+        K((11))
+        L((12))
+        %% A:::yellow --- B
+        A---B
+        A---C
+        B---D
+        C---E
+        C---F
+        G---J
+        G---H
+        G---I
+        K---L
+
+classDef yellow fill:#ffff00;
+```
+
+##### BFS Solution - Largest Component
+
+```python
+def get_largests_component(graph):
+    visited = set()
+    # We use the this variale to store the size of the maximum component
+    # its first value es - infinity.
+    max_size = float("-inf")
+    for node in graph:
+        queue = [node]
+        size = 0
+        while len(queue) > 0:
+            current_node = queue.pop(0)
+            if current_node in visited:
+                continue
+            size += 1
+            visited.add(current_node)
+            for neighbor in graph[current_node]:
+                queue.append(neighbor)
+        # when we stop iterating throug a component
+        # we need to compare its maximum value with the
+        # max_size variable.
+        max_size = max(max_size, size)
+    return max_size
+
+
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5, 6],
+    4: [2],
+    5: [3],
+    6: [3],
+    7: [8, 9, 10],
+    8: [7],
+    9: [7],
+    10: [7],
+    11: [12],
+    12: [11]
+}
+print(get_largests_component(graph))
+# 6
+```
+
+##### DFS Iterative Solution - Largest Component
+
+As always, the difference between DFS and BFS is the use of a stack instead of a queue.
+
+```python
+def get_largests_component(graph):
+    visited = set()
+    max_size = float("-inf")
+    for node in graph:
+        stack = [node]
+        size = 0
+        while len(stack) > 0:
+            current_node = stack.pop()
+            if current_node in visited:
+                continue
+            size += 1
+            visited.add(current_node)
+            for neighbor in graph[current_node]:
+                stack.append(neighbor)
+
+        max_size = max(max_size, size)
+    return max_size
+
+
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5, 6],
+    4: [2],
+    5: [3],
+    6: [3],
+    7: [8, 9, 10],
+    8: [7],
+    9: [7],
+    10: [7],
+    11: [12],
+    12: [11]
+}
+print(get_largests_component(graph))
+# 6
+```
+
+##### DFS Recursive Solution - Largest Component - Variation #1
+
+Here we will look at two variations using recursion. The first is to pass the parameter **size** to the recursive function and increment it one by one, and then compare it with the maximum value obtained from all the functions.
+
+```python
+def get_largests_component_recursively(graph):
+    visited = set()
+    max_size = float("-inf")
+    for node, neighbors in graph.items():
+        # Inicializamos el size en 0, y luego lo pasamos a la funcion traverse_graph
+        size = 0
+        max_size = max(max_size , traverse_graph(node, visited, graph, size))
+    return max_size
+
+def traverse_graph(currentNode, visited, graph, size):
+    if currentNode in visited:
+        return size
+    visited.add(currentNode)
+    # If the node has not been visited 
+    # that means that the size must be at least 1 + previous size.
+    size += 1
+    for neighbor in graph[currentNode]:
+        # calls to the neighbouring nodes may have different sizes,
+        # but we are interested in the maximum, 
+        # so we use the max() function to update the size variable.
+        size = max(size, traverse_graph(neighbor, visited, graph, size))
+
+    return size
+
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5, 6],
+    4: [2],
+    5: [3],
+    6: [3],
+    7: [8, 9, 10],
+    8: [7],
+    9: [7],
+    10: [7],
+    11: [12],
+    12: [11]
+}
+print(get_largests_component(graph))
+# 6
+```
+
+##### DFS Recursive Solution - Largest Component - Variation #2
+
+```python
+def get_largests_component_recursively(graph):
+    visited = set()
+    max_size = float("-inf")
+    for node, edges in graph.items():
+        size = traverse(node, graph, visited)
+        max_size = max(max_size, size)
+    return max_size
+def traverse(node, graph,visited):
+    if node in visited:
+        return 0
+    visited.add(node)
+    size = 1
+
+    for neighbor in graph[node]:
+        size +=  traverse(neighbor, graph,visited)
+    return size
+    
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5, 6],
+    4: [2],
+    5: [3],
+    6: [3],
+    7: [8, 9, 10],
+    8: [7],
+    9: [7],
+    10: [7],
+    11: [12],
+    12: [11]
+}
+
+print(get_largests_component_recursively(graph))
+# 6
+```
+
+
+
 #### Shortest Path
 
 #### The graph has a cycle?
