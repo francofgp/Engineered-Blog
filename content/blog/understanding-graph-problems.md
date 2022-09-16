@@ -12,7 +12,6 @@ Don't you know what a Data Class is? You know how to use it? And what is the dif
 
 ## What is a Graph?
 
-
 A Graph is a data structure consisting of `NODES` (or vertices) and `EDGES`. This data structure is often use as a way to represent distances or different connections.
 For example the distances between cities, with arbitrary distances
 
@@ -791,7 +790,6 @@ We need to write a function **get_largests_component** that takes in a **graph**
 
 For example, the graph we are going to take as an example is the one below, we can see that the maximum size of the component is 6, which is the component on the left.
 
-
 ```mermaid
  graph TD;
         A((1))
@@ -955,21 +953,28 @@ print(get_largests_component(graph))
 
 ##### DFS Recursive Solution - Largest Component - Variation #2
 
+The difference with this variation with respect to the previous one is that now we have a base case, where if the node is visited we return zero, otherwise, the size is 1 and we add the results of the other recursive functions.
+
 ```python
 def get_largests_component_recursively(graph):
     visited = set()
     max_size = float("-inf")
     for node, edges in graph.items():
         size = traverse(node, graph, visited)
+        # we compare the size of the recursive call, with the max_size,
+        # and then we return it
         max_size = max(max_size, size)
     return max_size
 def traverse(node, graph,visited):
+    # If the node es visited it means we counted already
     if node in visited:
         return 0
     visited.add(node)
+    # if the node is not visited it means at least the size is one
     size = 1
 
     for neighbor in graph[node]:
+        # we sume +1 to the sum for every new non visited node
         size +=  traverse(neighbor, graph,visited)
     return size
     
@@ -992,19 +997,391 @@ print(get_largests_component_recursively(graph))
 # 6
 ```
 
-
-
 #### Shortest Path
+
+In this exercise we must find the shortest path in an undirected graph, between two nodes.
+For example consider the example below, where we can see that there are several paths to get from node 1 to node 6, these paths can be:
+
+- 1, 3, 6
+- 1, 3, 5, 6
+- 1, 2, 4, 5, 6
+
+```mermaid
+ graph LR;
+        A((1))
+        B((2))
+        C((3))
+        D((4))
+        E((5))
+        F((6))
+       
+        %% A:::yellow --- B
+        A---B
+        A---C
+        B---D
+        C---E
+        C---F
+        E---F
+        D---E
+
+classDef yellow fill:#ffff00;
+```
+
+But we must consider the shortest one, we need a notion of length/distance, for our case, we consider that the distance between each node is 1, that is, the distance is the amount of "Edges", for example the route (1, 2, 4, 4, 5, 6) consists of 4 edges, therefore the distance is 4.
+
+In the example below we can see the correct shortest path, although there may be several.
+
+```mermaid
+ graph LR;
+        A((1))
+        B((2))
+        C((3))
+        D((4))
+        E((5))
+        F((6))
+       
+        %% A:::yellow --- B 
+        A---B
+        A:::yellow ---C
+        B---D
+        C---E
+        C:::yellow ---F 
+        E---F
+        D---E
+
+        style F fill:#ffff00
+        
+
+classDef yellow fill:#ffff00;
+```
+
+The difficulty of these exercises is that now we need to keep track, not only the nodes we visited, but also the distance from the previous node to the current one.
+
+For example, we can start from node A, saying that the distance is 0, but when adding an element to the queue or stack, we will have to add not only the neighboring node, but also the current distance, which is zero, plus 1.
+
+Write a function, shortest_path, that receives an undirected graph and two nodes, (source, destination). The function should return the length of the shortest path between Source and Destination.
+ Consider the length as the number of edges in the path, not the number of nodes. If there is no path between A and B, then return -1.
+
+##### BFS Iterative Solution - Shortest Path 
+
+If you think about it for a moment you may ask yourself, what is the best way to traverse the graph, if you look at a Depth First Search approach, it will try to traverse the graph from the beginning to the end in a single direction, where this may not be the most convenient. On the other hand, BFS, will try to expand by extending one by one the distances to the surroundings of the node, finding the solution faster.
+
+A particularity of these exercises is that we add to the queue or stack, the node and the distance, in our case it is in the form of a tuple, that is to say (node, distanceSoFar), as we are doing BFS, at the moment we find the destination node, it means that we find the shortest distance,
+
+```python
+def shortest_path(graph, source, destination):
+    visited = set()
+    queue = [(source, 0)]
+
+    while len(queue) > 0:
+        current_node, distance = queue.pop(0)
+        if current_node == destination:
+            return distance
+        if current_node in visited:
+            continue
+        visited.add(current_node)
+        
+        for neighbor in graph[current_node]:
+            queue.append((neighbor, distance + 1))
+
+    return -1
+    
+graph = {
+    1: [2, 3],
+    2: [1, 4],
+    3: [1, 5, 6],
+    4: [2, 5],
+    5: [3, 4, 6],
+    6: [3, 5],
+}
+
+print(shortest_path(graph, 1, 6))
+# 2
+```
 
 #### The graph has a cycle?
 
+
+
 ## Matrix as a graph
+
+You may not always get the nodes and edges of a graph, you may get a grid, in which case it is still possible to think of a problem with a grid as if it were a graph.
+
+For example we can, think of the position of a cell (row, col), as if it were the node, and we can consider that a node can move, up, down, left, right, i.e. it has at most 4 neighbors.
+
+For example consider the grid below, the node would be, with index zero, row 3 and column 2, that is (3, 2), and the neighbors would be the arrows.
+
+![grid-island](/uploads/post/understanding-graph-problems/graph-grid.jpg)
+
+The problem with these grids is that when finding our neighbors, we must consider not to go out of the grid.
+
+If our position is (row, col), our neighbors would be:
+
+- Up: (row - 1, col)
+- Down: (row + 1, col)
+- Right: (row, col + 1)
+- Left: (row, col - 1)
 
 ### Problems with islands 🏝
 
+Now we are going to look at two typical grid problems, which consist of counting the islands and finding the largest island. I will start by first explaining how to count the island.
+
 #### Count the islands
 
+This problem consists of counting how many islands there are in the grid. The water will be represented in blue and the land in yellow, the idea is to consider an island as any set of yellow cells that are next to each other. If we look at the grid below, we will see that there are 4 islands, but how do we solve this problem?
+
+![grid-island](/uploads/post/understanding-graph-problems/island-grid.jpg)
+
+The input parameter of our problem will be a grid of the following style:
+
+Where W = Water and L = Land.
+
+```python
+grid = [
+    ["W", "L", "W", "W", "L", "L"],
+    ["W", "W", "W", "W", "W", "W"],
+    ["W", "W", "W", "W", "L", "W"],
+    ["W", "L", "L", "W", "L", "L"],
+    ["W", "L", "L", "W", "L", "W"],
+    ["W", "W", "W", "W", "W", "W"],
+]
+```
+
+
+You have probably noticed that what we have to do is to iterate this grid to access the cells, and then ask if it is water, we do nothing, and if it is a land, we must mark it as visited.
+
+As we find land, we must also find the neighboring nodes, through BFS or DFS, we must also ask if the neighboring nodes are water or land, and if they are land, we must explore their neighbors and so on.
+
+![grid-island](/uploads/post/understanding-graph-problems/island-grid-1.jpg)
+
+It is important to mark neighboring nodes as visited, so that in the next iteration of our for loop, we ask if the current cell is water or the land has been visited, will skip it.
+
+![grid-island](/uploads/post/understanding-graph-problems/island-grid-2.jpg)
+
+The problem statement is as follows:
+
+Write a function, islandCount, that takes in a grid containing Ws and Ls. W represents water and L represents land. the function should return the number of island on the grid. An island is a vertically or horizontally connected region of land
+
+##### BFS Iterative Solution - Count the islands
+
+```python
+WATER = "W"
+LAND = "L"
+def island_count(grid):
+    visited = set()
+    islands = 0
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            if grid[row][col] == WATER:
+                continue
+            if (row, col) in visited:
+                continue
+            islands += 1
+            explore_land(grid, row, col, visited)
+
+    return islands
+
+def explore_land(grid, row, col, visited):
+    queue = [(row, col)]
+    while len(queue) > 0:
+        row, col = queue.pop(0)
+        if (row, col) in visited:
+            continue
+        visited.add((row, col))
+        if grid[row][col] == WATER:
+            continue
+
+        neighbors = get_neigbors(grid, row, col)
+        for neighbor in neighbors:
+            queue.append(neighbor)
+
+def get_neigbors(grid, row, col):
+    neighbors = []
+    # Up
+    if row - 1 >= 0:
+        neighbors.append((row - 1, col))
+    # Down
+    if row + 1 < len(grid):
+        neighbors.append((row + 1, col))
+    # Left
+    if col - 1 >= 0:
+        neighbors.append((row, col - 1))
+    # Rigth
+    if col + 1 < len(grid[0]):
+        neighbors.append((row, col + 1))
+
+    return neighbors
+
+grid = [
+    ["W", "L", "W", "W", "L", "L"],
+    ["W", "W", "W", "W", "W", "W"],
+    ["W", "W", "W", "W", "L", "W"],
+    ["W", "L", "L", "W", "L", "L"],
+    ["W", "L", "L", "W", "L", "W"],
+    ["W", "W", "W", "W", "W", "W"],
+]
+print(island_count(grid))
+# 4
+```
+
+##### DFS Recursive Solution - Count the islands 
+
+```python
+WATER = "W"
+LAND = "L"
+def island_count(grid):
+    visited = set()
+    island = 0
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+             if explore_land(grid, row, col, visited):
+                island += 1
+    return island
+def explore_land(grid, row, col, visited):
+    is_row_in_bounds = row >= 0 and row < len(grid)
+    is_col_in_bounds = col >= 0 and col < len(grid[0])
+    if is_row_in_bounds is not True or is_col_in_bounds is not True:
+        return False
+    if grid[row][col] ==  WATER:
+        return False
+
+    position = (row, col)
+    if position in visited:
+        return False
+    visited.add(position)
+
+    explore_land(grid, row - 1, col, visited)
+    explore_land(grid, row + 1, col, visited)
+    explore_land(grid, row, col - 1, visited)
+    explore_land(grid, row, col + 1, visited)
+
+    return True
+
+grid = [
+    ["W", "L", "W", "W", "L", "L"],
+    ["W", "W", "W", "W", "W", "W"],
+    ["W", "W", "W", "W", "L", "W"],
+    ["W", "L", "L", "W", "L", "L"],
+    ["W", "L", "L", "W", "L", "W"],
+    ["W", "W", "W", "W", "W", "W"],
+]
+print(island_count(grid))
+# 4
+```
+
 #### Largest Island
+
+##### BFS Iterative Solution - Largest Island
+
+
+```python
+WATER = "W"
+LAND = "L"
+def largest_island(grid):
+    visited = set()
+    min_island = float("-inf")
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            if grid[row][col] == WATER:
+                continue
+            if (row, col) in visited:
+                continue
+            min_island = max(min_island, explore_land(grid, row, col, visited))
+
+    return min_island
+
+def explore_land(grid, row, col, visited):
+    min_island = 0
+    queue = [(row, col)]
+    while len(queue) > 0:
+        row, col = queue.pop(0)
+        if (row, col) in visited:
+            continue
+        visited.add((row, col))
+        if grid[row][col] == WATER:
+            continue
+        min_island +=1
+        neighbors = get_neigbors(grid, row, col)
+        for neighbor in neighbors:
+            queue.append(neighbor)
+    return min_island
+def get_neigbors(grid, row, col):
+    neighbors = []
+    # Up
+    if row - 1 >= 0:
+        neighbors.append((row - 1, col))
+    # Down
+    if row + 1 < len(grid):
+        neighbors.append((row + 1, col))
+    # Left
+    if col - 1 >= 0:
+        neighbors.append((row, col - 1))
+    # Rigth
+    if col + 1 < len(grid[0]):
+        neighbors.append((row, col + 1))
+
+    return neighbors
+
+grid = [
+    ["W", "L", "W", "W", "L", "L"],
+    ["W", "W", "W", "W", "W", "W"],
+    ["W", "W", "W", "W", "L", "W"],
+    ["W", "L", "L", "W", "L", "L"],
+    ["W", "L", "L", "W", "L", "W"],
+    ["W", "W", "W", "W", "W", "W"],
+]
+print(largest_island(grid))
+# 4
+```
+
+##### DFS Recursive Solution - Largest Island
+
+```python
+WATER = "W"
+LAND = "L"
+def largest_island(grid):
+    visited = set()
+    min_size = float("-inf")
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            current_size = explore_land(grid, row, col, visited)
+        
+            if current_size > 0:
+                min_size = max(min_size, current_size)
+
+    return min_size
+def explore_land(grid, row, col, visited):
+    is_row_in_bounds = row >= 0 and row < len(grid)
+    is_col_in_bounds = col >= 0 and col < len(grid[0])
+    if is_row_in_bounds is not True or is_col_in_bounds is not True:
+        return 0
+    if grid[row][col] ==  WATER:
+        return 0
+
+    position = (row, col)
+    if position in visited:
+        return 0
+    visited.add(position)
+
+    size = 1
+    size += explore_land(grid, row - 1, col, visited)
+    size += explore_land(grid, row + 1, col, visited)
+    size += explore_land(grid, row, col - 1, visited)
+    size += explore_land(grid, row, col + 1, visited)
+
+    return size
+
+grid = [
+    ["W", "L", "W", "W", "L", "L"],
+    ["W", "W", "W", "W", "W", "W"],
+    ["W", "W", "W", "W", "L", "W"],
+    ["W", "L", "L", "W", "L", "L"],
+    ["W", "L", "L", "W", "L", "W"],
+    ["W", "W", "W", "W", "W", "W"],
+]
+print(largest_island(grid))
+# 4
+```
 
 ## Conclusion
 
