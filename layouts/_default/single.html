@@ -16,6 +16,9 @@
           <span>{{ .PublishDate.Format "02 January 2006" }}</span>
           {{ end }}
         </div>
+        <div class="mb-3 post-meta">
+          {{ partial "share-buttons" . }}
+        </div>
         {{ if .Params.image }}
         <img src="{{ .Params.Image | absURL }}" class="img-fluid w-100 mb-4" alt="{{ .Title | markdownify }}">
         {{ end }}
