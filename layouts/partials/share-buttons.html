@@ -57,11 +57,7 @@ $supportedNetworks ", ") }}
         text-decoration: none;
         color: #fff !important;
 
-        margin: {
-                {
-                $buttonMargin
-            }
-        }
+        margin: 0.1rem
     }
 
     .resp-sharing-button {
@@ -69,24 +65,6 @@ $supportedNetworks ", ") }}
         transition: 25ms ease-out;
         padding: 0.5em 0.75em;
         font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-
-            {
-                {
-                if (isset .Site.Params.ShareButtons "fontsize")
-            }
-        }
-
-        font-size: {
-                {
-                .Site.Params.ShareButtons.FontSize
-            }
-        }
-
-            {
-                {
-                end
-            }
-        }
     }
 
     .resp-sharing-button__icon svg {
