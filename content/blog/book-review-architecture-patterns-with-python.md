@@ -8,7 +8,7 @@ categories:
 tags:
 - Python
 - Django
-type: featured
+type: post
 
 ---
 Have you wanted to dive deep into architecture design patterns with Python, and you don't know where to start? Well, maybe this book will give you some guidance to achieve such a goal
