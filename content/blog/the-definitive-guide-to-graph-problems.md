@@ -170,7 +170,7 @@ For the **recursive solution**:
 #### DFS Code implementation, Iterative
 
 ```python
-def breadth_first_search(graph,starting_node):
+def depth_first_search(graph,starting_node):
     queue = [starting_node] # Declare a stack and insert the starting node.
     while len(queue) > 0: # While the stack is not empty you remove the last node of the stack.
         current_node = queue.pop() 
@@ -193,14 +193,14 @@ breadth_first_search(graph, 1)
 #### DFS Code implementation, Recursion
 
 ```python
-def breadth_first_search(graph,starting_node):
+def depth_first_search(graph,starting_node):
     # Create a recursive function that takes in the graph and the starting node.
     print(starting_node)
     for neighbor in graph[starting_node]: 
         # Create your base cases. In this case my base is when the for loop contains zero elements.
         # When that is the case I do not call the breadth_first_search function
         # Traverse all the neighboring nodes and call the recursive function with the index of the neighboring node.
-        breadth_first_search(graph, neighbor)
+        depth_first_search(graph, neighbor)
 
 graph = {
     1: [2, 3],
