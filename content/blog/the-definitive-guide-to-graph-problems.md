@@ -1081,6 +1081,7 @@ For example consider the example below, where we can see that there are several 
 - 1, 3, 6
 - 1, 3, 5, 6
 - 1, 2, 4, 5, 6
+- 1, 2, 4, 5, 3, 6
 
 ```mermaid
  graph LR;
@@ -1103,7 +1104,7 @@ For example consider the example below, where we can see that there are several 
 classDef yellow fill:#ffff00;
 ```
 
-But we must consider the shortest one, we need a **notion of length/distance**, for our case, we consider that the distance between each node is 1, that is, the distance is the amount of "Edges", for example the route (1, 2, 4, 4, 5, 6) consists of 4 edges, therefore the distance is 4.
+But we must consider the shortest one, we need a **notion of length/distance**, for our case, we consider that the distance between each node is 1, that is, the distance is the amount of "Edges", for example the route (1, 2, 4, 5, 6) consists of 4 edges, therefore the distance is 4.
 
 In the example below we can see the correct shortest path, although there may be several.
 
