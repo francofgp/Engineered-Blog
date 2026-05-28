@@ -4,50 +4,56 @@
 <section class="section-sm">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-10 featured-post-slider">
-        <!-- slider item -->
-        {{ range ( where .Site.RegularPages "Type" "featured" )}}
-        <article class="card featured-post">
-          <div class="row g-0 align-items-center">
-            <div class="col-md-5">
-              {{ if and .Params.Image (ne .Params.Image "") }}
-                {{/* Featured post slider image — col-md-5 inside col-10 of container.
-                     ~370px at lg, ~430px at xl, ~500px at xxl, full-width on mobile.
-                     Widths [600, 1000] cover retina on all. SVG covers passthrough. */}}
-                {{- $cover := .Resources.GetMatch "cover.*" -}}
-                {{- if and $cover (ne $cover.MediaType.Type "image/svg+xml") -}}
-                  {{ partial "picture.html" (dict
-                    "resource" $cover
-                    "alt"      (.Title | markdownify)
-                    "class"    "card-img"
-                    "sizes"    "(min-width: 1400px) 500px, (min-width: 1200px) 430px, (min-width: 992px) 370px, (min-width: 768px) 310px, 100vw"
-                    "widths"   (slice 600 1000))
-                  }}
-                {{- else if $cover -}}
-                  <img src="{{ $cover.RelPermalink }}" class="card-img" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
-                {{- else -}}
-                  <img src="{{ .Params.Image | absURL }}" class="card-img" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
-                {{- end }}
-              {{ end }}
-            </div>
-            <div class="col-md-6 offset-md-1">
-              <div class="card-body">
-                <div class="mb-3 post-meta">
-                  <span>By {{ .Site.Params.Author }}</span>
-                  {{ if not .Params.HideDate }}
-                  <span class="border-bottom border-primary px-2 mx-1"></span>
-                  <span>{{ .PublishDate.Format "02 January 2006" }}</span>
-                  {{ end }}
+      <section class="splide featured-post-slider col-10" aria-label="Featured posts">
+        <div class="splide__track">
+          <ul class="splide__list">
+            <!-- slider item -->
+            {{ range ( where .Site.RegularPages "Type" "featured" )}}
+            <li class="splide__slide">
+              <article class="card featured-post">
+                <div class="row g-0 align-items-center">
+                  <div class="col-md-5">
+                    {{ if and .Params.Image (ne .Params.Image "") }}
+                      {{/* Featured post slider image — col-md-5 inside col-10 of container.
+                           ~370px at lg, ~430px at xl, ~500px at xxl, full-width on mobile.
+                           Widths [600, 1000] cover retina on all. SVG covers passthrough. */}}
+                      {{- $cover := .Resources.GetMatch "cover.*" -}}
+                      {{- if and $cover (ne $cover.MediaType.Type "image/svg+xml") -}}
+                        {{ partial "picture.html" (dict
+                          "resource" $cover
+                          "alt"      (.Title | markdownify)
+                          "class"    "card-img"
+                          "sizes"    "(min-width: 1400px) 500px, (min-width: 1200px) 430px, (min-width: 992px) 370px, (min-width: 768px) 310px, 100vw"
+                          "widths"   (slice 600 1000))
+                        }}
+                      {{- else if $cover -}}
+                        <img src="{{ $cover.RelPermalink }}" class="card-img" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
+                      {{- else -}}
+                        <img src="{{ .Params.Image | absURL }}" class="card-img" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
+                      {{- end }}
+                    {{ end }}
+                  </div>
+                  <div class="col-md-6 offset-md-1">
+                    <div class="card-body">
+                      <div class="mb-3 post-meta">
+                        <span>By {{ .Site.Params.Author }}</span>
+                        {{ if not .Params.HideDate }}
+                        <span class="border-bottom border-primary px-2 mx-1"></span>
+                        <span>{{ .PublishDate.Format "02 January 2006" }}</span>
+                        {{ end }}
+                      </div>
+                      <a href="{{ .Permalink }}"
+                        class="h1 fw-bold d-block text-body-emphasis mb-4 card-title">{{ .Title | markdownify }}</a>
+                      <p class="card-text">{{.Summary}}...</p>
+                    </div>
+                  </div>
                 </div>
-                <a href="{{ .Permalink }}"
-                  class="h1 fw-bold d-block text-body-emphasis mb-4 card-title">{{ .Title | markdownify }}</a>
-                <p class="card-text">{{.Summary}}...</p>
-              </div>
-            </div>
-          </div>
-        </article>
-        {{ end }}
-      </div>
+              </article>
+            </li>
+            {{ end }}
+          </ul>
+        </div>
+      </section>
     </div>
   </div>
 </section>

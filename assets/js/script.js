@@ -108,52 +108,112 @@
     }
   })();
 
-  // Preloader js    
-  $(window).on('load', function () {
-    $('.preloader').fadeOut(100);
-  });
-
-  (function ($) {
+  /* ============================================================
+   * Footer JS: search modal handlers + Splide slider + GLightbox.
+   * All vanilla, no jQuery.
+   *
+   * Execution model (two different timings, on purpose):
+   *   - Search modal handlers (open/close/Esc): wired TOP-LEVEL in
+   *     this IIFE. Safe because script.js loads in footer.html AFTER
+   *     the header markup, so #searchOpen, #searchClose, #search-query,
+   *     and .search-wrapper are already in the DOM at script-execution
+   *     time. Wiring early means the lupa works on the very first click.
+   *   - Splide slider + GLightbox: deferred to DOMContentLoaded. They
+   *     scan the document for their markup and we don't want them
+   *     running before the full document tree is parsed.
+   *
+   * Sections:
+   * - Search modal: open/close + focus on open + Esc closes.
+   * - Splide: vertical featured-post slider on desktop, horizontal
+   *           on mobile. Single-slide mode falls back to type: 'fade'
+   *           with no pagination dots (cleaner UX with 1 item).
+   * - GLightbox: lightbox modal for the /about/ photo gallery.
+   *              No-op on pages without any .glightbox element.
+   * ============================================================ */
+  (function () {
     'use strict';
 
-    //  Search Form Open
-    $('#searchOpen').on('click', function () {
-      $('.search-wrapper').addClass('open');
-    });
-    $('#searchClose').on('click', function () {
-      $('.search-wrapper').removeClass('open');
-    });
+    /* Search modal open / close (vanilla, no jQuery).
+       - Focus the input on open via requestAnimationFrame so the browser
+         has applied the .open class before we try to focus. Paired with
+         the SCSS using pointer-events (not visibility:hidden), focus
+         lands on the first click.
+       - Esc closes the modal when it is open (standard modal UX). */
+    var searchOpen    = document.getElementById('searchOpen');
+    var searchClose   = document.getElementById('searchClose');
+    var searchWrapper = document.querySelector('.search-wrapper');
+    var searchInput   = document.getElementById('search-query');
 
-    // featured post slider
-    const featuredPostSlider = $(".featured-post-slider");
-    featuredPostSlider.slick({
-      infinite: true,
-      vertical: true,
-      verticalSwiping: true,
-      arrows: false,
-      dots: true,
-      responsive: [{
-        breakpoint: 600,
-        settings: {
-          vertical: false,
-          verticalSwiping: false,
-        }
-      }]
-    });
-
-    featuredPostSlider.on('wheel', (function(e) {
-      e.preventDefault();
-      if (e.originalEvent.deltaY > 0) {
-        $(this).slick('slickNext');
-      } else {
-        $(this).slick('slickPrev');
+    function openSearch() {
+      if (!searchWrapper) return;
+      searchWrapper.classList.add('open');
+      /* requestAnimationFrame waits for the next paint after style recalc,
+         which is more reliable than setTimeout(0) for triggering .focus()
+         on an element whose visibility/display just changed. Paired with
+         the SCSS change (pointer-events: none replacing visibility: hidden)
+         the focus now works on the first click. */
+      requestAnimationFrame(function () {
+        if (searchInput) searchInput.focus();
+      });
+    }
+    function closeSearch() {
+      if (!searchWrapper) return;
+      searchWrapper.classList.remove('open');
+    }
+    if (searchOpen)  searchOpen .addEventListener('click', openSearch);
+    if (searchClose) searchClose.addEventListener('click', closeSearch);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && searchWrapper && searchWrapper.classList.contains('open')) {
+        closeSearch();
       }
-    }));
+    });
 
-    // venobox initialize
-    $('.venobox').venobox();
+    /* Featured post slider (Splide).
+       NO autoHeight: per Splide v4 docs autoHeight "has no effect on vertical
+       sliders" — worse, passing it on a ttb slider made the .splide__track lose
+       its overflow:hidden behaviour, causing 2+ slides to render stacked
+       vertically without clipping. With a fixed height: '450px' the track
+       clips correctly and slides transition one at a time. */
+    function initFeaturedSlider() {
+      var el = document.querySelector('.splide.featured-post-slider');
+      if (!el || typeof Splide === 'undefined') return;
+      var slideCount = el.querySelectorAll('.splide__slide').length;
+      new Splide(el, {
+        type        : slideCount > 1 ? 'loop' : 'fade',
+        direction   : 'ttb',
+        height      : '450px',
+        arrows      : false,
+        pagination  : slideCount > 1,
+        wheel       : true,
+        wheelSleep  : 250,
+        releaseWheel: true,
+        speed       : 600,
+        breakpoints : {
+          600: { direction: 'ltr', height: 'auto' }
+        }
+      }).mount();
+    }
 
-  })(jQuery);
+    /* GLightbox — currently used by the /about/ photo gallery (markup tagged
+       with .glightbox + data-gallery="about-gallery"). Vanilla, no jQuery.
+       Safe to call even on pages without any .glightbox elements: the lib
+       simply scans, finds nothing, and returns an empty instance. */
+    function initGLightbox() {
+      if (typeof GLightbox === 'undefined') return;
+      if (!document.querySelector('.glightbox')) return;
+      GLightbox({ selector: '.glightbox' });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        initFeaturedSlider();
+        initGLightbox();
+      });
+    } else {
+      initFeaturedSlider();
+      initGLightbox();
+    }
+  })();
 
   /* ============================================================
    * Cookie notice (vanilla, localStorage)

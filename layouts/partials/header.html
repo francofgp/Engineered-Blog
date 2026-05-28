@@ -100,12 +100,12 @@
         {{ if .Site.Params.search.enable }}
         {{ "<!-- search -->" | safeHTML }}
         <div class="search ps-lg-4">
-          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
+          <button type="button" id="searchOpen" class="search-btn" aria-label="Open search"><i class="ti-search"></i></button>
           <div class="search-wrapper">
             <form action="{{ .Site.BaseURL }}/search" class="h-100">
               <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
             </form>
-            <button id="searchClose" class="search-close"><i class="ti-close text-body-emphasis"></i></button>
+            <button type="button" id="searchClose" class="search-close" aria-label="Close search"><i class="ti-close text-body-emphasis"></i></button>
           </div>
         </div>
         {{ end }}

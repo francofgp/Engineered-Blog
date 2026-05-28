@@ -143,7 +143,7 @@ The following surfaces are auto-themed via the ramp — you don't touch them whe
 - Tag pills + social icons (`.eb-tag`, `.social-links li a`) — via `rgba(var(--bs-primary-rgb), …)`
 - `::selection` background
 - Pagination active state + hover
-- Slick-dot active marker (featured post slider)
+- Splide pagination dot active marker (featured post slider)
 - Code block syntax highlighting accent (where Chroma uses primary)
 
 Net effect: changing 8 numbers re-themes the entire site.
@@ -227,6 +227,56 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 ---
 
 ## History
+
+### 2026-05-28 — jQuery removal + Splide migration + dead-code cleanup
+
+Closed the "vendored Liva theme legacy JS" chapter. Removed jQuery (84 KB) entirely along with three jQuery-dependent libs, replacing only what was still in use with vanilla equivalents. Net on-disk delta: **~136 KB less / 2 fewer HTTP requests / ~40 KB less over the wire (gzipped)**. The real win is mental, not Lighthouse: the codebase is now jQuery-free, and the only client-side libs left are Bootstrap 5.3 bundle (vanilla), Splide.js v4 (vanilla), Fuse.js (vanilla), mark.js v8 vanilla, and themify-icons CSS.
+
+Changes, grouped by motivation:
+
+1. **Dead code, removed without replacement**:
+   - **Venobox** (jQuery lightbox, 29 KB JS+CSS). Initial audit incorrectly claimed there were zero `.venobox` elements in the codebase — there was actually one in `layouts/about/list.html` (the photo gallery). Caught in the post-implementation audit and addressed by migrating to **GLightbox** (vanilla, ~68 KB JS+CSS) — see entry below "GLightbox migration for /about/ gallery". Plugin dir deleted, `config.toml` entries removed, init line removed from `assets/js/script.js`.
+   - **Preloader** (`layouts/partials/preloader.html` + `.preloader` SCSS rule + 100ms `$(window).on('load').fadeOut()` handler). Anti-pattern: a 100ms intentional FCP/LCP delay over a div that had no image (`preloader = ""` in config). With Hugo + Netlify CDN there's nothing to "preload". Partial deleted, SCSS rule deleted, baseof partial call removed, `[params.preloader]` block removed from `config.toml`, JS handler removed.
+2. **Library replacements (vanilla)**:
+   - **Slick → Splide.js v4** (`static/plugins/splide/{splide.min.js,splide-core.min.css}`, ~31 KB total vs Slick's ~58 KB). Slick was animating a *single* featured post — Splide v4 falls back to `type: 'fade'` with no pagination when there's only one slide, then re-enables `loop` + dots when slideCount > 1. Vertical (`direction: 'ttb'`) on ≥600px, horizontal on mobile, wheel-to-navigate, autoHeight to measure the tallest slide. Markup migrated to the required `.splide > .splide__track > .splide__list > li.splide__slide` nesting in `layouts/index.html`. Dot styles ported in `assets/scss/templates/_main.scss` (`.slick-dots`/`.slick-active` → `.splide__pagination`/`.is-active`, same thin-line aesthetic, theme-reactive via `var(--bs-primary)` / `var(--eb-border)`).
+   - **mark.js v8 (jQuery plugin, 17 KB) → mark.js v8 (vanilla, 16.5 KB)**. Same version, same size, same `new Mark(ctx).mark(keyword)` API. The previous vendored copy used `module.exports=t(require("jquery"))`; the new one uses `module.exports=t()`. Drop-in.
+   - **`search.js` jQuery → vanilla**. Line-by-line port: `$.getJSON` → `fetch().then(r => r.json())`, `$.each` → `forEach`, `$('#x').val()` → `getElementById('x').value`, `$('#x').append(html)` → `insertAdjacentHTML('beforeend', html)`, `$('#x').mark()` → `new Mark(getElementById('x')).mark()`. Added a `.catch` on the fetch (the jQuery version silently failed) and a `typeof Mark !== "undefined"` guard. Dropped a leftover dev `console.log({"matches":result})`.
+   - **Search modal open/close** in `script.js`: `$('#searchOpen').on('click', …)` → `document.getElementById('searchOpen').addEventListener('click', …)`. 3 lines.
+3. **jQuery itself deleted** (`static/plugins/jQuery/` + `config.toml` entry). Bootstrap 5+ has been vanilla since 2021, so the bundle keeps working untouched.
+
+Files touched: `config.toml`, `layouts/_default/baseof.html`, `layouts/partials/preloader.html` (deleted), `layouts/index.html`, `assets/js/script.js`, `assets/scss/_common.scss`, `assets/scss/templates/_main.scss`, `static/plugins/jQuery/` (deleted), `static/plugins/slick/` (deleted), `static/plugins/venobox/` (deleted), `static/plugins/splide/` (added), `static/plugins/search/{mark.js,search.js}`, `docs/THEME.md`, `AGENTS.md`.
+
+**Addendum — same-day post-implementation audit (4 fixes):**
+
+The first reader test surfaced four issues that the initial audit missed. All fixed in the same session.
+
+1. **Venobox was NOT zero-use — `/about/` gallery lost the lightbox.** The original audit grepped for `.venobox` in `content/` and `layouts/partials/` but missed `layouts/about/list.html:29`, which uses `class="venobox" data-gall="gallery"` to give the 14-image photo gallery a modal lightbox with prev/next navigation. Fix: migrated to **GLightbox v3.3.1** (vanilla, no jQuery dep, 55 KB JS + 13 KB CSS). Markup updated to `class="glightbox" data-gallery="about-gallery"`. Init added in `assets/js/script.js` (`GLightbox({ selector: '.glightbox' })`, guarded by `if (!document.querySelector('.glightbox')) return;` so it's a no-op on every other page). Lesson for future audits: grep all of `layouts/`, not just `partials/`, when checking for dead-code claims.
+
+2. **Splide vertical broke with 2+ slides.** Adding a second featured post showed both slides rendering stacked vertically without clipping (track lost its `overflow: hidden`). Cause: `autoHeight: true` "has no effect on vertical sliders" per Splide v4 docs, but passing it on a `ttb` slider actively interferes with the `height` option. Fix: removed `autoHeight` from `assets/js/script.js`, kept `height: '450px'` as the single source of truth for vertical mode. The mobile breakpoint at <600px still uses `height: 'auto'` (horizontal, where auto behaves normally). Updated the gotcha block below.
+
+3. **Doble X en search input.** `<input type="search">` triggers the WebKit/Blink native clear button — combined with our explicit `#searchClose` button it rendered two X's whenever the input had content. Fix: added a `::-webkit-search-cancel-button` + `::-webkit-search-decoration` `display: none` rule in `assets/scss/templates/_navigation.scss`. Kept `type="search"` for its semantic + mobile-keyboard + a11y benefits.
+
+4. **Search modal didn't focus the input on open.** Clicking the lupa opened the modal but left the cursor wherever it was; the user had to click *again* inside the input to start typing. Fix: `setTimeout(() => searchInput.focus(), 0)` after `.add('open')` (the 0ms defer is needed because `visibility: hidden` blocks `.focus()` synchronously in some browsers, and the wrapper's transition needs one tick to start). Bonus: added a global `Escape` listener that closes the modal when open — standard modal UX.
+
+Files touched in the addendum: `config.toml`, `layouts/about/list.html`, `assets/js/script.js`, `assets/scss/templates/_navigation.scss`, `static/plugins/glightbox/` (added), `static/plugins/search/search.js` (comment only), `docs/THEME.md`, `AGENTS.md`.
+
+**Gotcha for future-me**: Splide vertical mode (`direction: 'ttb'`) needs an explicit `height` and **do NOT pass `autoHeight: true`** even though the docs say it's a no-op for vertical — it actually breaks the track's clipping. Use a fixed `height: '450px'` and `object-fit: cover` on `.card-img` if the cards differ much in height. Pagination has **two distinct designs by viewport**: vertical thin-line on the right column for ≥600px (ported from Slick), circular dots at the bottom for <600px (the horizontal line design from Slick collapsed visually with only 2-3 slides). Both are theme-reactive via `$primary-color` / `$border-color`. If you ever swap the theme, make sure to update the `&::before { content: none; }` reset that suppresses the global `.content ul li::before` themify bullet.
+
+**Second addendum — same-day visual polish + focus root-cause fix (4 items):**
+
+After the first addendum landed, a manual walkthrough surfaced four more issues that required a second round.
+
+1. **Hover shadow on the featured card was being chopped in half.** The global `.card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,.18); }` was inherited by `.featured-post.card`, but the parent `.splide__track` has `overflow: hidden` (necessary to clip slides) → the bottom half of the shadow disappeared. Fix: changed the selector in `assets/scss/_common.scss` from `.card` to `.card:not(.featured-post)`. The featured card is the home's main content (not a thumbnail), so the lift-on-hover affordance was unnecessary anyway.
+
+2. **Search modal focus was *actually* broken — `visibility: hidden` was the culprit, not the timing.** The first addendum thought `setTimeout(() => input.focus(), 0)` would suffice, but browsers (Firefox especially) reject `.focus()` on `visibility: hidden` elements even when the style change is in-flight. Fix in two parts: (a) in `assets/scss/templates/_navigation.scss`, replaced `visibility: hidden` with `pointer-events: none` (input is still inert to clicks while modal closed, but programmatic focus works); (b) in `assets/js/script.js`, switched from `setTimeout(0)` to `requestAnimationFrame` — semantically correct for "focus after the next paint" and immune to future timing regressions.
+
+3. **Cover image flush against the card's left edge.** The slide markup uses `<div class="row g-0">` (no gutters) for a tight image+text grid, but that put the cover (Flask logo, etc.) touching the card's left border. Fix: added `padding-left: 30px` to `.featured-post .col-md-5` in `_main.scss`, reset to `0` under `@include tablet` (where the col stacks full-width on top and centering matters more).
+
+4. **Mobile pagination was visually broken — couldn't tell which slide was active.** The Slick-era design used horizontal lines (`width: 100%` on each `<li>` and `.splide__pagination__page`), which works for sliders with 5+ slides but collapses to overlapping invisible lines with only 2 slides. Replaced the entire `@media (max-width: 599px)` block in `_main.scss` with circular dots: 10px round, centered with `gap: 10px`, brand-coloured + `transform: scale(1.2)` on `.is-active`. Universally-recognised pattern, immediately clear which slide you're on.
+
+Files touched in this second addendum: `assets/scss/_common.scss`, `assets/scss/templates/_navigation.scss`, `assets/scss/templates/_main.scss`, `assets/js/script.js`, `docs/THEME.md`.
+
+**Lesson**: when a CSS property is documented as "blocks focus" (visibility, display: none), don't try to work around it with timing — change the property. Time-based fixes are fragile and ship as "intermittent" bugs.
 
 ### 2026-05-28 — Image pipeline + cookie banner modernization
 

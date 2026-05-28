@@ -26,8 +26,14 @@
     <div class="row g-0">
       {{ range .gallery }}
       <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-        <a href="{{ .image | absURL}}" class="venobox" data-gall="gallery"><img class="img-fluid w-100"
-            src="{{ .image | absURL}}" alt=""></a>
+        {{/* Derive an alt text from the image filename so screen readers + GLightbox
+             captions get something meaningful instead of empty strings. Strips the
+             extension and the `-high-res` suffix used by some assets (e.g. pytorch-logo-high-res.png).
+             Add `loading="lazy" decoding="async"` so the 6+ gallery images don't
+             contend with the above-the-fold author block on initial page load. */}}
+        {{ $alt := replaceRE `-high-res$` `` (strings.TrimSuffix (path.Ext .image) (path.Base .image)) }}
+        <a href="{{ .image | absURL}}" class="glightbox" data-gallery="about-gallery"><img class="img-fluid w-100"
+            src="{{ .image | absURL}}" alt="{{ $alt }}" loading="lazy" decoding="async"></a>
       </div>
       {{ end }}
     </div>

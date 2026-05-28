@@ -39,6 +39,13 @@
   border-left: 1px solid $border-color;
 }
 
+/* Closed state uses `pointer-events: none` instead of `visibility: hidden`.
+   visibility: hidden was preventing the JS .focus() call on the input
+   from working when the modal opens (browsers reject focus on elements
+   that are visibility:hidden, even mid-transition). With pointer-events
+   we keep the wrapper inert to clicks while closed but the input remains
+   programmatically focusable the moment we add .open. The opacity
+   transition is unchanged, so the visual fade-in is identical. */
 .search-wrapper {
   position: absolute;
   top: 0;
@@ -46,13 +53,13 @@
   right: 0;
   height: 100%;
   z-index: 2;
-  visibility: hidden;
-  transition: .2s ease;
   opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
 
   &.open {
-    visibility: visible;
     opacity: 1;
+    pointer-events: auto;
   }
 }
 
@@ -68,6 +75,19 @@
   &:focus {
     box-shadow: none !important;
   }
+
+  /* Hide the browser's native clear button on <input type="search"> in
+     WebKit/Blink (Chrome, Edge, Safari). We already have an explicit close
+     button (#searchClose) that closes the entire modal; without this rule
+     the input renders TWO X's once the user types something. We keep
+     type="search" for its semantics (mobile keyboards show the search key,
+     screen readers announce the role correctly, history dropdown works). */
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
 }
 
 .search-close {
@@ -77,6 +97,5 @@
   transform: translateY(-50%);
   border: 0;
   background: transparent;
-  page-break-after: 10px;
   font-size: 20px;
 }

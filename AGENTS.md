@@ -59,13 +59,13 @@ netlify.toml               # Build command + headers — do not change HUGO_VERS
 archetypes/default.md      # Template used by `hugo new` (rich TOML front matter + cheatsheet)
 layouts/                   # Hugo templates (Liva theme, vendored — edit with care)
   _default/                # baseof.html, list.html, single.html, index.json
-  partials/                # head.html, header.html, footer.html, post.html, sidebar.html, share-buttons.html, preloader.html
+  partials/                # head.html, header.html, footer.html, post.html, sidebar.html, share-buttons.html, picture.html
   index.html, 404.html
 assets/scss/               # SCSS sources compiled by Hugo Extended (libsass)
   style.scss               # Entry point — imports _variables, _typography, _common, _buttons, _kofi, _mixins
   templates/               # Per-template partials
 static/                    # Copied verbatim to site root
-  images/, plugins/        # Theme assets (bootstrap, jQuery, slick, venobox, search) — do not modify
+  images/, plugins/        # Theme assets (bootstrap, splide, search, themify-icons) — do not modify
 data/gallery.yml           # Gallery data consumed by templates
 public/                    # GENERATED — never commit changes here, never edit by hand
 resources/_gen/            # GENERATED Hugo asset cache — never edit
@@ -171,7 +171,7 @@ Notes:
 - `_variables.scss` exists for backward compat with the vendored Liva theme SCSS — its Sass variables are aliases over the CSS custom properties. Do not add new colors there.
 - Edit the partial `_*.scss` files for site-wide changes. Mixins go in `_mixins.scss`.
 - Do **not** add CSS via `<style>` blocks in templates or content unless you have a good reason — keep styling centralized in SCSS.
-- Third-party CSS/JS plugins (`static/plugins/bootstrap/` (Bootstrap 5.3.x, bundle with Popper), `jQuery/` (jQuery 3.x), `search/`) are vendored Liva theme dependencies. Do not modify them; if a plugin needs replacing, do it deliberately and update `config.toml` `[params.plugins]`.
+- Third-party CSS/JS plugins live under `static/plugins/`. As of the May 2026 jQuery removal, the inventory is: `bootstrap/` (Bootstrap 5.3.x bundle with Popper — vanilla, no jQuery dep), `splide/` (Splide.js v4 — replaces the old jQuery Slick slider; init in `assets/js/script.js`), `glightbox/` (GLightbox v3.3.1 — replaces the old jQuery Venobox lightbox; powers the `/about/` photo gallery, init in `assets/js/script.js`), `search/` (Fuse.js + mark.js v8 vanilla + the site's own `search.js`), and `themify-icons/` (icon font CSS). All vendored. If a plugin needs replacing, do it deliberately and update `config.toml` `[params.plugins]`.
 
 ## Editing templates
 

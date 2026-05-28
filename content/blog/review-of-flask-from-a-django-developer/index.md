@@ -6,7 +6,7 @@ draft = false
 image = "/blog/review-of-flask-from-a-django-developer/cover.png"
 tags = ["Python", "Django", "Flask"]
 title = "Review of Flask, From a Django Developer"
-type = "post"
+type = "featured"
 +++
 Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is?
 

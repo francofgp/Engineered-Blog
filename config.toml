@@ -21,21 +21,19 @@ home = ["HTML", "RSS", "JSON"]
 [[params.plugins.css]]
 URL = "plugins/bootstrap/bootstrap.min.css"
 [[params.plugins.css]]
-URL = "plugins/slick/slick.css"
+URL = "plugins/splide/splide-core.min.css"
+[[params.plugins.css]]
+URL = "plugins/glightbox/glightbox.min.css"
 [[params.plugins.css]]
 URL = "plugins/themify-icons/themify-icons.css"
-[[params.plugins.css]]
-URL = "plugins/venobox/venobox.css"
 
 # JS Plugins
 [[params.plugins.js]]
-URL = "plugins/jQuery/jquery.min.js"
-[[params.plugins.js]]
 URL = "plugins/bootstrap/bootstrap.bundle.min.js"
 [[params.plugins.js]]
-URL = "plugins/slick/slick.min.js"
+URL = "plugins/splide/splide.min.js"
 [[params.plugins.js]]
-URL = "plugins/venobox/venobox.min.js"
+URL = "plugins/glightbox/glightbox.min.js"
 [[params.plugins.js]]
 URL = "plugins/search/fuse.min.js"
 [[params.plugins.js]]
@@ -96,11 +94,6 @@ email = "giulianopertile@gmail.com"
 location = "Villa María, Córdoba, Argentina"
 # copyright
 copyright = "| copyright &copy; 2022 [giulianopertile.com](https://github.com/francofgp/Engineered-Blog) All Rights Reserved |"
-
-# Preloader
-[params.preloader]
-enable = true
-preloader = "" # use .png , .svg or .gif format
 
 # search
 [params.search]
