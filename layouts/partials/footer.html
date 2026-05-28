@@ -98,27 +98,13 @@
 <script src="{{ $script.Permalink }}"></script>
 
 
-<!-- cookie -->
+<!-- cookie notice (informational; GA + AdSense load before consent — see head.html).
+     Handler lives in assets/js/script.js, styles in assets/scss/_common.scss
+     (theme-aware via --eb-overlay-* tokens). Persistence is localStorage with
+     a versioned key — bump 'cookie-consent-v1' in script.js to re-prompt. -->
 {{ if site.Params.cookies.enable }}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>
-<div id="js-cookie-box" class="cookie-box cookie-box-hide">
-	This site uses cookies. By continuing to use this website, you agree to their use. <span id="js-cookie-button" class="btn btn-sm btn-primary ms-2">I Accept</span>
+<div id="js-cookie-box" class="cookie-box cookie-box-hide" role="region" aria-label="Cookie notice">
+  This site uses Google Analytics and AdSense cookies.
+  <button type="button" id="js-cookie-button" class="btn btn-sm btn-primary ms-2" aria-label="Accept cookies">I Accept</button>
 </div>
-<script>
-	(function ($) {
-		const cookieBox = document.getElementById('js-cookie-box');
-		const cookieButton = document.getElementById('js-cookie-button');
-		if (!Cookies.get('cookie-box')) {
-			cookieBox.classList.remove('cookie-box-hide');
-			cookieButton.onclick = function () {
-				Cookies.set('cookie-box', true, {
-					expires: {{ site.Params.cookies.expire_days }}
-				});
-				cookieBox.classList.add('cookie-box-hide');
-			};
-		}
-	})(jQuery);
-</script>
-
-{{/* Cookie box style now lives in assets/scss/_common.scss with theme-aware --eb-overlay-* tokens. */}}
 {{ end }}

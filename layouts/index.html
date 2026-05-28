@@ -10,8 +10,24 @@
         <article class="card featured-post">
           <div class="row g-0 align-items-center">
             <div class="col-md-5">
-              {{ if .Params.Image }}
-              <img src="{{ .Params.Image | absURL }}" class="card-img" alt="{{ .Title | markdownify }}">
+              {{ if and .Params.Image (ne .Params.Image "") }}
+                {{/* Featured post slider image — col-md-5 inside col-10 of container.
+                     ~370px at lg, ~430px at xl, ~500px at xxl, full-width on mobile.
+                     Widths [600, 1000] cover retina on all. SVG covers passthrough. */}}
+                {{- $cover := .Resources.GetMatch "cover.*" -}}
+                {{- if and $cover (ne $cover.MediaType.Type "image/svg+xml") -}}
+                  {{ partial "picture.html" (dict
+                    "resource" $cover
+                    "alt"      (.Title | markdownify)
+                    "class"    "card-img"
+                    "sizes"    "(min-width: 1400px) 500px, (min-width: 1200px) 430px, (min-width: 992px) 370px, (min-width: 768px) 310px, 100vw"
+                    "widths"   (slice 600 1000))
+                  }}
+                {{- else if $cover -}}
+                  <img src="{{ $cover.RelPermalink }}" class="card-img" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
+                {{- else -}}
+                  <img src="{{ .Params.Image | absURL }}" class="card-img" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
+                {{- end }}
               {{ end }}
             </div>
             <div class="col-md-6 offset-md-1">
@@ -44,8 +60,19 @@
       {{ range first 3 (where .Site.RegularPages "Type" "post")}}
       <div class="col-lg-4 small-post-border">
         <article class="d-flex align-items-start">
-          {{ if .Params.Image }}
-          <div class="recent-post-thumb me-3" style="background-image: url('{{ .Params.Image | absURL }}');"></div>
+          {{ if and .Params.Image (ne .Params.Image "") }}
+            {{/* Recent-post thumb is a fixed 100x100 circle (background-image, no srcset).
+                 A single 200w WebP at q90 is enough for retina at this size. SVG covers
+                 fall back to passthrough; non-bundle .Params.Image is used as-is. */}}
+            {{- $cover := .Resources.GetMatch "cover.*" -}}
+            {{- if and $cover (ne $cover.MediaType.Type "image/svg+xml") -}}
+              {{- $thumb := $cover.Process "resize 200x webp q90" -}}
+              <div class="recent-post-thumb me-3" style="background-image: url('{{ $thumb.RelPermalink }}');"></div>
+            {{- else if $cover -}}
+              <div class="recent-post-thumb me-3" style="background-image: url('{{ $cover.RelPermalink }}');"></div>
+            {{- else -}}
+              <div class="recent-post-thumb me-3" style="background-image: url('{{ .Params.Image | absURL }}');"></div>
+            {{- end }}
           {{ end }}
           <div class="recent-post-body">
             <div class="mb-3 post-meta">

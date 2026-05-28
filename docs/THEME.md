@@ -228,6 +228,21 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-28 — Image pipeline + cookie banner modernization
+
+Two unrelated polish passes bundled into one commit, plus a same-day audit+fix round (see addendum at the end of this entry):
+
+1. **Image processing pipeline**. New render hook (`layouts/_default/_markup/render-image.html`) + shared `partials/picture.html` + cover-image updates in `single.html`/`post.html`/`index.html`. Raster body and cover images now emit `<picture>` with WebP + JPG `srcset` (widths 480/800/1200, capped at original), `loading="lazy"` (eager + `fetchpriority="high"` on the post hero), and intrinsic `width`/`height` (anti-CLS). SVG, animated GIF, and external URLs pass through with `loading="lazy"` only — see `AGENTS.md` §Images for the full contract. No theme-token changes; mentioned here because the cookie-box animation refactor lives in the same SCSS file.
+
+2. **Cookie box animation**. The previous `.cookie-box-hide { display: none }` killed the `transition: all .75s …` on the parent — nothing animated. Replaced with `opacity` + `transform: translateY(10px)` + `visibility: hidden` and a `visibility` transition delayed on hide (so the fade-out actually plays before the element becomes inert). Also dropped the `js-cookie` CDN dep + jQuery IIFE in `footer.html`; the handler is now vanilla JS using `localStorage` (`cookie-consent-v1` key — bump the version to re-prompt). Banner is still informational only: GA + AdSense load before consent via `head.html`. See `AGENTS.md` §"Things to leave alone" for why we deliberately stop short of real gating.
+
+**Addendum (same-day post-audit fixes):**
+
+- **Quality bump**: WebP q82 / JPG q85 produced visible blur on the hero at xl/xxl — the browser was upscaling 800w→880w because the `sizes` attribute lied about the slot. Fixed by (a) raising WebP **q82 → q92** and JPG **q85 → q92**, (b) adding a **1600w** variant to the default pool (covers xxl + DPR 2), (c) computing `sizes` per breakpoint matching the real Bootstrap container × col grid. Hero files go from ~45 KB to ~150 KB — still ~30× smaller than the raw source. See `AGENTS.md` §Images → "Pipeline settings" for the exact numbers per caller, and don't tune them without reading the rationale.
+- **Cookie banner bugfix**: the previous version of this entry shipped with a banner that **never appeared in production** — `script.js` was loaded BEFORE the banner markup in `footer.html`, so the IIFE's `getElementById` returned `null`, the handler never connected, and `.cookie-box-hide` stayed applied forever. Now wrapped in a `DOMContentLoaded` check (same pattern as the theme toggle). Smoke test: `localStorage.removeItem('cookie-consent-v1')` + reload → banner appears.
+- **Defensive guards**: cover lookups in `single.html`/`post.html`/`index.html` now check `MediaType.Type` before processing — a future `cover.svg` would have crashed `.Process` (vectors can't be resized). Now falls back to a raw `<img>` for SVG covers.
+- **Misc**: render-image hook now passes the markdown `title="..."` through to the partial for JPG/PNG (was only working for SVG/GIF/external); `picture.html` dedupes the largest-width process call by capturing `$lastRaster` in the loop; `<span>` wrapper dropped from the cookie box markup; `.Params.Image` check is consistent across all templates.
+
 ### 2026-05-28 — Dark mode rollout (single-day implementation)
 
 Migrated the site from a single static SCSS palette to a dual-theme system. Palette **D · Warm-dark** chosen over GitHub (A — too stark/cold), Slate (B — too blue), and Material (C — teal pop too weak, body↔surface step too small), based on the side-by-side comparison in `mockups/dark-mode-preview.html`. Subsequent rounds in the same day refined dark-mode readability after first reader feedback, unified the ghost pattern across both themes, extracted the brand ramp for one-block-per-theme brand swaps, and bundled tech debt cleanup into the closing commit.

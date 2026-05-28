@@ -19,8 +19,28 @@
         <div class="mb-3 post-meta">
           {{ partial "share-buttons" . }}
         </div>
-        {{ if .Params.image }}
-        <img src="{{ .Params.Image | absURL }}" class="img-fluid w-100 mb-4" alt="{{ .Title | markdownify }}">
+        {{ if and .Params.Image (ne .Params.Image "") }}
+          {{/* Cover hero — above the fold, so loading="eager" + fetchpriority="high" for LCP.
+               Branching by cover MediaType:
+                 - JPG/PNG bundle resource → picture.html (responsive WebP+raster srcset)
+                 - SVG bundle resource     → raw <img> (Hugo can't .Process vectors)
+                 - no bundle resource      → raw <img> from .Params.Image (legacy/external)
+               OG/Twitter meta keep pointing at .Params.Image (the original) via head.html
+               so social cards stay full-res. */}}
+          {{- $cover := .Resources.GetMatch "cover.*" -}}
+          {{- if and $cover (ne $cover.MediaType.Type "image/svg+xml") -}}
+            {{ partial "picture.html" (dict
+              "resource"      $cover
+              "alt"           (.Title | markdownify)
+              "class"         "img-fluid w-100 mb-4"
+              "loading"       "eager"
+              "fetchpriority" "high")
+            }}
+          {{- else if $cover -}}
+            <img src="{{ $cover.RelPermalink }}" class="img-fluid w-100 mb-4" alt="{{ .Title | markdownify }}" loading="eager" decoding="async">
+          {{- else -}}
+            <img src="{{ .Params.Image | absURL }}" class="img-fluid w-100 mb-4" alt="{{ .Title | markdownify }}" loading="eager" decoding="async">
+          {{- end }}
         {{ end }}
         <div class="content mb-5">
           {{ .Content }}

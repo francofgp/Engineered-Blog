@@ -1,7 +1,24 @@
 <div class="col-md-6 mb-4">
     <article class="card">
         {{ if and .Params.Image (ne .Params.Image "") }}
-        <img src="{{ .Params.Image | absURL }}" class="card-img-top" alt="{{ .Title | markdownify }}">
+          {{/* Card thumbnail — post.html is rendered inside col-lg-8 of the home grid,
+               then col-md-6 inside that → ~320px at lg, ~380px at xl, ~440px at xxl,
+               full-width on mobile. Widths [400, 800] cover retina at all breakpoints.
+               SVG covers fall back to raw <img> (Hugo can't .Process vectors). */}}
+          {{- $cover := .Resources.GetMatch "cover.*" -}}
+          {{- if and $cover (ne $cover.MediaType.Type "image/svg+xml") -}}
+            {{ partial "picture.html" (dict
+              "resource" $cover
+              "alt"      (.Title | markdownify)
+              "class"    "card-img-top"
+              "sizes"    "(min-width: 1400px) 440px, (min-width: 1200px) 380px, (min-width: 992px) 320px, (min-width: 768px) 360px, 100vw"
+              "widths"   (slice 400 800))
+            }}
+          {{- else if $cover -}}
+            <img src="{{ $cover.RelPermalink }}" class="card-img-top" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
+          {{- else -}}
+            <img src="{{ .Params.Image | absURL }}" class="card-img-top" alt="{{ .Title | markdownify }}" loading="lazy" decoding="async">
+          {{- end }}
         {{ end }}
         <div class="card-body">
         {{ range .Params.Categories }}

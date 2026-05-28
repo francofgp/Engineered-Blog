@@ -1,0 +1,77 @@
+{{- /*
+  Responsive <picture> partial. Emits a WebP <source srcset> + original-format
+  <img> fallback with widths capped at the resource's intrinsic width.
+
+  Used by:
+    layouts/_default/_markup/render-image.html  · body markdown images
+    layouts/_default/single.html                 · post cover hero
+    layouts/partials/post.html                   · list-page card thumb
+    layouts/index.html                           · featured slider
+
+  Args (dict):
+    resource      *resource.Resource   required, raster (JPG/PNG) — NOT svg/gif/external
+    alt           string               required
+    title         string               optional, becomes title="…" on the <img>
+    class         string               optional, default "img-fluid"
+    sizes         string               optional, see below
+    loading       string               optional, default "lazy"  (use "eager" for above-the-fold heroes)
+    fetchpriority string               optional, default ""      (use "high" for the LCP image)
+    widths        slice of int         optional, default [480 800 1200 1600]
+
+  Quality settings (see AGENTS.md §Images → "Pipeline settings"):
+    WebP   → q92  (near-lossless to the eye, ~3× heavier than q82 default)
+    raster → q92  (same JPG/PNG quality as WebP for parity)
+
+  Default sizes mirrors Bootstrap container × col-lg-8 widths at each breakpoint:
+    xxl (≥1400) → 880px, xl (≥1200) → 760px, lg (≥992) → 640px,
+    md (≥768) → 720px (col-lg-8 stacks to col-12), <md → 100vw.
+
+  Caller is responsible for handling SVG / GIF / external / missing — this
+  partial assumes a raster resource that supports .Process.
+*/ -}}
+{{- $r        := .resource -}}
+{{- $alt      := .alt -}}
+{{- $title    := .title -}}
+{{- $class    := default "img-fluid" .class -}}
+{{- $sizes    := default "(min-width: 1400px) 880px, (min-width: 1200px) 760px, (min-width: 992px) 640px, (min-width: 768px) 720px, 100vw" .sizes -}}
+{{- $loading  := default "lazy" .loading -}}
+{{- $fpri     := default "" .fetchpriority -}}
+{{- $widths   := default (slice 480 800 1200 1600) .widths -}}
+
+{{- /* Cap widths to the original — never upscale (Hugo would do it, but it's wasteful). */ -}}
+{{- $picked := slice -}}
+{{- range $widths -}}
+  {{- if le . $r.Width -}}
+    {{- $picked = $picked | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if eq (len $picked) 0 -}}
+  {{- /* Original is narrower than every standard width — emit at original only. */ -}}
+  {{- $picked = $picked | append $r.Width -}}
+{{- else if and (lt (len $picked) (len $widths)) (lt (index $picked (sub (len $picked) 1)) $r.Width) -}}
+  {{- /* Standard ladder stopped short of the original (e.g. 1024 source → picked=[480,800]
+         when widths=[480,800,1200,1600]). Append the original as max variant so the
+         browser can serve full resolution at xxl + retina instead of upscaling a smaller
+         picked variant. Skipped when original ≥ max standard width (avoids generating
+         huge variants like 5472w for posts whose covers don't need them). */ -}}
+  {{- $picked = $picked | append $r.Width -}}
+{{- end -}}
+
+{{- /* Build srcset descriptors: "<url> <Nw>, …". Capture the last raster as $default
+       to avoid re-processing the largest width (Hugo would cache it anyway, but
+       this saves a fingerprint+lookup at build time). */ -}}
+{{- $webpSet   := slice -}}
+{{- $rasterSet := slice -}}
+{{- $default   := false -}}
+{{- range $picked -}}
+  {{- $w      := . -}}
+  {{- $webp   := $r.Process (printf "resize %dx webp q92" $w) -}}
+  {{- $raster := $r.Process (printf "resize %dx q92" $w) -}}
+  {{- $webpSet   = $webpSet   | append (printf "%s %dw" $webp.RelPermalink $w) -}}
+  {{- $rasterSet = $rasterSet | append (printf "%s %dw" $raster.RelPermalink $w) -}}
+  {{- $default   = $raster -}}
+{{- end -}}
+<picture>
+  <source type="image/webp" srcset="{{ delimit $webpSet ", " }}" sizes="{{ $sizes }}">
+  <img src="{{ $default.RelPermalink }}" srcset="{{ delimit $rasterSet ", " }}" sizes="{{ $sizes }}" alt="{{ $alt }}" class="{{ $class }}" loading="{{ $loading }}" decoding="async" width="{{ $default.Width }}" height="{{ $default.Height }}"{{ with $fpri }} fetchpriority="{{ . }}"{{ end }}{{ with $title }} title="{{ . }}"{{ end }}>
+</picture>

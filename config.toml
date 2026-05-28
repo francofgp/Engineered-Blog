@@ -117,10 +117,12 @@ content = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non
 enable = false
 
 
-# cookies
+# cookies — informational banner only (handler in assets/js/script.js, styling in
+# assets/scss/_common.scss, markup in layouts/partials/footer.html). Persistence
+# is localStorage with the versioned key 'cookie-consent-v1' — bump the key to
+# re-prompt readers. No expiry param: localStorage doesn't expire by design.
 [params.cookies]
 enable = true
-expire_days = 10
 
 
 ############################# social site ########################

@@ -154,3 +154,43 @@
     $('.venobox').venobox();
 
   })(jQuery);
+
+  /* ============================================================
+   * Cookie notice (vanilla, localStorage)
+   *
+   * Replaces the previous js-cookie CDN + jQuery IIFE. Persists consent
+   * with a versioned key — bump 'cookie-consent-v1' → 'v2' to re-prompt.
+   *
+   * MUST run after DOMContentLoaded — script.js is loaded in footer.html
+   * BEFORE the banner markup (so the layout block stays close to the
+   * other footer JS), which means at script-execution time the
+   * #js-cookie-box / #js-cookie-button elements don't exist yet.
+   *
+   * NOTE: this banner is INFORMATIONAL only. GA + AdSense load before
+   * consent via head.html. If you ever want real gating, defer those
+   * scripts there and dispatch their load from this click handler.
+   * ============================================================ */
+  (function () {
+    'use strict';
+    var STORAGE_KEY = 'cookie-consent-v1';
+
+    function initCookieBanner() {
+      var box = document.getElementById('js-cookie-box');
+      var btn = document.getElementById('js-cookie-button');
+      if (!box || !btn) return;
+      try {
+        if (localStorage.getItem(STORAGE_KEY) === 'accepted') return;
+      } catch (e) { /* storage disabled — fall through and show the banner */ }
+      box.classList.remove('cookie-box-hide');
+      btn.addEventListener('click', function () {
+        try { localStorage.setItem(STORAGE_KEY, 'accepted'); } catch (e) {}
+        box.classList.add('cookie-box-hide');
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCookieBanner);
+    } else {
+      initCookieBanner();
+    }
+  })();

@@ -1,0 +1,46 @@
+{{- /*
+  Render hook for markdown images (![alt](src "title")).
+
+  Goal: emit responsive, lazy, WebP-first images for bundle raster resources;
+  pass through SVG / animated GIF / external URLs unchanged but with
+  loading="lazy" + decoding="async".
+
+  Branching:
+    1. http(s):// or //…    → external, passthrough
+    2. /…                   → site-absolute, passthrough
+    3. bundle resource:
+       - SVG                → passthrough (Hugo can't resize vectors)
+       - GIF                → passthrough (Hugo's WebP encoder strips animation;
+                              the 1.9 MB dragon GIF would render static otherwise)
+       - JPG / PNG          → responsive <picture> via partials/picture.html
+       - not found (typo)   → passthrough raw src so the page still builds
+
+  See AGENTS.md §Images for the user-facing contract.
+*/ -}}
+{{- $src   := .Destination -}}
+{{- $alt   := .Text -}}
+{{- $title := .Title -}}
+{{- $cls   := "img-fluid" -}}
+
+{{- $isRemote   := or (hasPrefix $src "http://") (hasPrefix $src "https://") (hasPrefix $src "//") -}}
+{{- $isAbsolute := hasPrefix $src "/" -}}
+
+{{- if or $isRemote $isAbsolute -}}
+  <img src="{{ $src }}" alt="{{ $alt }}" class="{{ $cls }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+{{- else -}}
+  {{- with .Page.Resources.GetMatch $src -}}
+    {{- /* MediaType.Type returns the full MIME ("image/svg+xml", "image/gif", "image/jpeg", "image/png").
+           Resources that don't support image processing (SVG) must skip the partial — calling .Width
+           on a non-processable resource raises a build error. */ -}}
+    {{- $mime := .MediaType.Type -}}
+    {{- if eq $mime "image/svg+xml" -}}
+      <img src="{{ .RelPermalink }}" alt="{{ $alt }}" class="{{ $cls }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+    {{- else if eq $mime "image/gif" -}}
+      <img src="{{ .RelPermalink }}" alt="{{ $alt }}" class="{{ $cls }}" loading="lazy" decoding="async" width="{{ .Width }}" height="{{ .Height }}"{{ with $title }} title="{{ . }}"{{ end }}>
+    {{- else -}}
+      {{ partial "picture.html" (dict "resource" . "alt" $alt "title" $title "class" $cls) }}
+    {{- end -}}
+  {{- else -}}
+    <img src="{{ $src }}" alt="{{ $alt }}" class="{{ $cls }}" loading="lazy" decoding="async"{{ with $title }} title="{{ . }}"{{ end }}>
+  {{- end -}}
+{{- end -}}

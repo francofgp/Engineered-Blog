@@ -115,9 +115,37 @@ Drafts: set `draft = true` in the front matter while writing. The Netlify build 
 - **Cover image**: name it `cover.jpg` or `cover.png` (one per post) and reference it from front matter as `image = "/blog/<slug>/cover.<ext>"`.
 - **In-body images** in the post body: use **relative paths** — just the filename, e.g. `![alt](dragon-curve.jpg)`. Hugo resolves it against the bundle.
 - **Cross-bundle references** (e.g. linking to another post's image): use the site-absolute path `/blog/<other-slug>/<file>`.
-- Keep file sizes reasonable (compress before committing — there are no automatic image pipelines configured). Some existing images are multi-MB and should not be used as a model for new ones.
-- Do not put post-specific images in `static/images/` (that directory is for site chrome: logo, favicon, author photo, featured-post thumbnails wired into `data/gallery.yml`).
-- **External images (Wikimedia Commons, project brand assets, third-party screenshots)**: download into the Page Bundle — never hot-link. See [Image attribution](#image-attribution) below for the required caption format.
+- **Image processing is automatic.** Hugo's render-image hook (`layouts/_default/_markup/render-image.html`) and the cover-image logic in `single.html`/`post.html`/`index.html` resize raster images to multiple widths, emit WebP + JPG/PNG variants in a `<picture>` tag with `srcset`, add `loading="lazy" decoding="async"`, and emit intrinsic `width`/`height` to prevent CLS. The shared building block is `layouts/partials/picture.html`. Drop multi-MB JPGs into the bundle without guilt — Hugo downscales at build time. Processed files are cached in `resources/_gen/` (gitignored). **See "Pipeline settings" below for the exact quality numbers** — they are tuned for visible-but-tolerable bandwidth cost; do not bump them without re-reading the rationale.
+
+### Pipeline settings
+
+These are the **current production values**. If you change them, update this table and the History entry in `docs/THEME.md`.
+
+| Caller | File | Widths | WebP quality | Raster quality | `sizes` attribute |
+|---|---|---|---|---|---|
+| Body images (markdown) | `layouts/_default/_markup/render-image.html` | partial default | q92 | q92 | partial default |
+| Hero post (cover, above-the-fold) | `layouts/_default/single.html` | 480, 800, 1200, 1600 | q92 | q92 | `(min-width: 1400px) 880px, (min-width: 1200px) 760px, (min-width: 992px) 640px, (min-width: 768px) 720px, 100vw` |
+| Card thumb (list views, paginated grid) | `layouts/partials/post.html` | 400, 800 | q92 | q92 | `(min-width: 1400px) 440px, (min-width: 1200px) 380px, (min-width: 992px) 320px, (min-width: 768px) 360px, 100vw` |
+| Featured slider (home) | `layouts/index.html` | 600, 1000 | q92 | q92 | `(min-width: 1400px) 500px, (min-width: 1200px) 430px, (min-width: 992px) 370px, (min-width: 768px) 310px, 100vw` |
+| Recent-post circle thumb (home, 100×100) | `layouts/index.html` | 200 (single, no srcset) | q90 | n/a | n/a (background-image) |
+
+**Why q92 (raised from q82, the Hugo/community default)** — q82 produced visible blur on hero images at xl/xxl. q92 is near-lossless to the eye and roughly 3× heavier than q82, but the resulting files are still ~30× smaller than the raw source. Trade-off was explicitly chosen: **prefer quality over bandwidth**. To tune, edit the `q92` literals in `layouts/partials/picture.html` (in the `range` block) and the `q90` literal in the recent-thumb block in `layouts/index.html`.
+
+**Why 1600w in the default pool** — at xxl (viewport ≥ 1400px) with DPR 2, the hero slot needs ~1760 physical px to render crisp. 1200w upscales visibly on retina; 1600w covers it. Smaller-screen visitors still get 480 / 800 / 1200, so this is opt-in cost for high-DPR users on big screens.
+
+**Why the actual srcset may include the original width** — `picture.html` always caps variants to the original (no upscaling). If the original falls **between** standard widths (e.g. a 1024w cover with widths `[480, 800, 1200, 1600]` → picked `[480, 800]`), the partial appends the original as the max variant → final srcset `[480w, 800w, 1024w]`. Without this, the browser would upscale 800w → blur at xxl. **Skipped when the original is huge** (e.g. 5472w hero) — the largest standard (1600w) already covers it and we don't want a useless 5472w variant.
+
+**Why accurate `sizes` matters** — without it, the browser picks the variant based on a (misleading) declared slot size and may pick a too-small variant + upscale → blur. The values above mirror Bootstrap container widths × column ratios at each breakpoint. **Rule of thumb**: when changing the column grid for an image (e.g. `col-lg-8` → `col-lg-6`), also re-derive the `sizes` attribute. Otherwise the browser will silently pick the wrong variant.
+
+**SVG covers are safe but un-optimised** — `single.html`/`post.html`/`index.html` guard against `cover.svg` (`MediaType.Type == "image/svg+xml"`) and emit a raw `<img>` instead of calling `picture.html` (which would crash on `.Width` for vectors). Honest passthrough; optimise SVGs manually with SVGO.
+
+
+- **What the pipeline does NOT optimise** (passthrough with `loading="lazy"` only):
+  - **SVG** — Hugo can't resize vectors. If a committed SVG is huge (e.g. multi-MB tilings), optimise it manually with [SVGO](https://github.com/svg/svgo) before committing.
+  - **Animated GIF** — Hugo's WebP encoder collapses animation to a single frame, so the hook passes animated GIFs through verbatim. If size matters, convert manually to animated WebP / AVIF with `cwebp` or `ffmpeg` and commit that instead.
+  - **External URLs** (`http(s)://…`) and **site-absolute paths** (`/blog/<other-slug>/<file>`) — passthrough, since they're outside the Page Bundle.
+- Do not put post-specific images in `static/images/` (that directory is for site chrome: logo, favicon, author photo, featured-post thumbnails wired into `data/gallery.yml`). Files under `static/` are NOT processed by the render hook — they're served verbatim.
+- **External images (Wikimedia Commons, project brand assets, third-party screenshots)**: download into the Page Bundle — never hot-link. See [Image attribution](#image-attribution) below for the required caption format. Downloaded copies inside the bundle are auto-optimised by the render hook; hot-linked URLs are not.
 
 ## Image attribution
 
@@ -151,7 +179,7 @@ The theme is **vendored**, not pulled as a Hugo module. That means any change to
 
 - Prefer the smallest viable change. If a tweak can live in `assets/scss/` or in front matter, do it there.
 - Keep Hugo template syntax (`{{ ... }}`) intact. The post layout is `layouts/_default/single.html`; the list layout is `layouts/_default/list.html`; the base layout is `layouts/_default/baseof.html`.
-- `layouts/_default/_markup/` contains render hooks (e.g. for code blocks, links) — touch with caution.
+- `layouts/_default/_markup/` contains render hooks (`render-image.html`, `render-codeblock-mermaid.html`) — touch with caution; the image hook is the entry point for the auto-optimisation pipeline described in §Images.
 
 ## Things to leave alone unless explicitly asked
 
@@ -160,6 +188,7 @@ The theme is **vendored**, not pulled as a Hugo module. That means any change to
 - Google Analytics ID, Google AdSense client, Giscus repo IDs — these are wired into `config.toml` and `layouts/`. Do not change them without being asked.
 - The three draft files in `content/blog/` (`new-post.md`, `post-10.md`, `_markdown-reference.md`) — see note above.
 - `theme.toml` — metadata of the upstream Liva theme; not consumed by the build.
+- **Cookie banner** (`layouts/partials/footer.html` + handler in `assets/js/script.js`) is **informational only** — Google Analytics + AdSense load before consent via `head.html`. If you want real GDPR-style gating, defer those scripts in `head.html` and dispatch their load from the I-Accept click handler. Don't "fix" the banner thinking it currently gates anything.
 
 ## Verification before declaring done
 
