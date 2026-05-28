@@ -5,6 +5,15 @@ command = "hugo --minify --gc"
 [build.environment]
 HUGO_VERSION = "0.162.0"
 HUGO_BASEURL = "https://giulianopertile.com/"
+# Node.js usado por el build agent de Netlify (build plugins internos).
+# Hugo no consume Node (no hay package.json), pero Netlify deprecó Node 16/18 y
+# el default movió a 22 en feb 2025. Pineamos a 24 (Active LTS desde oct 2025,
+# EOL abril 2028) — es la versión "más moderna estable": LTS mantenida por
+# upstream y soportada por Netlify (que acepta "any released version" vía
+# NODE_VERSION). 26 sería Current/non-LTS hasta oct 2026, demasiado bleeding-edge
+# para CI. Fijarlo acá hace que netlify.toml gane sobre cualquier override viejo
+# en la UI del project.
+NODE_VERSION = "24"
 
 [[headers]]
 for = "/*" # This defines which paths this specific [[headers]] block will cover.
