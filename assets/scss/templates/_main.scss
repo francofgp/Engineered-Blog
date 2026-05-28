@@ -118,6 +118,12 @@
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
+.recent-post-body {
+  flex: 1;
+  min-width: 0;
 }
 
 .small-post-border {

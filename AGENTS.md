@@ -140,7 +140,7 @@ Notes:
 - All site styles live in `assets/scss/`. The entry point is `style.scss`; it is compiled by `{{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}` in `layouts/partials/head.html`.
 - Edit the partial `_*.scss` files for site-wide changes. Variables go in `_variables.scss`; mixins in `_mixins.scss`.
 - Do **not** add CSS via `<style>` blocks in templates or content unless you have a good reason — keep styling centralized in SCSS.
-- Third-party CSS/JS plugins (`static/plugins/bootstrap/`, `jQuery/`, `search/`) are vendored Liva theme dependencies. Do not modify them; if a plugin needs replacing, do it deliberately and update `config.toml` `[params.plugins]`.
+- Third-party CSS/JS plugins (`static/plugins/bootstrap/` (Bootstrap 5.3.x, bundle with Popper), `jQuery/` (jQuery 3.x), `search/`) are vendored Liva theme dependencies. Do not modify them; if a plugin needs replacing, do it deliberately and update `config.toml` `[params.plugins]`.
 
 ## Editing templates
 
