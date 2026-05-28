@@ -59,8 +59,9 @@ netlify.toml               # Build command + headers — do not change HUGO_VERS
 archetypes/default.md      # Template used by `hugo new` (rich TOML front matter + cheatsheet)
 layouts/                   # Hugo templates (Liva theme, vendored — edit with care)
   _default/                # baseof.html, list.html, single.html, index.json
-  partials/                # head.html, header.html, footer.html, post.html, sidebar.html, share-buttons.html, picture.html
-  index.html, 404.html
+  partials/                # head.html, header.html, footer.html, post.html, sidebar.html, share-buttons.html,
+                           # picture.html, head-schema.html (JSON-LD; see docs/AI-SEO.md)
+  index.html, 404.html, index.llmstxt.txt  # index.llmstxt.txt → /llms.txt (AI SEO; see docs/AI-SEO.md)
 assets/scss/               # SCSS sources compiled by Hugo Extended (libsass)
   style.scss               # Entry point — imports _variables, _typography, _common, _buttons, _kofi, _mixins
   templates/               # Per-template partials
@@ -106,6 +107,11 @@ Rules derived from existing posts (`content/blog/<slug>/index.md`):
 - `categories` map to `/categories/<slug>/` index pages. Reuse existing ones when possible (`Programming`, `Engineering`) before inventing new ones.
 - `tags` are free-form but kebab-case-friendly (`"Python"`, `"Go"`, `"Django"`).
 - Slug = directory name. Keep it lowercase, hyphen-separated, and stable (it becomes the permalink and the bundle path).
+
+**Optional front-matter fields** (commented in `archetypes/default.md`; uncomment to activate):
+
+- `lastmod = <RFC 3339>` — set ONLY when meaningfully editing a published post (typos don't count). Surfaces as JSON-LD `dateModified` and as a visible "Updated" label, **but only when ≥24h after `date`**. Omitting it suppresses both signals (no fake "updated today"). See `docs/AI-SEO.md` §"When to update what".
+- `toc = true` — renders a `<nav>` Table of Contents (Hugo's `.TableOfContents`, built from H2-H4) at the top of the post. Off by default. Helps LLMs ground citations to specific sections of long posts.
 
 Drafts: set `draft = true` in the front matter while writing. The Netlify build runs `hugo` without `-D`, so drafts will not be published. Three drafts live in `content/blog/` as personal references (`new-post.md`, `post-10.md`, `_markdown-reference.md`) — they are intentionally kept as drafts; do not "fix" or delete them without being asked.
 
@@ -180,6 +186,7 @@ The theme is **vendored**, not pulled as a Hugo module. That means any change to
 - Prefer the smallest viable change. If a tweak can live in `assets/scss/` or in front matter, do it there.
 - Keep Hugo template syntax (`{{ ... }}`) intact. The post layout is `layouts/_default/single.html`; the list layout is `layouts/_default/list.html`; the base layout is `layouts/_default/baseof.html`.
 - `layouts/_default/_markup/` contains render hooks (`render-image.html`, `render-codeblock-mermaid.html`) — touch with caution; the image hook is the entry point for the auto-optimisation pipeline described in §Images.
+- **JSON-LD / Schema.org / llms.txt** — lives in `layouts/partials/head-schema.html` (per-page-type schema selector) and `layouts/index.llmstxt.txt` (llms.txt generator). Wired into `<head>` via `head.html` and into Hugo outputs via `[outputFormats.LLMSTXT]` in `config.toml`. **Read `docs/AI-SEO.md` before touching any of these** — silent escape bugs (e.g. forgetting `safeJS` on `jsonify`) ship broken structured data that crawlers reject.
 
 ## Things to leave alone unless explicitly asked
 

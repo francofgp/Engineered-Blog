@@ -1,0 +1,56 @@
+{{- /*
+  llms.txt — emerging standard (https://llmstxt.org) for telling LLMs which content on the
+  site is worth indexing. Wired up by:
+    - config.toml: [outputFormats.LLMSTXT] (defines mediaType, baseName, isPlainText)
+    - config.toml: [outputs].home includes "LLMSTXT" (only emitted on the home page)
+    - This file: rendered to /llms.txt at site root.
+  Spec format (strict order):
+    1. H1 with site name (required)
+    2. Blockquote with short summary
+    3. Optional paragraphs of context
+    4. H2 sections, each containing markdown list of [name](url): description entries
+  An "## Optional" H2 has special meaning — LLMs may skip those URLs when context is tight.
+*/ -}}
+{{- /* Build a comma-separated list of the top 5 categories by post count. .ByCount returns
+       an OrderedTaxonomy ([]OrderedTaxonomyEntry); we range and accumulate .Name into a
+       slice, then delimit. Falls back to a sensible static list if no categories exist.
+       Computed at top so the body below can use it without {{-/-}} eating the newlines
+       between markdown blocks (blockquote → paragraph → H2) — that was the bug fixed in
+       the audit: previously the {{- $topCats := -}} block sat between the blockquote and
+       the next paragraph and swallowed the blank line, collapsing 528 chars into one line. */ -}}
+{{- $topCats := slice -}}
+{{- range first 5 site.Taxonomies.categories.ByCount -}}
+  {{- $topCats = $topCats | append .Name -}}
+{{- end -}}
+# {{ site.Params.nameSite | default site.Title }}
+
+> {{ site.Params.bio | default site.Params.description }}
+
+This file is an llms.txt index of {{ site.BaseURL }} — a curated, machine-readable map of the blog's primary content for large language models. The site is a personal engineering blog by {{ site.Params.author }}. Posts cover {{ delimit $topCats ", " | default "Programming, Engineering" }} and adjacent topics. All posts are HTML pages with corresponding JSON-LD `BlogPosting` schema embedded in `<head>`; the canonical URLs below resolve to the rendered article.
+
+## Posts
+{{ range (where .Site.RegularPages "Type" "post").ByPublishDate.Reverse }}
+- [{{ .Title }}]({{ .Permalink }}): {{ with .Description }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 200 }}{{ end }}
+{{- end }}
+
+## Pages
+{{ range where .Site.Pages "Type" "in" (slice "about" "contact") }}
+- [{{ .Title }}]({{ .Permalink }}): {{ with .Description }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 200 }}{{ end }}
+{{- end }}
+
+## Topics
+{{- /* Surface the category & tag index pages so LLMs can navigate by topic. Tag/category URLs
+       follow Hugo's permalinks: /categories/<slug>/ and /tags/<slug>/. */}}
+{{ range $name, $items := .Site.Taxonomies.categories }}
+- [Category: {{ $name | title }}]({{ "categories/" | absURL }}{{ $name | urlize }}/): {{ len $items }} post{{ if ne (len $items) 1 }}s{{ end }}
+{{- end }}
+{{ range $name, $items := .Site.Taxonomies.tags }}
+- [Tag: {{ $name | humanize }}]({{ "tags/" | absURL }}{{ $name | urlize }}/): {{ len $items }} post{{ if ne (len $items) 1 }}s{{ end }}
+{{- end }}
+
+## Optional
+
+- [RSS feed]({{ "index.xml" | absURL }}): Full Atom-style feed of all posts (publish date, summary, content).
+- [Sitemap]({{ "sitemap.xml" | absURL }}): XML sitemap of every indexable URL on the site.
+- [Search index]({{ "index.json" | absURL }}): JSON-formatted full-text index used by the in-site Fuse.js search.
+- [Source code](https://github.com/francofgp/Engineered-Blog): Hugo + Liva theme; site source on GitHub.

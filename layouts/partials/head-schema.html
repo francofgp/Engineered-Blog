@@ -1,0 +1,201 @@
+{{/*
+  JSON-LD Schema.org structured data — emitted in <head>. This is the SINGLE most impactful
+  AI-SEO / GEO change on the site: it's what Google AI Overviews, ChatGPT Search, Perplexity,
+  and Claude use to understand what each page IS (article? person? site?), WHO wrote it, and
+  WHEN. Schema.org spec: https://schema.org/  — JSON-LD format docs:
+  https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
+
+  Strategy: emit DIFFERENT schemas depending on page type. Per Google's guidance and John
+  Mueller's "don't bloat" warning, we only mark up what the page actually IS — no FAQ/HowTo
+  unless the post genuinely is one.
+
+  Page-type matrix:
+    .IsHome              → WebSite (with SearchAction so AI knows about /search/)
+    .Type == "about"     → Person (the author entity; anchor for E-E-A-T)
+    .Type == "post"      → BlogPosting (+ nested author Person + publisher Organization +
+                                        BreadcrumbList)
+    everything else      → (no schema; list pages / category pages don't benefit)
+
+  Helpers used: jsonify (escapes properly), dateFormat (ISO 8601), absURL, dict, slice.
+  IMPORTANT: never hand-concatenate JSON strings here — always build a dict and pipe through
+  jsonify. Otherwise we'd ship broken JSON on any post with quotes/backslashes in its title.
+
+  ESCAPING NOTE: Hugo's html/template auto-escapes content inside <script> as JS strings,
+  which would wrap our jsonify output in quotes and escape every character — shipping
+  broken JSON-LD. We pipe through `safeJS` to tell Hugo "this is already JS-safe code,
+  do not re-escape". `safeJS` is the correct call here (not `safeHTML`) because the
+  context is JS — see https://gohugo.io/functions/safe/safejs/
+*/}}
+
+{{- $params := site.Params -}}
+{{- $authorName := $params.author | default $params.nameSite -}}
+{{- $siteName := $params.nameSite | default site.Title -}}
+{{- $siteURL := site.BaseURL | absURL -}}
+{{- $aboutURL := printf "%sabout/" $siteURL -}}
+{{- $logoURL := $params.logo | absURL -}}
+
+{{/* Cover image dict (url, width, height, alt, isSVG, hasResource, available). Same partial
+     head.html uses for OG/Twitter image meta — keeping image metadata in one place. */}}
+{{- $cover := partial "cover-image-info.html" . -}}
+
+{{/* Reusable Person sub-graph (the author entity). Used by BOTH the BlogPosting "author"
+     field and the standalone Person schema on /about/. Building it once = consistency. */}}
+{{- $personEntity := dict
+  "@type" "Person"
+  "name"  $authorName
+  "alternateName" $siteName
+  "url" $aboutURL
+  "jobTitle" ($params.jobTitle | default "")
+  "description" ($params.bio | default $params.description)
+  "sameAs" ($params.sameAs | default slice)
+-}}
+
+{{/* Reusable Organization sub-graph (the publisher). Article schema REQUIRES publisher with
+     a logo ImageObject — otherwise Google rejects the markup. */}}
+{{- $publisherEntity := dict
+  "@type" "Organization"
+  "name" $siteName
+  "url" $siteURL
+  "logo" (dict
+    "@type" "ImageObject"
+    "url" $logoURL
+  )
+-}}
+
+{{- if .IsHome -}}
+  {{/* WebSite schema on the home page. The SearchAction lets Google show a sitelinks
+       searchbox in SERPs when the site is well-known enough. The {search_term_string}
+       placeholder is literal — do NOT URL-encode the braces. */}}
+  {{- $websiteSchema := dict
+    "@context" "https://schema.org"
+    "@type" "WebSite"
+    "name" $siteName
+    "url" $siteURL
+    "description" $params.description
+    "inLanguage" (site.Language.Lang | default "en-US")
+    "publisher" $publisherEntity
+    "potentialAction" (dict
+      "@type" "SearchAction"
+      "target" (dict
+        "@type" "EntryPoint"
+        "urlTemplate" (printf "%ssearch/?s={search_term_string}" $siteURL)
+      )
+      "query-input" "required name=search_term_string"
+    )
+  -}}
+  <script type="application/ld+json">{{ $websiteSchema | jsonify | safeJS }}</script>
+
+{{- else if eq .Type "about" -}}
+  {{/* Standalone Person schema on /about/. Sets the author entity as a first-class node
+       in Google's knowledge graph and tells LLMs "if you're going to cite this site's
+       author, here's the canonical record." mainEntityOfPage anchors the Person to THIS
+       page (added per audit M3 — Schema.org recommends it when the entity is the page's
+       main subject). */}}
+  {{- $personSchema := merge
+    (dict
+      "@context" "https://schema.org"
+      "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+    )
+    $personEntity
+  -}}
+  {{- if $cover.available -}}
+    {{- $personSchema = merge $personSchema (dict "image" $cover.url) -}}
+  {{- end -}}
+  <script type="application/ld+json">{{ $personSchema | jsonify | safeJS }}</script>
+
+{{- else if eq .Type "post" -}}
+  {{/* BlogPosting schema on blog posts. This is what AI Overviews / ChatGPT Search / Perplexity
+       parse to decide "this URL is an article, by X, dated Y, about Z" — i.e. the foundation
+       for being cited. We deliberately use BlogPosting (more specific) over Article. */}}
+
+  {{/* Image as ImageObject when we have raster dims (best for Google Rich Results, which
+       want ≥696px width); plain URL string for SVG / external / fallback cases. Schema.org
+       accepts both shapes. Per audit B5. */}}
+  {{- $imageValue := "" -}}
+  {{- if and $cover.available (gt $cover.width 0) -}}
+    {{- $imageValue = dict
+      "@type"  "ImageObject"
+      "url"    $cover.url
+      "width"  $cover.width
+      "height" $cover.height
+    -}}
+  {{- else if $cover.available -}}
+    {{- $imageValue = $cover.url -}}{{/* SVG or external/legacy — no reliable dims. */}}
+  {{- else -}}
+    {{- $imageValue = $logoURL -}}{{/* Fallback so the schema field is never empty (Google warns). */}}
+  {{- end -}}
+
+  {{/* Lastmod: front-matter `lastmod` wins; otherwise falls back to `date` (Hugo's default
+       .Lastmod behaviour). Format is ISO 8601 with timezone — what Schema.org expects. */}}
+  {{- $datePublished := .PublishDate.Format "2006-01-02T15:04:05Z07:00" -}}
+
+  {{/* Required + always-present fields. Optional ones (dateModified, keywords, articleSection)
+       are merged in below only when they have honest data — prevents shipping empty strings
+       or fake "modified today" signals when no real edits happened. Per audit B2c, M2. */}}
+  {{- $blogPostingSchema := dict
+    "@context" "https://schema.org"
+    "@type" "BlogPosting"
+    "mainEntityOfPage" (dict
+      "@type" "WebPage"
+      "@id" .Permalink
+    )
+    "headline" .Title
+    "description" (.Description | default .Summary)
+    "image" $imageValue
+    "datePublished" $datePublished
+    "author" $personEntity
+    "publisher" $publisherEntity
+    "url" .Permalink
+    "inLanguage" (site.Language.Lang | default "en-US")
+    "wordCount" .WordCount
+  -}}
+
+  {{/* dateModified: only emit when the post was actually edited later than published.
+       Without this guard Hugo's default Lastmod==Date makes every post advertise
+       "updated today" — dishonest schema. Threshold: 24h (matches the visible "Updated"
+       label logic in single.html). */}}
+  {{- if gt (.Lastmod.Sub .PublishDate).Hours 24.0 -}}
+    {{- $blogPostingSchema = merge $blogPostingSchema (dict
+      "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+    ) -}}
+  {{- end -}}
+
+  {{/* keywords / articleSection: arrays directly (idiomatic Schema.org), and only when the
+       post actually has tags/categories. Avoids shipping "" or [] for sparse posts. */}}
+  {{- with .Params.tags -}}
+    {{- $blogPostingSchema = merge $blogPostingSchema (dict "keywords" .) -}}
+  {{- end -}}
+  {{- with .Params.categories -}}
+    {{- $blogPostingSchema = merge $blogPostingSchema (dict "articleSection" .) -}}
+  {{- end -}}
+
+  <script type="application/ld+json">{{ $blogPostingSchema | jsonify | safeJS }}</script>
+
+  {{/* BreadcrumbList — separate <script> per Google's guidance (mixing into one @graph is
+       allowed but harder to debug). For posts: Home → Blog → Current. */}}
+  {{- $breadcrumb := dict
+    "@context" "https://schema.org"
+    "@type" "BreadcrumbList"
+    "itemListElement" (slice
+      (dict
+        "@type" "ListItem"
+        "position" 1
+        "name" "Home"
+        "item" $siteURL
+      )
+      (dict
+        "@type" "ListItem"
+        "position" 2
+        "name" "Posts"
+        "item" (printf "%sblog/" $siteURL)
+      )
+      (dict
+        "@type" "ListItem"
+        "position" 3
+        "name" .Title
+        "item" .Permalink
+      )
+    )
+  -}}
+  <script type="application/ld+json">{{ $breadcrumb | jsonify | safeJS }}</script>
+{{- end -}}

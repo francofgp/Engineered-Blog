@@ -2,8 +2,33 @@
   <meta charset="utf-8">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
 
+  {{/* Cover image metadata, computed ONCE here and reused below for og:image:*, twitter:image,
+       and inside head-schema.html (via a second call — Hugo memoises partial returns). The
+       dict contains: .available, .url, .width, .height, .alt, .isSVG, .hasResource. See
+       layouts/partials/cover-image-info.html for the field-by-field doc. */}}
+  {{- $cover := partial "cover-image-info.html" . -}}
+
   {{ "<!-- mobile responsive meta -->" | safeHTML }}
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  {{/* No maximum-scale/user-scalable=no — those break pinch-zoom and fail WCAG 1.4.4
+       (resize text). The old value `maximum-scale=1` was a copy-paste leftover from the
+       theme; legitimate use cases for blocking zoom are vanishingly rare. */}}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {{/* Canonical URL — explicit signal to crawlers (and AI) about which URL is the
+       authoritative version. Critical when a page is reachable via multiple paths
+       (paginated lists, taxonomies, future translations). Use .Permalink (Hugo's absolute,
+       baseURL-aware permalink). */}}
+  <link rel="canonical" href="{{ .Permalink }}">
+
+  {{/* RSS feed discovery — older readers, AI agents and feed parsers look for this in <head>.
+       Single pages (posts) don't have their own RSS output in Hugo's default setup, so we
+       fall back to the site-wide feed (the home page's RSS) so the alternate link is present
+       on every page, not just list pages. */}}
+  {{- $rss := .OutputFormats.Get "RSS" -}}
+  {{- if not $rss -}}{{ $rss = site.Home.OutputFormats.Get "RSS" }}{{- end -}}
+  {{ with $rss -}}
+  <link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ $.Site.Title }} — RSS feed">
+  {{- end }}
 
   {{/* Anti-flash: resolve theme BEFORE any stylesheet loads, so the first paint
        already shows the correct light/dark surfaces. Runs synchronously. */}}
@@ -22,8 +47,30 @@
     })();
   </script>
 
-  <!-- Twitter card -->
-  <meta name="twitter:card" content="summary">
+  {{/* Twitter card type: use summary_large_image whenever the page has a cover image
+       (more visual real estate in feeds = higher CTR). Falls back to plain summary only
+       when no image exists. Both formats need image meta tags below to actually render. */}}
+  {{- $hasImage := and .Params.image (ne .Params.image "") -}}
+  <meta name="twitter:card" content="{{ if $hasImage }}summary_large_image{{ else }}summary{{ end }}">
+  {{ with .Site.Params.twitterHandle -}}
+  <meta name="twitter:site" content="{{ . }}">
+  <meta name="twitter:creator" content="{{ . }}">
+  {{- end }}
+
+  {{/* og:type — `article` for blog posts (unlocks article:published_time / author / tag
+       below, which both Facebook and LinkedIn render), `website` for everything else. */}}
+  <meta property="og:type" content="{{ if eq .Type "post" }}article{{ else }}website{{ end }}">
+
+  {{/* og:locale — Open Graph uses the IETF BCP 47 tag with an UNDERSCORE separator and
+       the region in uppercase (e.g. en_US, not en-us). Hugo stores site.Language.Lang as
+       lowercase BCP 47 with a hyphen, so we split + uppercase + rejoin. Defaults to en_US
+       if no language is configured. */}}
+  {{- $lang := site.Language.Lang | default "en-us" -}}
+  {{- $langParts := split $lang "-" -}}
+  {{- $ogLocale := index $langParts 0 -}}
+  {{- if gt (len $langParts) 1 -}}{{- $ogLocale = printf "%s_%s" $ogLocale (upper (index $langParts 1)) -}}{{- end -}}
+  <meta property="og:locale" content="{{ $ogLocale }}">
+
   <!-- Title Tags -->
   <meta property="og:title" content="{{ .Title }} | {{ .Site.Title }}" />
   <meta name="twitter:title" content="{{ .Title }} | {{ .Site.Title }}" />
@@ -41,21 +88,55 @@
   <meta name="url" content="{{ .Permalink }}" />
   <meta name="twitter:url" content="{{ .Permalink }}" />
   <meta property="og:url" content="{{ .Permalink }}" />
-   <!-- Image  Tags -->
-  {{ with .Params.image }}
-  <meta itemprop="image" content="{{ . | absURL }}" />
-  <meta property="og:image" content="{{ . | absURL }}" />
-  <meta name="twitter:image" content="{{ . | absURL }}" />
-  <meta name="twitter:image:src" content="{{ . | absURL }}" />
-  {{ else }}
-  <meta itemprop="image" content="{{ .Site.Params.logo | absURL }}" />
-  <meta property="og:image" content="{{ .Site.Params.logo | absURL }}" />
-  <meta name="twitter:image" content="{{ .Site.Params.logo | absURL }}" />
-  <meta name="twitter:image:src" content="{{ .Site.Params.logo | absURL }}" />
-  {{ end }}
+  {{/* Image meta. We emit og:image / twitter:image / itemprop=image plus, when we have a
+       raster bundle resource (NOT an SVG), the optional og:image:width / og:image:height /
+       og:image:alt that let Facebook + LinkedIn reserve layout before the image loads.
+       Sources of truth, in order:
+         1. $cover from cover-image-info.html (page bundle resource OR .Params.image)
+         2. site logo (when the page has no image at all) — keeps every page sociable. */}}
+  {{- $imgURL := $cover.url | default (site.Params.logo | absURL) -}}
+  <meta itemprop="image" content="{{ $imgURL }}" />
+  <meta property="og:image" content="{{ $imgURL }}" />
+  <meta name="twitter:image" content="{{ $imgURL }}" />
+  <meta name="twitter:image:src" content="{{ $imgURL }}" />
+  {{- if and $cover.available (gt $cover.width 0) }}
+  <meta property="og:image:width"  content="{{ $cover.width }}">
+  <meta property="og:image:height" content="{{ $cover.height }}">
+  {{- end }}
+  {{- with $cover.alt }}
+  <meta property="og:image:alt" content="{{ . }}">
+  {{- end }}
 
   {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
   {{ hugo.Generator }}
+
+  {{/* Article-specific OpenGraph fields, only on blog posts. Facebook / LinkedIn / some
+       AI crawlers read these to render richer previews and to confirm the publish date.
+       article:tag is repeated once per tag (OG spec allows multiple of the same property).
+
+       article:modified_time is ONLY emitted when Lastmod differs from PublishDate by ≥1 day.
+       Hugo's default sets .Lastmod = .Date when no `lastmod` is in front-matter, so without
+       this guard every post would advertise dateModified == datePublished and signal a fake
+       "updated today" to crawlers. The audit (B2c) flagged this as dishonest schema. */}}
+  {{- if eq .Type "post" }}
+  <meta property="article:published_time" content="{{ .PublishDate.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{- if gt (.Lastmod.Sub .PublishDate).Hours 24.0 }}
+  <meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+  {{- end }}
+  {{- with .Params.author | default .Site.Params.author }}
+  <meta property="article:author" content="{{ . }}">
+  {{- end }}
+  {{- range .Params.categories }}
+  <meta property="article:section" content="{{ . }}">
+  {{- end }}
+  {{- range .Params.tags }}
+  <meta property="article:tag" content="{{ . }}">
+  {{- end }}
+  {{- end }}
+
+  {{/* JSON-LD Schema.org structured data — the highest-leverage AI-SEO change. See partial
+       for the per-page-type matrix (WebSite / BlogPosting / Person + BreadcrumbList). */}}
+  {{ partial "head-schema.html" . }}
 
   {{/* Preload the themify-icons woff so social icons + UI icons appear without FOIT.
        Must match the URL the themify CSS uses verbatim (incl. cache-buster query) and

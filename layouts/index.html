@@ -39,7 +39,7 @@
                         <span>By {{ .Site.Params.Author }}</span>
                         {{ if not .Params.HideDate }}
                         <span class="border-bottom border-primary px-2 mx-1"></span>
-                        <span>{{ .PublishDate.Format "02 January 2006" }}</span>
+                        <time datetime="{{ .PublishDate.Format `2006-01-02T15:04:05Z07:00` }}">{{ .PublishDate.Format "02 January 2006" }}</time>
                         {{ end }}
                       </div>
                       <a href="{{ .Permalink }}"
@@ -85,11 +85,14 @@
               <span>By {{ .Site.Params.Author }}</span>
               {{ if not .Params.HideDate }}
               <span class="border-bottom border-primary px-2 mx-1"></span>
-              <span>{{ .PublishDate.Format "02 Jan 2006" }}</span>
+              <time datetime="{{ .PublishDate.Format `2006-01-02T15:04:05Z07:00` }}">{{ .PublishDate.Format "02 Jan 2006" }}</time>
               {{ end }}
             </div>
             <a href="{{ .Permalink }}" class="h5 d-block mb-3">{{ .Title | markdownify }}</a>
-            <a href="{{ .Permalink }}" class="btn btn-outline-primary">read more</a>
+            {{/* aria-label so crawlers + screen readers see "Read more about <title>" instead
+                 of bare "Read more". Same fix as in layouts/partials/post.html — addresses the
+                 Lighthouse "Links do not have descriptive text" finding. */}}
+            <a href="{{ .Permalink }}" class="btn btn-outline-primary" aria-label="Read more about {{ .Title | plainify }}">Read more</a>
           </div>
         </article>
       </div>

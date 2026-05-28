@@ -1,6 +1,12 @@
 ######################## default configuration ####################
 baseURL = "https://www.giulianopertile.com/"
+# `locale` (lowercase, top-level) is a legacy field from the Liva theme — Hugo itself doesn't
+# read it. The canonical Hugo field is `defaultContentLanguage` below, which populates
+# `site.Language.Lang` and through it og:locale / JSON-LD inLanguage / <html lang>. Without
+# it, `site.Language.Lang` would default to bare "en" (no region), so og:locale would emit
+# just "en" instead of the more useful "en_US".
 locale = "en-us"
+defaultContentLanguage = "en-us"
 title = "Giuliano Pertile"
 summaryLength = 10
 
@@ -12,7 +18,19 @@ ignoreLogs = ['warning-goldmark-raw-html']
 pagerSize = 6
 
 [outputs]
-home = ["HTML", "RSS", "JSON"]
+# LLMSTXT: emerging llms.txt standard (https://llmstxt.org). A curated, machine-readable
+# index of the site's main content for LLMs (ChatGPT, Claude, Perplexity). Lives at /llms.txt
+# in the site root. The custom format is defined under [outputFormats.LLMSTXT] below and
+# rendered by layouts/_default/list.llmstxt.txt. Only emitted on the home page.
+home = ["HTML", "RSS", "JSON", "LLMSTXT"]
+
+# Custom output format for llms.txt. Plain text, not indexed by search engines
+# (isPlainText=true skips HTML escaping; the file is markdown-formatted plain text by spec).
+[outputFormats.LLMSTXT]
+mediaType = "text/plain"
+baseName = "llms"
+isPlainText = true
+notAlternative = true # Don't expose as a <link rel="alternate"> — it's not an alt format of HTML.
 
 ############################# Plugins ##############################
 [params.plugins]
@@ -95,6 +113,22 @@ location = "Villa María, Córdoba, Argentina"
 # copyright
 copyright = "| copyright &copy; 2022 [giulianopertile.com](https://github.com/francofgp/Engineered-Blog) All Rights Reserved |"
 
+# ---- AI SEO / Schema.org metadata ----------------------------------------------------------
+# Used by layouts/partials/head-schema.html to emit JSON-LD (WebSite, BlogPosting, Person,
+# Organization, BreadcrumbList) and by head.html for Twitter cards (twitter:site/creator).
+# Edit these when your bio, role, or handles change — they propagate to every page.
+jobTitle = "Software Engineer"
+bio = "Software engineer writing about Python, Django, Go, software architecture, and engineering practice."
+twitterHandle = "@francofgp" # leading @, used in <meta name="twitter:site"> / "twitter:creator"
+# sameAs: profiles that *identify the same Person*. Schema.org uses these to link the author
+# entity in the knowledge graph (LinkedIn, GitHub, etc.). Order doesn't matter.
+sameAs = [
+  "https://github.com/francofgp",
+  "https://www.linkedin.com/in/francofgp/",
+  "https://twitter.com/francofgp",
+  "https://francofgp.github.io/",
+]
+
 # search
 [params.search]
 enable = true
@@ -172,6 +206,9 @@ enableRobotsTXT = true
 
 
 [sitemap]
-  changefreq = 'always'
+# 'always' tells crawlers the page changes every visit (e.g. dynamic homepages of news sites).
+# For a personal blog this is misleading — most crawlers ignore it. 'monthly' is honest for
+# evergreen posts; Hugo overrides per-page via the `sitemap` front-matter map if needed.
+  changefreq = 'monthly'
   filename = 'sitemap.xml'
   priority = 0.5

@@ -1,0 +1,69 @@
+{{/*
+  cover-image-info.html — returns a dict with everything callers need to render rich image
+  metadata (Open Graph image:width/height/alt, JSON-LD ImageObject with dims, etc.) without
+  each caller re-implementing the resource lookup. Called once per page from head.html and
+  head-schema.html.
+
+  Returned dict (always populated, fields are empty strings / 0 when N/A):
+    .available   bool   — true if the page has any image at all
+    .url         string — absolute URL of the image (cover bundle resource OR .Params.image)
+    .width       int    — pixel width (0 for SVG or external/legacy images)
+    .height      int    — pixel height (0 for SVG or external/legacy images)
+    .alt         string — alt text (page title, plainified)
+    .isSVG       bool   — true if the resolved cover is an SVG (Hugo can't .Process vectors)
+    .hasResource bool   — true if the cover is a Page Bundle resource (vs an external URL)
+
+  Why dims matter:
+    - Open Graph: og:image:width / og:image:height let Facebook/LinkedIn reserve layout
+      before fetching the image (no CLS in social previews). og:image:alt is a11y.
+    - Schema.org Article: spec recommends `image` as ImageObject with width/height; Google
+      Rich Results prefer ≥696px width for article cards.
+
+  Edge cases:
+    - SVG cover: width/height stay 0 (Hugo cannot resize SVGs). Callers should emit just the
+      URL without the width/height meta tags.
+    - No bundle resource but .Params.image set (legacy posts): width/height stay 0; URL is
+      the absURL of the front-matter path.
+    - No image at all: .available = false. Callers fall back to site logo.
+
+  Note on `return`: Hugo partials can return a value with `{{ return ... }}` at the end —
+  this makes the partial usable as `{{ $info := partial "..." . }}` from any template. Docs:
+  https://gohugo.io/templates/partial/#returning-a-value-from-a-partial
+*/}}
+
+{{- $page := . -}}
+{{- $info := dict
+  "available"   false
+  "url"         ""
+  "width"       0
+  "height"      0
+  "alt"         (.Title | plainify)
+  "isSVG"       false
+  "hasResource" false
+-}}
+
+{{- if and .Params.image (ne .Params.image "") -}}
+  {{- $info = merge $info (dict "available" true) -}}
+  {{- $cover := .Resources.GetMatch "cover.*" -}}
+  {{- if $cover -}}
+    {{- $info = merge $info (dict
+      "hasResource" true
+      "url"         ($cover.Permalink)
+    ) -}}
+    {{- if eq $cover.MediaType.Type "image/svg+xml" -}}
+      {{- $info = merge $info (dict "isSVG" true) -}}
+    {{- else -}}
+      {{/* Raster resource → Hugo exposes .Width and .Height. */}}
+      {{- $info = merge $info (dict
+        "width"  $cover.Width
+        "height" $cover.Height
+      ) -}}
+    {{- end -}}
+  {{- else -}}
+    {{/* No bundle resource — fall back to the front-matter path as-is. We can't infer
+         dimensions (image lives outside Hugo's pipeline), so width/height stay 0. */}}
+    {{- $info = merge $info (dict "url" (.Params.image | absURL)) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $info -}}
