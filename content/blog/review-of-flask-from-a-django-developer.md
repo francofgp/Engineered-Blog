@@ -1,18 +1,13 @@
----
-title: Review of Flask, From a Django Developer
-date: 2022-07-09T02:07:47.000+06:00
-image: /uploads/post/review-of-flask-from-a-django-developer/flask-logo-version-2.png
-description: Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is? Well today I am going to share my experience with Flask
-categories:
-- Engineering
-tags:
-- Python
-- Django
-- Flask
-type: post
-draft: false
-
----
++++
+categories = ["Engineering"]
+date = 2022-07-09T02:07:47+06:00
+description = "Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is? Well today I am going to share my experience with Flask"
+draft = false
+image = "/uploads/post/review-of-flask-from-a-django-developer/flask-logo-version-2.png"
+tags = ["Python", "Django", "Flask"]
+title = "Review of Flask, From a Django Developer"
+type = "post"
++++
 Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is?
 
 Well today I am going to share my experience with Flask, comparing different aspects of both frameworks, so you can decide which one suits your needs.

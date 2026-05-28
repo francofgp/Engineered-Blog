@@ -1,15 +1,13 @@
----
-title: 'How to Measure Software Performance'
-date: 2022-07-16T17:24:00.000-03:00
-image: "/uploads/post/how-to-measure-performance/tape-measure.jpg"
-description: You want to measure software delivery performance, but don't know how?. Do you want to know if your team is performing well? Don't you know what to do to remain competitive? The answers to these and many more questions will be answered in this post.
-categories:
-- Engineering
-tags:
-- DevOps
-type: post
-draft: false
----
++++
+categories = ["Engineering"]
+date = 2022-07-16T17:24:00-03:00
+description = "You want to measure software delivery performance, but don't know how?. Do you want to know if your team is performing well? Don't you know what to do to remain competitive? The answers to these and many more questions will be answered in this post."
+draft = false
+image = "/uploads/post/how-to-measure-performance/tape-measure.jpg"
+tags = ["DevOps"]
+title = "How to Measure Software Performance"
+type = "post"
++++
 
 You want to **measure software delivery performance**, but don't know how?. Do you want to know if **your team is performing well?** Don't you know what to do to remain competitive? The answers to these and many more questions will be answered in this post.
 

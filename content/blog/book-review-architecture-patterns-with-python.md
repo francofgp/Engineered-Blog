@@ -1,16 +1,12 @@
----
-title: 'Book Review: Architecture Patterns with Python'
-date: 2022-06-01T01:07:00.000-03:00
-image: "/uploads/featured-post-architecture-patterns-with-python.jpg"
-description: 'Review: Architecture Patterns with Python'
-categories:
-- Engineering
-tags:
-- Python
-- Django
-type: post
-
----
++++
+categories = ["Engineering"]
+date = 2022-06-01T01:07:00-03:00
+description = "Review: Architecture Patterns with Python"
+image = "/uploads/featured-post-architecture-patterns-with-python.jpg"
+tags = ["Python", "Django"]
+title = "Book Review: Architecture Patterns with Python"
+type = "post"
++++
 Have you wanted to dive deep into architecture design patterns with Python, and you don't know where to start? Well, maybe this book will give you some guidance to achieve such a goal
 
 In this post I will be given my review of this book, what I learned, and if I recommend it.

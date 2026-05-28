@@ -1,10 +1,16 @@
 ######################## default configuration ####################
 baseURL = "https://www.giulianopertile.com/"
-languageCode = "en-us"
+locale = "en-us"
 title = "Giuliano Pertile"
-summaryLength = "10"
-paginate = 6
+summaryLength = 10
 disqusShortname = ""
+
+# Suppress the Goldmark raw-HTML warning emitted by draft posts that intentionally
+# include inline HTML (e.g. content/blog/new-post.md uses <i>, <b>, etc. as a markdown reference).
+ignoreLogs = ['warning-goldmark-raw-html']
+
+[pagination]
+pagerSize = 6
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
@@ -85,8 +91,6 @@ home = "Home"
 # Meta data
 description = "This is my personal blog, where I will be sharing my journey as a software engineer."
 author = "Franco Giuliano Pertile"
-# Google Analitycs
-googleAnalitycsID = "G-TWMRGNLPFR"
 # Contact Information
 mobile = "" #Add phone carefully
 email = "giulianopertile@gmail.com"
