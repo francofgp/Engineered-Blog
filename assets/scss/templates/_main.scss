@@ -105,7 +105,7 @@
 
 .post-meta {
   span {
-    color: #444;
+    color: var(--eb-text-muted);
     font-weight: 500;
   }
 }
@@ -142,7 +142,7 @@
 /* widget */
 .widgets {
   padding-left: 25px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--eb-border);
   @include desktop {
     padding-left: 0;
     border-left: 0;
@@ -173,24 +173,33 @@
   }
 }
 
+/* Social icons share the .eb-tag ghost look — same tokens, same hover behaviour.
+   Box-sizing border-box + line-height: 33px keep the 35x35 footprint with the 1px border. */
 .social-links {
   li {
     a {
+      box-sizing: border-box;
       height: 35px;
       width: 35px;
-      background: $primary-color;
-      color: $white;
+      background: var(--eb-tag-bg);
+      color: var(--eb-tag-fg);
+      border: 1px solid var(--eb-tag-border);
       display: block;
-      line-height: 35px;
+      line-height: 33px;
+      transition: opacity 0.15s ease, background-color 0.15s ease;
 
       &:hover {
-        color: $white;
+        background: rgba(var(--bs-primary-rgb), 0.20);
+        color: var(--eb-tag-fg);
       }
     }
   }
 }
 
-/* pagination */
+/* pagination — matches the ghost design language used by .eb-tag and .social-links.
+   Hover lifts the bg alpha; active uses a slightly lower bg + a full-primary border
+   to read as "current page". All colours flow from --bs-primary / --bs-primary-rgb so
+   the same rules work in both themes. */
 .pagination {
   justify-content: center;
 
@@ -204,10 +213,11 @@
       color: $primary-color;
       border-top: 0;
       border-bottom: 0;
+      transition: background-color 0.15s ease;
 
       &:hover {
-        background: $primary-color;
-        color: $white;
+        background: rgba(var(--bs-primary-rgb), 0.20);
+        color: $primary-color;
       }
     }
 
@@ -220,8 +230,8 @@
 
     &.active {
       .page-link {
-        background: $white;
-        color: $text-color;
+        background: rgba(var(--bs-primary-rgb), 0.15);
+        color: $primary-color;
         border: 1px solid $primary-color;
       }
     }
@@ -286,17 +296,17 @@
     max-width: 100%;
     margin-bottom: 1rem;
 
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--eb-border);
 
     th,
     td {
       padding: .75rem;
       vertical-align: top;
-      border: 1px solid #dee2e6
+      border: 1px solid var(--eb-border)
     }
 
     thead {
-      background: darken($color: $gray, $amount: 2);
+      background: var(--eb-surface-emphasis);
     }
 
     tbody {
@@ -345,16 +355,26 @@
     padding: 3px 5px;
     background: $gray;
     border: 1px solid $border-color;
-    border-radius: 3px;
-/*     color: $text-color-dark;*/ 
+    border-radius: 0;
+  }
+
+  /* Sync Chroma wrapper background to the theme surface (overrides the BG declared by
+     `.chroma` in assets/css/chroma-*.css). Specificity 0,0,1,1 beats Chroma's 0,0,1,0.
+     The 1px border gives the block its own visual weight against the body bg instead of
+     feeling like a recessed area (matters most in dark, where surface and body are only
+     a few luminance points apart). border-radius: 0 keeps the theme's square aesthetic. */
+  pre.chroma {
+    background: var(--eb-surface);
+    border: 1px solid var(--eb-border);
+    border-radius: 0;
   }
 
 }
 
 footer a {
-  @extend .text-dark;
+  color: var(--eb-text-strong);
   &:hover {
-    color: $primary-color !important;
+    color: $primary-color;
     text-decoration: underline;
   }
 }

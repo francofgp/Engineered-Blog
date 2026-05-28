@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dark mode palette preview · Engineered Blog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700&display=swap" rel="stylesheet">
+
+<style>
+/* ---------- Shared base ---------- */
+* { box-sizing: border-box; }
+body {
+  font-family: 'Raleway', sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 24px;
+  color: #1f2328;
+}
+h1.page-title { font-weight: 700; margin: 0 0 8px; }
+.page-sub { color: #656d76; margin-bottom: 32px; font-size: 14px; }
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+}
+
+.palette-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+}
+.palette-label {
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #d0d7de;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.palette-label strong { font-size: 15px; }
+.palette-label small { color: #656d76; font-size: 12px; }
+
+.swatches {
+  display: flex;
+  height: 6px;
+}
+.swatches span { flex: 1; }
+
+/* ---------- Palette A · GitHub neutral ---------- */
+.palette-a {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --border: #30363d;
+  --primary: #2DD4CC;
+  --primary-ink: #0d1117;
+  /* code colors approximating github-dark */
+  --c-kw: #ff7b72;
+  --c-fn: #d2a8ff;
+  --c-num: #79c0ff;
+  --c-str: #a5d6ff;
+  --c-com: #8b949e;
+}
+/* ---------- Palette B · Slate ---------- */
+.palette-b {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #334155;
+  --primary: #22d3cc;
+  --primary-ink: #0f172a;
+  /* code colors approximating dracula */
+  --c-kw: #ff79c6;
+  --c-fn: #50fa7b;
+  --c-num: #bd93f9;
+  --c-str: #f1fa8c;
+  --c-com: #6272a4;
+}
+/* ---------- Palette C · Material warm ---------- */
+.palette-c {
+  --bg: #1e1e1e;
+  --surface: #2a2a2a;
+  --text: #e3e3e3;
+  --muted: #a8a8a8;
+  --border: #3a3a3a;
+  --primary: #2DD4CC;
+  --primary-ink: #1e1e1e;
+  /* code colors approximating material/one-dark */
+  --c-kw: #c792ea;
+  --c-fn: #82aaff;
+  --c-num: #f78c6c;
+  --c-str: #c3e88d;
+  --c-com: #697098;
+}
+/* ---------- Palette D · Warm-dark (middle ground) ---------- */
+.palette-d {
+  --bg: #16181c;
+  --surface: #1f2128;
+  --text: #e6e4e0;
+  --muted: #8e8f93;
+  --border: #2b2e35;
+  --primary: #2DD4CC;
+  --primary-ink: #16181c;
+  /* code colors approximating dracula */
+  --c-kw: #ff79c6;
+  --c-fn: #50fa7b;
+  --c-num: #bd93f9;
+  --c-str: #f1fa8c;
+  --c-com: #6272a4;
+}
+/* ---------- Light mode (shared) ---------- */
+.palette-light {
+  --bg: #ffffff;
+  --surface: #f6f8fa;
+  --text: #1f2328;
+  --muted: #656d76;
+  --border: #d0d7de;
+  --primary: #00AAA1;
+  --primary-ink: #ffffff;
+  --c-kw: #cf222e;
+  --c-fn: #8250df;
+  --c-num: #0550ae;
+  --c-str: #0a3069;
+  --c-com: #6e7781;
+}
+
+.preview {
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 14px;
+}
+
+/* mini navbar */
+.nav-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text);
+}
+.nav-links {
+  color: var(--muted);
+  font-size: 13px;
+  display: flex;
+  gap: 16px;
+}
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.nav-links a:hover { color: var(--primary); }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+}
+.theme-toggle button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.theme-toggle button.active {
+  background: var(--bg);
+  color: var(--primary);
+}
+.theme-toggle svg { width: 14px; height: 14px; }
+
+/* post card */
+.post-category {
+  color: var(--primary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.post-title {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 22px;
+  margin: 4px 0 6px;
+  line-height: 1.25;
+}
+.post-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+.post-meta .sep {
+  display: inline-block;
+  border-bottom: 1px solid var(--primary);
+  width: 18px;
+  vertical-align: middle;
+  margin: 0 8px;
+}
+.post-body {
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* code block (chroma-ish) */
+.code-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text);
+  overflow-x: auto;
+}
+.code-block .ln { color: var(--muted); user-select: none; margin-right: 12px; }
+.code-block .kw { color: var(--c-kw); }
+.code-block .fn { color: var(--c-fn); }
+.code-block .num { color: var(--c-num); }
+.code-block .str { color: var(--c-str); }
+.code-block .com { color: var(--c-com); }
+
+/* inline code */
+.inline-code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: 'Fira Code', Consolas, monospace;
+  font-size: 12px;
+}
+
+/* tag pills */
+.tag-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tag-pill {
+  background: var(--primary);
+  color: var(--primary-ink);
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-radius: 0;
+}
+
+/* buttons */
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-eb {
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 0;
+  border: 1px solid var(--primary);
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: capitalize;
+}
+.btn-primary-eb {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+.btn-outline-eb {
+  background: transparent;
+  color: var(--text);
+}
+
+/* widget */
+.widget {
+  background: var(--bg);
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.widget-title {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-block;
+  border-top: 1px solid var(--primary);
+  border-bottom: 1px solid var(--primary);
+  padding: 6px 0;
+  margin-bottom: 12px;
+}
+
+/* footer strip */
+.footer-strip {
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* decision footer */
+.decision-block {
+  margin-top: 40px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d0d7de;
+}
+.decision-block h2 { font-size: 18px; font-weight: 700; margin: 0 0 12px; }
+.decision-block ul { margin: 0; padding-left: 20px; color: #1f2328; line-height: 1.8; }
+.decision-block code {
+  background: #f6f8fa;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+}
+
+/* highlight winning palette */
+.palette-card.recommended {
+  outline: 2px solid #00AAA1;
+  outline-offset: 2px;
+  position: relative;
+}
+.recommended-badge {
+  position: absolute;
+  top: -10px;
+  right: 16px;
+  background: #00AAA1;
+  color: #fff;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Dark mode palette preview</h1>
+<p class="page-sub">Four dark variants applied to a faithful chunk of the blog (navbar · featured post · code block · sidebar widget · footer). Light mode shown for reference. <strong>Option D added</strong> as warm-dark middle ground between A's pop and C's softness. Pick one and reply in chat — <code>A</code>, <code>B</code>, <code>C</code> or <code>D</code>.</p>
+
+<!-- Light mode (shared reference) -->
+<div class="palette-card" style="margin-bottom:24px;">
+  <div class="palette-label">
+    <div><strong>Light mode (shared across all options)</strong></div>
+    <small>BG #ffffff · Primary #00AAA1 · Text #1f2328</small>
+  </div>
+  <div class="swatches">
+    <span style="background:#ffffff;"></span>
+    <span style="background:#f6f8fa;"></span>
+    <span style="background:#1f2328;"></span>
+    <span style="background:#656d76;"></span>
+    <span style="background:#d0d7de;"></span>
+    <span style="background:#00AAA1;"></span>
+  </div>
+  <div class="preview palette-light">
+    <div class="nav-strip">
+      <div class="brand">Giuliano Pertile</div>
+      <div class="nav-links">
+        <a href="#">About</a><a href="#">Posts</a><a href="#">Contact</a>
+      </div>
+      <div class="theme-toggle">
+        <button class="active" title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+        <button title="Dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+        <button title="Auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></button>
+      </div>
+    </div>
+    <div>
+      <div class="post-category">Programming</div>
+      <div class="post-title">The Dragon Curve in Python</div>
+      <div class="post-meta">By Franco<span class="sep"></span>14 September 2022</div>
+    </div>
+    <div class="post-body">I built a fractal generator with matplotlib. The dragon curve emerges from iteratively folding a strip of paper — formally, you can express it as <span class="inline-code">L = L + R</span> where each iteration appends the previous sequence reversed and inverted.</div>
+    <div class="code-block">
+<span class="ln">1</span><span class="kw">def</span> <span class="fn">dragon</span>(n):<br>
+<span class="ln">2</span>    <span class="com"># base case</span><br>
+<span class="ln">3</span>    <span class="kw">if</span> n == <span class="num">0</span>:<br>
+<span class="ln">4</span>        <span class="kw">return</span> [<span class="num">1</span>]<br>
+<span class="ln">5</span>    prev = dragon(n - <span class="num">1</span>)<br>
+<span class="ln">6</span>    <span class="kw">return</span> prev + [<span class="num">1</span>] + [-x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">reversed</span>(prev)]
+    </div>
+    <div class="btn-row">
+      <button class="btn-eb btn-primary-eb">read more</button>
+      <button class="btn-eb btn-outline-eb">share</button>
+    </div>
+    <div class="widget">
+      <span class="widget-title">Tags</span>
+      <div class="tag-row">
+        <span class="tag-pill">Python</span>
+        <span class="tag-pill">Fractals</span>
+        <span class="tag-pill">Math</span>
+      </div>
+    </div>
+    <div class="footer-strip">
+      <span>© 2026 giulianopertile.com</span>
+      <span>All rights reserved</span>
+    </div>
+  </div>
+</div>
+
+<!-- Three dark palettes -->
+<div class="palette-grid">
+
+  <!-- ============ A · GitHub neutral ============ -->
+  <div class="palette-card">
+    <div class="palette-label">
+      <div><strong>A · GitHub neutral</strong></div>
+      <small>14.1:1 AAA · Chroma <code>github-dark</code></small>
+    </div>
+    <div class="swatches">
+      <span style="background:#0d1117;"></span>
+      <span style="background:#161b22;"></span>
+      <span style="background:#e6edf3;"></span>
+      <span style="background:#7d8590;"></span>
+      <span style="background:#30363d;"></span>
+      <span style="background:#2DD4CC;"></span>
+    </div>
+    <div class="preview palette-a">
+      <div class="nav-strip">
+        <div class="brand">Giuliano Pertile</div>
+        <div class="nav-links">
+          <a href="#">About</a><a href="#">Posts</a><a href="#">Contact</a>
+        </div>
+        <div class="theme-toggle">
+          <button title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+          <button class="active" title="Dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+          <button title="Auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></button>
+        </div>
+      </div>
+      <div>
+        <div class="post-category">Programming</div>
+        <div class="post-title">The Dragon Curve in Python</div>
+        <div class="post-meta">By Franco<span class="sep"></span>14 September 2022</div>
+      </div>
+      <div class="post-body">I built a fractal generator with matplotlib. The dragon curve emerges from iteratively folding a strip of paper — formally, you can express it as <span class="inline-code">L = L + R</span> where each iteration appends the previous sequence reversed and inverted.</div>
+      <div class="code-block">
+<span class="ln">1</span><span class="kw">def</span> <span class="fn">dragon</span>(n):<br>
+<span class="ln">2</span>    <span class="com"># base case</span><br>
+<span class="ln">3</span>    <span class="kw">if</span> n == <span class="num">0</span>:<br>
+<span class="ln">4</span>        <span class="kw">return</span> [<span class="num">1</span>]<br>
+<span class="ln">5</span>    prev = dragon(n - <span class="num">1</span>)<br>
+<span class="ln">6</span>    <span class="kw">return</span> prev + [<span class="num">1</span>] + [-x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">reversed</span>(prev)]
+      </div>
+      <div class="btn-row">
+        <button class="btn-eb btn-primary-eb">read more</button>
+        <button class="btn-eb btn-outline-eb">share</button>
+      </div>
+      <div class="widget">
+        <span class="widget-title">Tags</span>
+        <div class="tag-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Fractals</span>
+          <span class="tag-pill">Math</span>
+        </div>
+      </div>
+      <div class="footer-strip">
+        <span>© 2026 giulianopertile.com</span>
+        <span>All rights reserved</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ B · Slate ============ -->
+  <div class="palette-card">
+    <div class="palette-label">
+      <div><strong>B · Slate</strong></div>
+      <small>14.6:1 AAA · Chroma <code>dracula</code></small>
+    </div>
+    <div class="swatches">
+      <span style="background:#0f172a;"></span>
+      <span style="background:#1e293b;"></span>
+      <span style="background:#f1f5f9;"></span>
+      <span style="background:#94a3b8;"></span>
+      <span style="background:#334155;"></span>
+      <span style="background:#22d3cc;"></span>
+    </div>
+    <div class="preview palette-b">
+      <div class="nav-strip">
+        <div class="brand">Giuliano Pertile</div>
+        <div class="nav-links">
+          <a href="#">About</a><a href="#">Posts</a><a href="#">Contact</a>
+        </div>
+        <div class="theme-toggle">
+          <button title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+          <button class="active" title="Dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+          <button title="Auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></button>
+        </div>
+      </div>
+      <div>
+        <div class="post-category">Programming</div>
+        <div class="post-title">The Dragon Curve in Python</div>
+        <div class="post-meta">By Franco<span class="sep"></span>14 September 2022</div>
+      </div>
+      <div class="post-body">I built a fractal generator with matplotlib. The dragon curve emerges from iteratively folding a strip of paper — formally, you can express it as <span class="inline-code">L = L + R</span> where each iteration appends the previous sequence reversed and inverted.</div>
+      <div class="code-block">
+<span class="ln">1</span><span class="kw">def</span> <span class="fn">dragon</span>(n):<br>
+<span class="ln">2</span>    <span class="com"># base case</span><br>
+<span class="ln">3</span>    <span class="kw">if</span> n == <span class="num">0</span>:<br>
+<span class="ln">4</span>        <span class="kw">return</span> [<span class="num">1</span>]<br>
+<span class="ln">5</span>    prev = dragon(n - <span class="num">1</span>)<br>
+<span class="ln">6</span>    <span class="kw">return</span> prev + [<span class="num">1</span>] + [-x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">reversed</span>(prev)]
+      </div>
+      <div class="btn-row">
+        <button class="btn-eb btn-primary-eb">read more</button>
+        <button class="btn-eb btn-outline-eb">share</button>
+      </div>
+      <div class="widget">
+        <span class="widget-title">Tags</span>
+        <div class="tag-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Fractals</span>
+          <span class="tag-pill">Math</span>
+        </div>
+      </div>
+      <div class="footer-strip">
+        <span>© 2026 giulianopertile.com</span>
+        <span>All rights reserved</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ C · Material warm ============ -->
+  <div class="palette-card">
+    <div class="palette-label">
+      <div><strong>C · Material warm</strong></div>
+      <small>12.4:1 AAA · Chroma <code>material</code></small>
+    </div>
+    <div class="swatches">
+      <span style="background:#1e1e1e;"></span>
+      <span style="background:#2a2a2a;"></span>
+      <span style="background:#e3e3e3;"></span>
+      <span style="background:#a8a8a8;"></span>
+      <span style="background:#3a3a3a;"></span>
+      <span style="background:#2DD4CC;"></span>
+    </div>
+    <div class="preview palette-c">
+      <div class="nav-strip">
+        <div class="brand">Giuliano Pertile</div>
+        <div class="nav-links">
+          <a href="#">About</a><a href="#">Posts</a><a href="#">Contact</a>
+        </div>
+        <div class="theme-toggle">
+          <button title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+          <button class="active" title="Dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+          <button title="Auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></button>
+        </div>
+      </div>
+      <div>
+        <div class="post-category">Programming</div>
+        <div class="post-title">The Dragon Curve in Python</div>
+        <div class="post-meta">By Franco<span class="sep"></span>14 September 2022</div>
+      </div>
+      <div class="post-body">I built a fractal generator with matplotlib. The dragon curve emerges from iteratively folding a strip of paper — formally, you can express it as <span class="inline-code">L = L + R</span> where each iteration appends the previous sequence reversed and inverted.</div>
+      <div class="code-block">
+<span class="ln">1</span><span class="kw">def</span> <span class="fn">dragon</span>(n):<br>
+<span class="ln">2</span>    <span class="com"># base case</span><br>
+<span class="ln">3</span>    <span class="kw">if</span> n == <span class="num">0</span>:<br>
+<span class="ln">4</span>        <span class="kw">return</span> [<span class="num">1</span>]<br>
+<span class="ln">5</span>    prev = dragon(n - <span class="num">1</span>)<br>
+<span class="ln">6</span>    <span class="kw">return</span> prev + [<span class="num">1</span>] + [-x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">reversed</span>(prev)]
+      </div>
+      <div class="btn-row">
+        <button class="btn-eb btn-primary-eb">read more</button>
+        <button class="btn-eb btn-outline-eb">share</button>
+      </div>
+      <div class="widget">
+        <span class="widget-title">Tags</span>
+        <div class="tag-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Fractals</span>
+          <span class="tag-pill">Math</span>
+        </div>
+      </div>
+      <div class="footer-strip">
+        <span>© 2026 giulianopertile.com</span>
+        <span>All rights reserved</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ D · Warm-dark (middle ground) ============ -->
+  <div class="palette-card recommended">
+    <span class="recommended-badge">Nueva · Recomendada</span>
+    <div class="palette-label">
+      <div><strong>D · Warm-dark</strong></div>
+      <small>~14:1 AAA · Chroma <code>dracula</code></small>
+    </div>
+    <div class="swatches">
+      <span style="background:#16181c;"></span>
+      <span style="background:#1f2128;"></span>
+      <span style="background:#e6e4e0;"></span>
+      <span style="background:#8e8f93;"></span>
+      <span style="background:#2b2e35;"></span>
+      <span style="background:#2DD4CC;"></span>
+    </div>
+    <div class="preview palette-d">
+      <div class="nav-strip">
+        <div class="brand">Giuliano Pertile</div>
+        <div class="nav-links">
+          <a href="#">About</a><a href="#">Posts</a><a href="#">Contact</a>
+        </div>
+        <div class="theme-toggle">
+          <button title="Light"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+          <button class="active" title="Dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+          <button title="Auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></button>
+        </div>
+      </div>
+      <div>
+        <div class="post-category">Programming</div>
+        <div class="post-title">The Dragon Curve in Python</div>
+        <div class="post-meta">By Franco<span class="sep"></span>14 September 2022</div>
+      </div>
+      <div class="post-body">I built a fractal generator with matplotlib. The dragon curve emerges from iteratively folding a strip of paper — formally, you can express it as <span class="inline-code">L = L + R</span> where each iteration appends the previous sequence reversed and inverted.</div>
+      <div class="code-block">
+<span class="ln">1</span><span class="kw">def</span> <span class="fn">dragon</span>(n):<br>
+<span class="ln">2</span>    <span class="com"># base case</span><br>
+<span class="ln">3</span>    <span class="kw">if</span> n == <span class="num">0</span>:<br>
+<span class="ln">4</span>        <span class="kw">return</span> [<span class="num">1</span>]<br>
+<span class="ln">5</span>    prev = dragon(n - <span class="num">1</span>)<br>
+<span class="ln">6</span>    <span class="kw">return</span> prev + [<span class="num">1</span>] + [-x <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">reversed</span>(prev)]
+      </div>
+      <div class="btn-row">
+        <button class="btn-eb btn-primary-eb">read more</button>
+        <button class="btn-eb btn-outline-eb">share</button>
+      </div>
+      <div class="widget">
+        <span class="widget-title">Tags</span>
+        <div class="tag-row">
+          <span class="tag-pill">Python</span>
+          <span class="tag-pill">Fractals</span>
+          <span class="tag-pill">Math</span>
+        </div>
+      </div>
+      <div class="footer-strip">
+        <span>© 2026 giulianopertile.com</span>
+        <span>All rights reserved</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="decision-block">
+  <h2>How to pick</h2>
+  <ul>
+    <li><strong>A · GitHub neutral</strong> — pure black BG, máximo pop del teal, cool undertone. Para devs que aman la estética GitHub.</li>
+    <li><strong>B · Slate</strong> — bluer undertone, combines with the teal. Trendier (Linear, Notion, Vercel vibes). Pairs with <code>dracula</code>.</li>
+    <li><strong>C · Material warm</strong> — softer dark, easier on long sessions pero el teal pierde fuerza. Body↔surface poco contraste.</li>
+    <li><strong>D · Warm-dark</strong> — <strong>middle ground</strong>. BG <code>#16181c</code> es un toque más cálido y menos stark que A, pero suficientemente oscuro para que el teal pop. Surface step grande para que las cards/code blocks se separen del body. Texto cream <code>#e6e4e0</code> en vez de blanco puro, baja la halation. Pairs con <code>dracula</code> (acentos pink/green warm).</li>
+  </ul>
+  <p style="margin-top:16px;color:#656d76;font-size:13px;">Tip: reducí el zoom del browser, alejate del monitor, leé el párrafo y el código de cada panel. La que se lea más "tuya" gana. Si querés que tunee D más warm/más cool/más dark/teal más verde, decime.</p>
+</div>
+
+</body>
+</html>

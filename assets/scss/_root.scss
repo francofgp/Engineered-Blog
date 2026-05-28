@@ -1,0 +1,155 @@
+// =================================================================
+// THEME REGISTRY · single source of truth for all design tokens
+// =================================================================
+// Light theme defaults live on `:root`. Dark theme overrides live
+// under `[data-bs-theme="dark"]`. Bootstrap 5.3 toggles the attribute
+// on `<html>`; everything else cascades from these tokens.
+//
+// To change the look of the site:
+//   1. Edit values in this file (and ONLY this file when possible).
+//   2. Update docs/THEME.md with the rationale + new swatches.
+//
+// To add a new token:
+//   1. Define it for BOTH themes here.
+//   2. Reference it elsewhere as `var(--token-name)`.
+//
+// Naming convention:
+//   --bs-*  → Bootstrap-recognised vars (pass-through overrides).
+//   --eb-*  → Engineered-Blog tokens (our own design system).
+//
+// References:
+//   Bootstrap 5.3 color modes — https://getbootstrap.com/docs/5.3/customize/color-modes/
+//   Companion doc — docs/THEME.md
+// =================================================================
+
+// -----------------------------------------------------------------
+// LIGHT THEME (default)
+// -----------------------------------------------------------------
+:root {
+  // ---------- Brand ramp ----------
+  // To swap the brand colour: change these 4 values (light) + the 4 (dark below).
+  // Every derivative token in this file references `var(--bs-primary*)`, so no other
+  // edits are needed downstream. See docs/THEME.md §"How to swap the brand colour".
+  --bs-primary: #00AAA1;
+  --bs-primary-rgb: 0, 170, 161;
+  --bs-primary-darker: #007F7A;    // ~-25% lightness; AA-pass text on tinted bg (ghost tag fg, focus rings)
+  --bs-primary-lighter: #1ac4ba;   // ~+10% lightness; vivid accent (selection bg)
+
+  // ---------- Surfaces ----------
+  --eb-body-bg: #ffffff;
+  --eb-surface: #f4fcff;            // cards, code blocks, blockquote, tbody
+  --eb-surface-emphasis: #daf6ff;   // thead, hover (darker than surface)
+
+  // ---------- Text ----------
+  --eb-text-strong: #222222;        // headings, emphasis
+  --eb-text-muted: #666666;         // body copy
+  --eb-text-light: #959595;         // tertiary / disabled
+
+  // ---------- Borders ----------
+  --eb-border: #ACB9C4;
+
+  // ---------- Interactive ----------
+  --eb-selection-bg: var(--bs-primary-lighter);
+  --eb-selection-fg: #ffffff;       // text contrast, not brand-derived
+
+  // ---------- Tag pills (ghost variant in BOTH themes for visual consistency) ----------
+  // The bg/border are computed from --bs-primary-rgb; the fg uses --bs-primary-darker
+  // so it passes WCAG AA on the tinted bg (the bare --bs-primary only passes AA Large).
+  --eb-tag-bg: rgba(var(--bs-primary-rgb), 0.10);
+  --eb-tag-fg: var(--bs-primary-darker);
+  --eb-tag-border: rgba(var(--bs-primary-rgb), 0.30);
+
+  // ---------- Overlays (attention-grabbing banners, cookie box) ----------
+  --eb-overlay-bg: #2d2d2d;
+  --eb-overlay-fg: #f5f5f5;
+
+  // ---------- Bootstrap pass-through ----------
+  // Map our tokens onto Bootstrap globals so utilities like
+  // `.text-body-emphasis`, `.text-body-secondary`, `.bg-body`,
+  // `.border-secondary-subtle`, etc. follow the same registry.
+  --bs-body-bg: var(--eb-body-bg);
+  --bs-body-color: var(--eb-text-muted);
+  --bs-body-color-rgb: 102, 102, 102;
+  --bs-emphasis-color: var(--eb-text-strong);
+  --bs-emphasis-color-rgb: 34, 34, 34;
+  --bs-secondary-color: var(--eb-text-muted);
+  --bs-border-color: var(--eb-border);
+
+  // Tells the browser to render native widgets (scrollbars, form
+  // pickers, autofill) in the matching color scheme.
+  color-scheme: light;
+}
+
+// -----------------------------------------------------------------
+// Component-scoped Bootstrap overrides
+// -----------------------------------------------------------------
+// Some Bootstrap 5.3 variables are declared at the COMPONENT selector level,
+// not at `:root`. Example: `.dropdown-menu { --bs-dropdown-link-active-bg: #0d6efd; }`.
+// That declaration wins over any `:root` override because it's the same specificity
+// but more specific scope. We have to re-declare those variables on the same selector,
+// AFTER Bootstrap's CSS loads (which is the case: plugins/bootstrap.min.css comes before
+// our compiled scss/style.scss in head.html).
+//
+// `var(--bs-primary)` is theme-aware via the ramp above, so a single declaration
+// covers both light and dark themes — no need to duplicate per data-bs-theme.
+.dropdown-menu {
+  --bs-dropdown-border-radius: 0;
+  --bs-dropdown-inner-border-radius: 0;
+  --bs-dropdown-link-active-bg: var(--bs-primary);
+  --bs-dropdown-link-active-color: #ffffff;
+}
+
+// -----------------------------------------------------------------
+// DARK THEME · "Warm-dark" (palette D)
+// -----------------------------------------------------------------
+// Chosen 2026-05-28 over GitHub (too stark/cold), Slate (too blue) and
+// Material (teal pop too weak, body↔surface step too small).
+// See docs/THEME.md §History for full rationale.
+[data-bs-theme="dark"] {
+  // ---------- Brand ramp ----------
+  // Note: the ramp meaning INVERTS between themes — in dark, "lighter" is what we use
+  // for text on tinted bg (because dark text on dark bg doesn't work) and "darker" is
+  // what we use for selection bg (because the body is already dark, selection needs a
+  // saturated mid-shade to pop without going neon). See docs/THEME.md for the swap recipe.
+  --bs-primary: #2DD4CC;            // brighter teal so it still pops on dark
+  --bs-primary-rgb: 45, 212, 204;
+  --bs-primary-darker: #1eb8b0;     // selection bg in dark (saturated mid-teal)
+  --bs-primary-lighter: #5EEAD4;    // text on tinted bg in dark; Tailwind teal-300 equivalent
+
+  // ---------- Surfaces ----------
+  --eb-body-bg: #16181c;            // warm-dark, not pure black
+  --eb-surface: #1f2128;            // clear step up from body
+  --eb-surface-emphasis: #2a2d36;   // bumped from #262931 for clearer thead/row-hover step over --eb-surface
+
+  // ---------- Text ----------
+  --eb-text-strong: #e6e4e0;        // cream white (lower halation than #fff)
+  --eb-text-muted: #b3b6bd;         // bumped from #8e8f93 → WCAG ~8.6:1 (AAA) for body copy
+  --eb-text-light: #6b6c70;
+
+  // ---------- Borders ----------
+  --eb-border: #3a3e48;             // bumped from #2b2e35 so hairlines are actually visible
+
+  // ---------- Interactive ----------
+  --eb-selection-bg: var(--bs-primary-darker);
+  --eb-selection-fg: #16181c;       // text contrast (matches --eb-body-bg), not brand-derived
+
+  // ---------- Tag pills (ghost variant — GitHub/Linear/Vercel pattern) ----------
+  --eb-tag-bg: rgba(var(--bs-primary-rgb), 0.15);    // translucent teal
+  --eb-tag-fg: var(--bs-primary-lighter);            // AAA contrast against the translucent dark bg
+  --eb-tag-border: rgba(var(--bs-primary-rgb), 0.35);
+
+  // ---------- Overlays ----------
+  --eb-overlay-bg: #2b2e35;         // intentionally a step below --eb-border for a recessed feel
+  --eb-overlay-fg: #e6e4e0;
+
+  // ---------- Bootstrap pass-through ----------
+  --bs-body-bg: var(--eb-body-bg);
+  --bs-body-color: var(--eb-text-muted);
+  --bs-body-color-rgb: 142, 143, 147;
+  --bs-emphasis-color: var(--eb-text-strong);
+  --bs-emphasis-color-rgb: 230, 228, 224;
+  --bs-secondary-color: var(--eb-text-muted);
+  --bs-border-color: var(--eb-border);
+
+  color-scheme: dark;
+}

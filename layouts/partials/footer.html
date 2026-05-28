@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-lg-8 mx-auto text-center">
         <h2>{{ .Site.Params.newsletter.title | markdownify }}</h2>
-        <p class="text-light px-md-5 py-4 border-start border-end border-primary">
+        <p class="text-body-secondary px-md-5 py-4 border-start border-end border-primary">
           {{ .Site.Params.newsletter.content | markdownify }}</p>
         <form action="#" class="row justify-content-center">
           <div class="col-md-8">
@@ -25,7 +25,7 @@
     <div class="row justify-content-center">
       <div class="col-12 text-center mb-5">
         {{ if .Site.Params.nameSite }} 
-        <a class="text-dark h3" href="{{ .Site.BaseURL }}">{{ .Site.Params.nameSite}}</a>
+        <a class="text-body-emphasis h3" href="{{ .Site.BaseURL }}">{{ .Site.Params.nameSite}}</a>
         {{else}}
         <a href="{{ .Site.BaseURL }}"><img src="{{ .Site.Params.logo | absURL }}" alt="{{ .Site.Title }}"></a>
         {{ end }}
@@ -35,14 +35,14 @@
         <h6 class="mb-4">Contact Me</h6>
         <ul class="list-unstyled">
           {{ if .Site.Params.mobile }}
-          <li class="mb-3"><a class="text-dark" href="tel:{{ .Site.Params.mobile }}"><i
+          <li class="mb-3"><a class="text-body-emphasis" href="tel:{{ .Site.Params.mobile }}"><i
                 class="ti-mobile me-3 text-primary"></i>{{ .Site.Params.mobile }}</a></li>
           {{ end }}
           {{ if .Site.Params.location }}           
           <li class="mb-3"><i class="ti-location-pin me-3 text-primary"></i>{{ .Site.Params.location }}</li>
           {{ end }}
           {{ if .Site.Params.email }}
-          <li class="mb-3"><a class="text-dark" href="mailto:{{ .Site.Params.email }}"><i
+          <li class="mb-3"><a class="text-body-emphasis" href="mailto:{{ .Site.Params.email }}"><i
                 class="ti-email me-3 text-primary"></i>{{ .Site.Params.email }}</a></li>
           {{ end }}
         </ul>
@@ -52,7 +52,7 @@
         <h6 class="mb-4">Social Contacts</h6>
         <ul class="list-unstyled">
           {{ range .Site.Params.social }}
-          <li class="mb-3"><a class="text-dark" href="{{ .link | safeURL }}">{{ .title }}</a></li>
+          <li class="mb-3"><a class="text-body-emphasis" href="{{ .link | safeURL }}">{{ .title }}</a></li>
           {{ end }}
         </ul>
       </div>
@@ -62,7 +62,7 @@
         {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
         <ul class="list-unstyled">
           {{- range $name, $items := .Site.Taxonomies.categories }}
-          <li class="mb-3"><a class="text-dark"
+          <li class="mb-3"><a class="text-body-emphasis"
               href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}/">{{ $name | title | humanize }}</a>
           </li>
           {{- end }}
@@ -74,7 +74,7 @@
         <h6 class="mb-4">Quick Links</h6>
         <ul class="list-unstyled">
           {{ range .Site.Menus.footer }}
-          <li class="mb-3"><a class="text-dark" href="{{ .URL | absURL }}">{{ .Name }}</a></li>
+          <li class="mb-3"><a class="text-body-emphasis" href="{{ .URL | absURL }}">{{ .Name }}</a></li>
           {{ end }}
         </ul>
       </div>
@@ -120,23 +120,5 @@
 	})(jQuery);
 </script>
 
-<!-- cookie style -->
-<style>
-.cookie-box {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  text-align: center;
-  z-index: 9999;
-  padding: 1rem 2rem;
-  background: rgb(71, 71, 71);
-  transition: all .75s cubic-bezier(.19, 1, .22, 1);
-  color: #fdfdfd;
-}
-
-.cookie-box-hide {
-  display: none;
-}
-</style>
+{{/* Cookie box style now lives in assets/scss/_common.scss with theme-aware --eb-overlay-* tokens. */}}
 {{ end }}

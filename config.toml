@@ -3,7 +3,6 @@ baseURL = "https://www.giulianopertile.com/"
 locale = "en-us"
 title = "Giuliano Pertile"
 summaryLength = 10
-disqusShortname = ""
 
 # Suppress the Goldmark raw-HTML warning emitted by draft posts that intentionally
 # include inline HTML (e.g. content/blog/new-post.md uses <i>, <b>, etc. as a markdown reference).
@@ -157,7 +156,13 @@ link = "https://francofgp.github.io/"
 
 
 [markup.highlight]
-style = 'manni' # see https://xyproto.github.io/splash/docs/all.html or try 'dracula'
+# Emit Chroma class names (`<span class="k">…</span>`) instead of inline `style="…"`.
+# This lets us ship two stylesheets (light/dark) and switch via [data-bs-theme] in head.html.
+# Light styling lives in   assets/css/chroma-light.css   (regenerate: `hugo gen chromastyles --style=manni > assets/css/chroma-light.css`)
+# Dark  styling lives in   assets/css/chroma-dark.css    (regenerate: `hugo gen chromastyles --style=dracula > assets/css/chroma-dark.css`)
+# The `style` field below is ignored when noClasses=false, kept here as historical reference.
+noClasses = false
+style = 'manni'
 
 ############################# share-buttons ########################
 

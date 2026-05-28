@@ -5,6 +5,23 @@
   {{ "<!-- mobile responsive meta -->" | safeHTML }}
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+  {{/* Anti-flash: resolve theme BEFORE any stylesheet loads, so the first paint
+       already shows the correct light/dark surfaces. Runs synchronously. */}}
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('theme');
+        var mode = (stored === 'light' || stored === 'dark') ? stored : 'auto';
+        var resolved = (mode === 'auto')
+          ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+          : mode;
+        document.documentElement.setAttribute('data-bs-theme', resolved);
+      } catch (e) {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+      }
+    })();
+  </script>
+
   <!-- Twitter card -->
   <meta name="twitter:card" content="summary">
   <!-- Title Tags -->
@@ -40,6 +57,11 @@
   {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
   {{ hugo.Generator }}
 
+  {{/* Preload the themify-icons woff so social icons + UI icons appear without FOIT.
+       Must match the URL the themify CSS uses verbatim (incl. cache-buster query) and
+       requires `crossorigin` even for same-origin fonts. */}}
+  <link rel="preload" href="{{ `plugins/themify-icons/fonts/themify.woff?-fvbane` | absURL }}" as="font" type="font/woff" crossorigin="anonymous">
+
   {{ "<!-- plugins -->" | safeHTML }}
   {{ range .Site.Params.plugins.css }}
   <link rel="stylesheet" href="{{ .URL | absURL }}">
@@ -48,6 +70,16 @@
   {{ "<!-- Main Stylesheet -->" | safeHTML }}
   {{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
   <link rel="stylesheet" href="{{ $styles.Permalink }}" media="screen">
+
+  {{/* Chroma syntax highlighting: build ONE cacheable stylesheet containing both themes.
+       Dark rules are wrapped under [data-bs-theme="dark"] via CSS nesting before concat.
+       Output: /css/chroma.<sha256>.min.css with SRI integrity hash. See docs/THEME.md. */}}
+  {{ $chromaLight := resources.Get "css/chroma-light.css" }}
+  {{ $chromaDark  := resources.Get "css/chroma-dark.css" }}
+  {{ if and $chromaLight $chromaDark }}
+  {{ $combined := printf "%s\n[data-bs-theme=\"dark\"] {\n%s\n}\n" $chromaLight.Content $chromaDark.Content | resources.FromString "css/chroma.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $combined.RelPermalink }}" integrity="{{ $combined.Data.Integrity }}" crossorigin="anonymous">
+  {{ end }}
 
   {{ "<!--Favicon-->" | safeHTML }}
   <link rel="shortcut icon" href="{{ `images/favicon.ico` | absURL }}" type="image/x-icon">

@@ -1,13 +1,31 @@
-// Color Variables
-$primary-color: #00AAA1;
-$text-color: #666666;
-$text-color-dark: #222222;
-$text-color-light: #959595;
-$body-color: #fff;
-$border-color: #ACB9C4;
+// =================================================================
+// Sass aliases over the CSS-custom-property registry in _root.scss.
+//
+// PURPOSE: keep the existing SCSS (which references $primary-color,
+// $text-color, etc.) compiling without touching every file.
+//
+// RULE: do NOT add new colors here. Add them to _root.scss as CSS
+// custom properties so they participate in light/dark switching.
+// New SCSS code should prefer `var(--eb-*)` / `var(--bs-*)` directly.
+//
+// CAVEAT: Sass color functions like `lighten()` and `darken()` cannot
+// resolve a CSS custom property at build time. Where the codebase
+// used them (e.g. `lighten($primary-color, 10)`), the call was
+// replaced with a dedicated token defined for both themes in _root.scss.
+// =================================================================
+
+// Theme-reactive aliases (resolve at runtime, switch with data-bs-theme)
+$primary-color: var(--bs-primary);
+$text-color: var(--eb-text-muted);
+$text-color-dark: var(--eb-text-strong);
+$text-color-light: var(--eb-text-light);
+$body-color: var(--eb-body-bg);
+$border-color: var(--eb-border);
+$gray: var(--eb-surface);
+
+// True constants (never theme-aware)
 $black: #000;
 $white: #fff;
-$gray: #f4fcff;
 
 // Font Variables
 $primary-font: 'Raleway', sans-serif;

@@ -7,7 +7,7 @@ Instructions for AI coding agents working on this repository. Humans should read
 ## Project overview
 
 - **What**: Personal blog at <https://www.giulianopertile.com/>.
-- **Stack**: [Hugo](https://gohugo.io/) static site generator + [Liva theme](https://github.com/gethugothemes/liva-hugo) (vendored under `layouts/`, `assets/`, `static/plugins/`).
+- **Stack**: [Hugo](https://gohugo.io/) static site generator + [Liva theme](https://github.com/gethugothemes/liva-hugo) (vendored under `layouts/`, `assets/`, `static/plugins/`). Dark mode + theme tokens (light/dark) live in `assets/scss/_root.scss` — see `docs/THEME.md`.
 - **Deploy**: Netlify, auto-builds on push to the default branch using `netlify.toml` (`hugo --minify --gc`, `HUGO_VERSION = 0.162.0`).
 - **No package manager, no Node, no Go modules.** Only the `hugo` CLI is required to develop locally.
 
@@ -138,7 +138,10 @@ Notes:
 ## Styling
 
 - All site styles live in `assets/scss/`. The entry point is `style.scss`; it is compiled by `{{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}` in `layouts/partials/head.html`.
-- Edit the partial `_*.scss` files for site-wide changes. Variables go in `_variables.scss`; mixins in `_mixins.scss`.
+- **Theme registry**: all design tokens (colors, surfaces, text, borders) for both light and dark mode live in `assets/scss/_root.scss` as CSS custom properties. This is the **single source of truth** — if you need to change a color, edit it there and update `docs/THEME.md`. Do NOT add hex colors in other SCSS files; reference `var(--eb-*)` or `var(--bs-*)` instead.
+- Dark mode is toggled via Bootstrap 5.3's `data-bs-theme` attribute on `<html>`. The token under `[data-bs-theme="dark"]` in `_root.scss` activates automatically.
+- `_variables.scss` exists for backward compat with the vendored Liva theme SCSS — its Sass variables are aliases over the CSS custom properties. Do not add new colors there.
+- Edit the partial `_*.scss` files for site-wide changes. Mixins go in `_mixins.scss`.
 - Do **not** add CSS via `<style>` blocks in templates or content unless you have a good reason — keep styling centralized in SCSS.
 - Third-party CSS/JS plugins (`static/plugins/bootstrap/` (Bootstrap 5.3.x, bundle with Popper), `jQuery/` (jQuery 3.x), `search/`) are vendored Liva theme dependencies. Do not modify them; if a plugin needs replacing, do it deliberately and update `config.toml` `[params.plugins]`.
 
@@ -154,7 +157,7 @@ The theme is **vendored**, not pulled as a Hugo module. That means any change to
 
 - `public/` and `resources/_gen/` — generated, gitignored, never edit.
 - `netlify.toml` `HUGO_VERSION` — bumping requires a manual local verification with the same version.
-- Google Analytics ID, Google AdSense client, Disqus shortname, Giscus repo IDs — these are wired into `config.toml` and `layouts/`. Do not change them without being asked.
+- Google Analytics ID, Google AdSense client, Giscus repo IDs — these are wired into `config.toml` and `layouts/`. Do not change them without being asked.
 - The three draft files in `content/blog/` (`new-post.md`, `post-10.md`, `_markdown-reference.md`) — see note above.
 - `theme.toml` — metadata of the upstream Liva theme; not consumed by the build.
 

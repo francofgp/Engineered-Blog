@@ -9,17 +9,19 @@ VERSION:	Versoin Number
 [TABLE OF CONTENTS]
 -------------------------------------------------------------------*/
 
+@import 'root';
+
 @import 'variables';
 
 @import 'mixins';
-
-@import 'kofi';
 
 @import 'typography';
 
 @import 'buttons';
 
 @import 'common';
+
+@import 'share-buttons';
 
 @import 'templates/navigation.scss';
 

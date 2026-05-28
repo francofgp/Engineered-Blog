@@ -26,9 +26,21 @@
           {{ .Content }}
 
           {{ if .Page.Store.Get "hasMermaid" }}
+          <script>
+            // Cache original mermaid source so the theme toggle (in assets/js/script.js) can re-render.
+            // ORDER MATTERS: this cache must run BEFORE the mermaid CDN script below. Once mermaid
+            // initialises with startOnLoad:true it replaces .mermaid innerHTML with the rendered SVG,
+            // and the cache would then capture the SVG instead of the source. Do not reorder.
+            document.querySelectorAll('.mermaid').forEach(function (el) {
+              el.dataset.original = el.innerHTML.trim();
+            });
+          </script>
           <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
           <script>
-            mermaid.initialize({ startOnLoad: true });
+            mermaid.initialize({
+              startOnLoad: true,
+              theme: document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'default'
+            });
           </script>
           {{ end }}
 
@@ -36,27 +48,42 @@
         <div class="content">
           <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
           <script
-            type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#FF5E5B', 'W7W2DRG2T'); kofiwidget2.draw();</script>
+            type='text/javascript'>
+            // Use the brand teal so the button doesn't fight the rest of the design system.
+            // Ko-fi reads this colour at init time and bakes it into the widget — it's the only
+            // styling hook the widget exposes. We pick the light-theme teal (#00AAA1) because it
+            // reads cleanly against both bg colours; the dark teal (#2DD4CC) would be neon on light.
+            kofiwidget2.init('Support Me on Ko-fi', '#00AAA1', 'W7W2DRG2T'); kofiwidget2.draw();</script>
         </div>
 
-        <!-- comments -->
-        {{ template "_internal/disqus.html" . }}
-
-        <script src="https://giscus.app/client.js"
-        data-repo="francofgp/Engineered-Blog"
-        data-repo-id="R_kgDOHY7p_w"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOHY7p_84CRhS5"
-        data-mapping="pathname"
-        data-strict="1"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme="light"
-        data-lang="en"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async>
+        {{/* Giscus: inject the script programmatically so we can pick the theme based on
+             the current data-bs-theme. The anti-flash script in head.html guarantees data-bs-theme
+             is already set by the time this runs. Subsequent toggles are handled via postMessage
+             in assets/js/script.js (syncGiscusTheme). */}}
+        <script>
+          (function () {
+            var isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            var s = document.createElement('script');
+            s.src = 'https://giscus.app/client.js';
+            var attrs = {
+              'data-repo': 'francofgp/Engineered-Blog',
+              'data-repo-id': 'R_kgDOHY7p_w',
+              'data-category': 'Announcements',
+              'data-category-id': 'DIC_kwDOHY7p_84CRhS5',
+              'data-mapping': 'pathname',
+              'data-strict': '1',
+              'data-reactions-enabled': '1',
+              'data-emit-metadata': '0',
+              'data-input-position': 'top',
+              'data-theme': isDark ? 'dark_dimmed' : 'light',
+              'data-lang': 'en',
+              'data-loading': 'lazy'
+            };
+            Object.keys(attrs).forEach(function (k) { s.setAttribute(k, attrs[k]); });
+            s.crossOrigin = 'anonymous';
+            s.async = true;
+            document.currentScript.parentNode.appendChild(s);
+          })();
         </script>
         
       </div>
