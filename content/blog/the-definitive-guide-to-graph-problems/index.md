@@ -1,8 +1,8 @@
-+++
+﻿+++
 categories = ["Programming"]
 date = 2022-09-17T03:00:00Z
 description = "Do you want to learn how to solve graph problems? Are you preparing for a coding interview? Do you want to polish your problem-solving skills? In this article I will try to answer these questions and more, and you will learn the patterns necessary to deal with these problems."
-image = "/uploads/post/the-definitive-guide-to-graph-problems/cover.png"
+image = "/blog/the-definitive-guide-to-graph-problems/cover.png"
 tags = ["Python", "Algorithms"]
 title = "The Definitive Guide to Graph Problems"
 type = "featured"
@@ -49,7 +49,7 @@ Graph are often a topic present in coding interviews, so here I want to show you
 
 I recommend reading the topics in this article in order, as we will develop the subject progressively and the understanding of the first exercises are the basis for the following ones.
 
-![grid-island](/uploads/post/the-definitive-guide-to-graph-problems/baby-building-blocks.jpg)
+![grid-island](baby-building-blocks.jpg)
 
 ## Problem solutions
 
@@ -466,7 +466,7 @@ Again, feel free to try to solve these exercises on your own before jump into th
 
 I will explain in the code the new lines that we need to solve the problem and potential gotchas.
 
-![grid-island](/uploads/post/the-definitive-guide-to-graph-problems/exercises.jpg)
+![grid-island](exercises.jpg)
 
 #### Find a path Between node A and B in a undirected Graph
 
@@ -1377,7 +1377,7 @@ For example we can, think of the position of a cell (row, col), as if it were th
 
 For example consider the grid below, the node would be, with index zero, row 3 and column 2, that is (3, 2), and the neighbors would be the arrows.
 
-![grid-island](/uploads/post/the-definitive-guide-to-graph-problems/graph-grid.jpg)
+![grid-island](graph-grid.jpg)
 
 The problem with these grids is that when finding our neighbors, we must consider not to go out of the grid.
 
@@ -1396,7 +1396,7 @@ Now we are going to look at two typical grid problems, which consist of counting
 
 This problem consists of counting how many islands there are in the grid. The water will be represented in blue and the land in yellow, the idea is to consider an island as any set of yellow cells that are next to each other. If we look at the grid below, we will see that there are 4 islands, but how do we solve this problem?
 
-![grid-island](/uploads/post/the-definitive-guide-to-graph-problems/island-grid.jpg)
+![grid-island](island-grid.jpg)
 
 The input parameter of our problem will be a grid of the following style:
 
@@ -1420,11 +1420,11 @@ You have probably noticed that what we have to do is to iterate this grid to acc
 
 As we find land, we must also find the neighboring nodes, through BFS or DFS, we must also ask if the neighboring nodes are water or land, and if they are land, we must explore their neighbors and so on.
 
-![grid-island](/uploads/post/the-definitive-guide-to-graph-problems/island-grid-1.jpg)
+![grid-island](island-grid-1.jpg)
 
 It is important to mark neighboring nodes as visited, so that in the next iteration of our for loop, we ask if the current cell is water or the land has been visited, if that is the case, we skip them.
 
-![grid-island](/uploads/post/the-definitive-guide-to-graph-problems/island-grid-2.jpg)
+![grid-island](island-grid-2.jpg)
 
 The problem statement is as follows:
 

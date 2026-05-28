@@ -1,8 +1,8 @@
-+++
+﻿+++
 categories = ["Programming"]
 date = 2022-06-17T01:03:47Z
 description = "What I think of Go, as a Python developer"
-image = "/uploads/golang-post.jpg"
+image = "/blog/my-first-time-learning-go/cover.jpg"
 tags = ["Python", "Go"]
 title = "My First Time Learning Go as a Python Developer"
 type = "post"
@@ -14,7 +14,7 @@ Have you ever wanted to learn Go, but you are still not sure if that is your thi
 
 The idea of learning Go was in my head since I graduated from college, but I never gave it a chance, because I wanted to learn Python because of the Machine Learning stuff. So time passed, and I am starting to see Go on every social media such as YouTube, Twitter, and Reddit, so I guess I jumped on the **hype train**, and **the company I work for is evaluating Go as an option**. But I want to build a simple application with the language, not just if statements and loops, so that brings us to the next point.
 
-![](https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png)
+![](go-logo.svg)
 
 ## What I built with Go
 
@@ -78,7 +78,7 @@ That has been one of the main design goals of Go.
 
 Python is easy to learn as well, but I think **Go is a little harder**, especially when it comes to concepts like pointers, which are not easy at first glance, as you will see shortly.
 
-![](/uploads/computer-black.jpg)
+![](computer-black.jpg)
 
 ## What I don't like about Go
 
@@ -152,7 +152,7 @@ Where I live, in Argentina, **there isn't a high demand for Go developers**, whi
 
 Clearly, this is not something bad about the language itself, but it is a reason to have in mind when you plan to study something to help your career, and I think that this applies to everything new skill that you learn in life, not just in software.
 
-![](/uploads/thinking-guy.jpeg)
+![](thinking-guy.jpeg)
 
 ## Things that I need to explore more
 

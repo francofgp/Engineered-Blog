@@ -34,8 +34,8 @@ hugo server
 # Production build (same as Netlify) — outputs to public/
 hugo --minify --gc
 
-# Scaffold a new post (creates content/blog/<slug>.md from archetypes/default.md)
-hugo new blog/<slug>.md
+# Scaffold a new post as a Page Bundle (creates content/blog/<slug>/index.md from archetypes/default.md)
+hugo new blog/<slug>/index.md
 ```
 
 Prefer running `hugo server` (not `hugo` + serving manually) — it auto-reloads on file changes, including SCSS.
@@ -43,11 +43,17 @@ Prefer running `hugo server` (not `hugo` + serving manually) — it auto-reloads
 ## Repo layout
 
 ```
-content/blog/              # All blog posts live here (one .md per post, TOML front matter)
+content/blog/              # All blog posts live here as Hugo Page Bundles
+  <slug>/
+    index.md               # Post content + TOML front matter
+    cover.{jpg,png}        # Cover image (used in hero, OG, Twitter cards)
+    *.{jpg,png,gif,...}    # Any other images referenced in the post body
+  _markdown-reference.md   # Draft cheatsheet (single file, not a bundle)
+  new-post.md, post-10.md  # Draft placeholders from upstream theme
 content/{about,contact}/   # Static pages
 config.toml                # Site config (baseURL, menus, params, social links, analytics ID)
 netlify.toml               # Build command + headers — do not change HUGO_VERSION lightly
-archetypes/default.md      # Template used by `hugo new` (currently empty front matter)
+archetypes/default.md      # Template used by `hugo new` (rich TOML front matter + cheatsheet)
 layouts/                   # Hugo templates (Liva theme, vendored — edit with care)
   _default/                # baseof.html, list.html, single.html, index.json
   partials/                # head.html, header.html, footer.html, post.html, sidebar.html, share-buttons.html, preloader.html
@@ -57,7 +63,6 @@ assets/scss/               # SCSS sources compiled by Hugo Extended (libsass)
   templates/               # Per-template partials
 static/                    # Copied verbatim to site root
   images/, plugins/        # Theme assets (bootstrap, jQuery, slick, venobox, search) — do not modify
-  uploads/                 # Post images and other uploads (see "Images" below)
 data/gallery.yml           # Gallery data consumed by templates
 public/                    # GENERATED — never commit changes here, never edit by hand
 resources/_gen/            # GENERATED Hugo asset cache — never edit
@@ -67,16 +72,16 @@ Both `public/` and `resources/_gen/` are gitignored. If you see edits there, som
 
 ## Writing a new blog post
 
-This is the most common task. Posts use **TOML front matter** (`+++` delimiters), not YAML.
+This is the most common task. Posts are **Hugo Page Bundles**: each post is a directory `content/blog/<kebab-case-slug>/` containing `index.md` and its co-located images. Front matter is **TOML** (`+++` delimiters), not YAML.
 
-Create `content/blog/<kebab-case-slug>.md`:
+Create `content/blog/<kebab-case-slug>/index.md`:
 
 ```toml
 +++
 categories = ["Programming"]
 date = 2026-05-27T03:00:00Z
 description = "One sentence (used in meta tags, social cards, and as the homepage summary)."
-image = "/uploads/post/<slug>/cover.jpg"
+image = "/blog/<slug>/cover.jpg"
 tags = ["Python", "Django"]
 title = "Title in Title Case"
 type = "post"
@@ -89,23 +94,25 @@ Opening paragraph — this also appears under the title on the post page.
 Body in standard Markdown. Code fences with language hints render via Hugo's `manni` Chroma theme.
 ```
 
-Rules derived from existing posts (`content/blog/*.md`):
+Rules derived from existing posts (`content/blog/<slug>/index.md`):
 
 - **Front matter is TOML (`+++`)**, not YAML (`---`). Match the existing posts; do not switch formats.
 - `type = "post"` is required for the post layout (`layouts/_default/single.html`) to render correctly.
-- `date` is an RFC 3339 timestamp with a `Z` (UTC). It controls sort order and the displayed publish date.
-- `image` is a site-absolute path under `/uploads/post/<slug>/`. It is used for the post hero, OpenGraph, and Twitter cards (see `layouts/partials/head.html`).
-- `categories` map to `/categories/<slug>/` index pages. Reuse existing ones when possible (`Programming`, `Engineering`, `Android and Gaming`, `Go Language`) before inventing new ones.
+- `date` is an RFC 3339 timestamp (e.g. `2022-09-14T03:00:00Z`). It controls sort order and the displayed publish date.
+- `image` is a **site-absolute** path under `/blog/<slug>/` — Hugo serves bundle resources from the post's URL. Used for the post hero, OpenGraph, and Twitter cards (see `layouts/partials/head.html`).
+- `categories` map to `/categories/<slug>/` index pages. Reuse existing ones when possible (`Programming`, `Engineering`) before inventing new ones.
 - `tags` are free-form but kebab-case-friendly (`"Python"`, `"Go"`, `"Django"`).
-- Slug = filename without `.md`. Keep it lowercase, hyphen-separated, and stable (it becomes the permalink).
+- Slug = directory name. Keep it lowercase, hyphen-separated, and stable (it becomes the permalink and the bundle path).
 
-Drafts: set `draft = true` in the front matter while writing. The Netlify build runs `hugo` without `-D`, so drafts will not be published. Two legacy placeholders (`new-post.md`, `post-10.md`) are intentionally left as drafts — do not "fix" or delete them without being asked.
+Drafts: set `draft = true` in the front matter while writing. The Netlify build runs `hugo` without `-D`, so drafts will not be published. Three drafts live in `content/blog/` as personal references (`new-post.md`, `post-10.md`, `_markdown-reference.md`) — they are intentionally kept as drafts; do not "fix" or delete them without being asked.
 
-## Images and uploads
+## Images
 
-- **Post images** → `static/uploads/post/<slug>/<file>.{jpg,png,webp}`, referenced as `/uploads/post/<slug>/<file>.jpg` (site-absolute).
-- **Featured/hero/og images** → same convention; set the `image` front matter field to the path.
-- Keep file sizes reasonable (compress before committing — there are no automatic image pipelines configured). Some existing uploads are multi-MB and should not be used as a model for new ones.
+- **Post images live inside the post's Page Bundle**: `content/blog/<slug>/<file>.{jpg,png,gif,svg,webp}`.
+- **Cover image**: name it `cover.jpg` or `cover.png` (one per post) and reference it from front matter as `image = "/blog/<slug>/cover.<ext>"`.
+- **In-body images** in the post body: use **relative paths** — just the filename, e.g. `![alt](dragon-curve.jpg)`. Hugo resolves it against the bundle.
+- **Cross-bundle references** (e.g. linking to another post's image): use the site-absolute path `/blog/<other-slug>/<file>`.
+- Keep file sizes reasonable (compress before committing — there are no automatic image pipelines configured). Some existing images are multi-MB and should not be used as a model for new ones.
 - Do not put post-specific images in `static/images/` (that directory is for site chrome: logo, favicon, author photo, featured-post thumbnails wired into `data/gallery.yml`).
 
 ## Styling
@@ -128,7 +135,7 @@ The theme is **vendored**, not pulled as a Hugo module. That means any change to
 - `public/` and `resources/_gen/` — generated, gitignored, never edit.
 - `netlify.toml` `HUGO_VERSION` — bumping requires a manual local verification with the same version.
 - Google Analytics ID, Google AdSense client, Disqus shortname, Giscus repo IDs — these are wired into `config.toml` and `layouts/`. Do not change them without being asked.
-- The two draft placeholder posts (`content/blog/new-post.md`, `content/blog/post-10.md`) — see note above.
+- The three draft files in `content/blog/` (`new-post.md`, `post-10.md`, `_markdown-reference.md`) — see note above.
 - `theme.toml` — metadata of the upstream Liva theme; not consumed by the build.
 
 ## Verification before declaring done
@@ -151,18 +158,18 @@ Do not commit `public/` or `resources/_gen/`. Do not run `hugo` and check in its
 
 ## Good / avoid
 
-- Good: new post uses TOML front matter, `type = "post"`, image under `static/uploads/post/<slug>/`, reuses an existing category, builds clean with `hugo --minify --gc`.
+- Good: new post is a Page Bundle `content/blog/<slug>/index.md` + co-located images, TOML front matter, `type = "post"`, `image = "/blog/<slug>/cover.<ext>"`, reuses an existing category, builds clean with `hugo --minify --gc`.
 - Good: SCSS change lands in `assets/scss/_common.scss` (or a similarly-scoped partial) and is verified in `hugo server`.
 - Avoid: switching a post to YAML front matter, dropping `type = "post"`, or inventing a new category for a single use.
 - Avoid: editing `public/`, vendoring new JS into `static/plugins/`, or adding inline `<style>` blocks in templates.
-- Avoid: committing large unoptimized images (>1MB) into `static/uploads/` without being asked.
+- Avoid: committing large unoptimized images (>1MB) into the bundle without being asked.
 
 ## Permissions
 
 Safe to do without asking:
 
 - Read any file, run `hugo version`, `hugo server`, `hugo --minify --gc`, `hugo new`.
-- Create or edit files under `content/`, `assets/scss/`, `static/uploads/`, `data/`.
+- Create or edit files under `content/`, `assets/scss/`, `data/`.
 
 Ask first before:
 

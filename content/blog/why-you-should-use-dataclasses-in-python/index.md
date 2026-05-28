@@ -1,8 +1,8 @@
-+++
+﻿+++
 categories = ["Programming"]
 date = 2022-09-14T03:00:00Z
 description = "Don't you know what a Data Class is? You know how to use it? And what is the difference with a regular class? Here in this post I will try to answer these questions and many more."
-image = "/uploads/post/why-you-should-use-dataclasses-in-python/cover.jpg"
+image = "/blog/why-you-should-use-dataclasses-in-python/cover.jpg"
 tags = ["Python"]
 title = "Why You Should Use Data Classes in Python"
 type = "post"
@@ -285,7 +285,7 @@ Now if you are trying to represent something more abstract, complex, and methods
 
 The decision depends on what you are trying to represent.
 
-![](/uploads/post/why-you-should-use-dataclasses-in-python/computer.jpg)
+![](computer.jpg)
 
 ## Conclusion
 

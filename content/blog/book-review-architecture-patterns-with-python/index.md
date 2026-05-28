@@ -1,8 +1,8 @@
-+++
+﻿+++
 categories = ["Engineering"]
 date = 2022-06-01T01:07:00-03:00
 description = "Review: Architecture Patterns with Python"
-image = "/uploads/featured-post-architecture-patterns-with-python.jpg"
+image = "/blog/book-review-architecture-patterns-with-python/cover.jpg"
 tags = ["Python", "Django"]
 title = "Book Review: Architecture Patterns with Python"
 type = "post"
@@ -23,7 +23,7 @@ Publication Date: 3/5/2020
 
 The publisher did not provide me with a copy. I promise to be honest about how I feel about this book, both the good and the less so.
 
-![](/uploads/architecture-patterns-with-python-485h.png)
+![](architecture-patterns-with-python-485h.png)
 
 ## About the book
 
@@ -53,13 +53,13 @@ I found those concepts quite useful, especially if you don't have much exposure 
 
 Although this is not a book about Domain-Driven Design, Test Driven Development, or Event-Driven Design (said by the authors themselves), it is a good introduction to these subjects, about the different ways to architecture your application. The authors teach these concepts by building an application with a mixture of different design patterns and discussing their pros and cons along the way, so you will have a good grasp of these concepts.
 
-![](/uploads/pexels-1.jpg)
+![](pexels-1.jpg)
 
 ### Flask and Django
 
 The application developed in this book is made with **Flask API**. And if you are like me, a person with only exposure to Django, don't worry, you will have no problems with the examples or understanding the concepts, and even more, **the authors constantly compared the differences between Django and Flask**, and give you hits about how to implement certain things in Django.
 
-![](/uploads/django-logo-negative.png)
+![](django-logo-negative.png)
 
 ### Testing
 
@@ -79,7 +79,7 @@ The **exercises** for the readers are **tough**, and what I mean by that is, for
 
 **Sometimes you don't have all the solutions**, but I think I am being very picky here since there are no definitive answers because most of the solutions depend on your domain and there are always a lot of different ways to solve a problem, **but they do provide tests**, to, well, test your solutions.
 
-![](/uploads/exercise-notebook.jpg)
+![](exercise-notebook.jpg)
 
 ## Conclusion
 

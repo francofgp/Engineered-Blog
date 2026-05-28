@@ -1,9 +1,9 @@
-+++
+﻿+++
 categories = ["Engineering"]
 date = 2022-07-09T02:07:47+06:00
 description = "Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is? Well today I am going to share my experience with Flask"
 draft = false
-image = "/uploads/post/review-of-flask-from-a-django-developer/flask-logo-version-2.png"
+image = "/blog/review-of-flask-from-a-django-developer/cover.png"
 tags = ["Python", "Django", "Flask"]
 title = "Review of Flask, From a Django Developer"
 type = "post"
@@ -16,15 +16,15 @@ Well today I am going to share my experience with Flask, comparing different asp
 
 After working with Django for a few years, I felt the need to explore another popular Python web framework, which is Flask. I always knew that Flask was a microframework (more on that below), but I never built anything with it. So I took the opportunity at work to experiment with a new framework for a certain web application, and my team and I decided to try Flask. So in this post I want to comment my opinions about Flask, after working with Django.
 
-![building-blocks](/uploads/post/review-of-flask-from-a-django-developer/building-blocks.jpg)
+![building-blocks](building-blocks.jpg)
 ## What is Flask?
 Flask is a micro web framework written in Python. It is classified as a **microframework** because it does not require particular tools or libraries. It has no database abstraction layer, form validation, or any other components where pre-existing third-party libraries provide common functions.
 
-![flask-logo](/uploads/post/review-of-flask-from-a-django-developer/flask-logo.png)
+![flask-logo](flask-logo.png)
 
 By contrast, Django is a web framework with a **batteries-included** philosophy. This means that the common functionality for building web applications should come with the framework instead of as separate libraries, like an ORM, template engine, user authentication and so on.
 
-![django-logo](/uploads/post/review-of-flask-from-a-django-developer/django-logo.png)
+![django-logo](django-logo.png)
 
 ## Application Structure
 
@@ -229,7 +229,7 @@ Obviously, this depends on the type of authentication you want to use. But even 
 
 Flask is different from other frameworks because it allows developers to take the driver's seat and have full creative control of their applications. You may have heard the phrase **fighting the framework** before. 
 
-![man-discussing](/uploads/post/review-of-flask-from-a-django-developer/fighting.jpeg)
+![man-discussing](fighting.jpeg)
 
 This happens mostly with a solution that is not the official one. You may want to use a different database, ORM  or perhaps a different method of authentication.
 
@@ -262,7 +262,7 @@ I remember that when I started to learn Django some things seemed magical to me,
 
 On the other hand, with Flask this feeling of "magic" never existed, from minute zero I understood what I was doing while I was creating my application.
 
-![man-discussing](/uploads/post/review-of-flask-from-a-django-developer/magician.jpg)
+![man-discussing](magician.jpg)
 
 ## What I don't like about Flask
 
@@ -272,7 +272,7 @@ There is a trade-off here, Django being a batteries-included framework, comes wi
 
 Whereas in Flask, if you want to build something tons of features you will spend a lot of time configuring your application, or you will not if you don't want anything but show a single page. Again, this will depend on the requirements of your application, and  **adding new features/packages to Flask it is not too much o f a hustle.**
 
-![man-discussing](/uploads/post/review-of-flask-from-a-django-developer/trade-off.jpg)
+![man-discussing](trade-off.jpg)
 
 
 ## Conclusion

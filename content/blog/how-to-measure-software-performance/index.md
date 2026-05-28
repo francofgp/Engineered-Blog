@@ -1,9 +1,9 @@
-+++
+﻿+++
 categories = ["Engineering"]
 date = 2022-07-16T17:24:00-03:00
 description = "You want to measure software delivery performance, but don't know how?. Do you want to know if your team is performing well? Don't you know what to do to remain competitive? The answers to these and many more questions will be answered in this post."
 draft = false
-image = "/uploads/post/how-to-measure-performance/tape-measure.jpg"
+image = "/blog/how-to-measure-software-performance/cover.jpg"
 tags = ["DevOps"]
 title = "How to Measure Software Performance"
 type = "post"
@@ -30,7 +30,7 @@ To remain competitive and succeed in the market, organizations must *accelerate:
 
 Technology leaders need to deliver software quickly and reliably to win in the market. The key to successful change is measuring and understanding the right things with a **focus on capabilities and not on maturity**.
 
-![delivery-man](/uploads/post/how-to-measure-performance/delivery-man.jpg)
+![delivery-man](delivery-man.jpg)
 
 Shifting to a capabilities model of measurement is essential for organizations wanting to accelerate software delivery. This is due to **four factors**.
 
@@ -60,7 +60,7 @@ DevOps emerged from a small number of organizations facing a evil problem: how t
 **In order to remain competitive, organizations must learn how to solve these problems.**
 
 
-![measuring something](/uploads/post/how-to-measure-performance/measuring.jpg)
+![measuring something](measuring.jpg)
 ### The value of DevOps
 
 Some of the advantages of adopting DevOps lead to:
@@ -78,7 +78,7 @@ Measuring performance in the domain of software is hard, the  way  work is broke
 
 Indeed, it’s expected that we will change and evolve our design based on what we learn by trying to implement it. So it is necessary to define a valid, reliable measure of software delivery performance.
 
-![measuring instruments](/uploads/post/how-to-measure-performance/measuring-instruments.jpg)
+![measuring instruments](measuring-instruments.jpg)
 
 ### Previous attempts to measure performance
 
@@ -119,7 +119,7 @@ Shorter deployment frequency are better since:
 - Increases motivation and urgency, 
 - **Reduces costs** and schedule growth.
 
-![deployment](/uploads/post/how-to-measure-performance/deployment.jpg)
+![deployment](deployment.jpg)
 
 ### Mean Time to Recovery
 
@@ -138,7 +138,7 @@ High  performers  do  better  at  all  of  these  measures, but much dogma in ou
 
 High-performing  organizations  are  twice  as  likely  to exceed  these  goals  as  low  performers.  Therefore  your organization’s  software  delivery  capability  can  in  fact  provide  a  competitive advantage to your business.
 
-![increasing](/uploads/post/how-to-measure-performance/increasing.jpg)
+![increasing](increasing.jpg)
 
 Whether you’re trying to generate  profits  or  not,  any  organization  today  depends  on  technology  to achieve its mission and provide value to its customers or stakeholders quickly, reliably,  and  securely.
 

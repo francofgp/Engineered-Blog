@@ -3,7 +3,7 @@ categories = ["Reference"]
 date = 2022-01-01T00:00:00Z
 description = "Personal markdown cheatsheet — how every formatting feature looks on this blog. Not published."
 draft = true
-image = "/uploads/post/the-definitive-guide-to-graph-problems/cover.png"
+image = "/blog/the-definitive-guide-to-graph-problems/cover.png"
 tags = ["Markdown"]
 title = "Markdown Reference (Personal Cheatsheet)"
 type = "post"
@@ -50,15 +50,19 @@ Bare URL: <https://giulianopertile.com>.
 
 ## Images
 
-Standard markdown image (site-absolute path):
+Two ways to reference images, depending on where the file lives:
 
 ```markdown
-![Alt text](/uploads/post/<slug>/image.jpg)
+# In a Page Bundle (preferred — image co-located with index.md)
+![Alt text](image.jpg)
+
+# Site-absolute (image from another bundle, or special case)
+![Alt text](/blog/<slug>/image.jpg)
 ```
 
-![Cover example](/uploads/post/the-definitive-guide-to-graph-problems/cover.png)
+![Cover example](/blog/the-definitive-guide-to-graph-problems/cover.png)
 
-> Convention: post images live in `static/uploads/post/<slug>/` and are referenced as `/uploads/post/<slug>/<file>`.
+> Convention: each post is a Hugo Page Bundle (`content/blog/<slug>/index.md`) with its images at the same level. In-body images use relative paths (just the filename); the `image` field in front matter uses the site-absolute path `/blog/<slug>/cover.<ext>`.
 
 ## Lists
 
@@ -209,7 +213,7 @@ The TOML block at the top of every post:
 categories = ["Programming"]    # shown as tags on the post + groups it in /categories/
 date = 2026-05-27T00:00:00Z     # RFC3339 — controls publish order
 description = "One-liner used in meta tags + OG cards + homepage summary"
-image = "/uploads/post/<slug>/cover.jpg"
+image = "/blog/<slug>/cover.jpg"
 tags = ["Python", "Algorithms"]
 title = "Title in Title Case"
 type = "post"                   # "post" for normal posts, "featured" for the hero on home
