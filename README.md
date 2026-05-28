@@ -38,8 +38,10 @@ hugo server -D
 
 ## Write a new post
 
+Posts are [Hugo Page Bundles](https://gohugo.io/content-management/page-bundles/) — each one is a directory `content/blog/<slug>/` containing `index.md` and its images at the same level.
+
 ```powershell
-hugo new blog/<kebab-case-slug>.md
+hugo new blog/<kebab-case-slug>/index.md
 ```
 
 The archetype (`archetypes/default.md`) generates a post with full TOML front matter pre-filled and a markdown cheatsheet in an HTML comment block — delete the comment block before publishing. For a complete reference of every supported feature (headings, code blocks with highlight, mermaid diagrams, tables, footnotes, etc.), see `content/blog/_markdown-reference.md`.

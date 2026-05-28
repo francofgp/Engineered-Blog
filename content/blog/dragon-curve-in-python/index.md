@@ -10,7 +10,9 @@ type = "post"
 +++
 Today you are going to learn how to create this amazing figures in Python. More precisely, you will learn what the Dragon Curve is, how to generate one, and how to create one in Python.
 
-![](https://upload.wikimedia.org/wikipedia/commons/6/6f/Full_tiling_dragon.svg)
+![Full tiling dragon](full-tiling-dragon.svg)
+
+*["Full tiling dragon"](https://commons.wikimedia.org/wiki/File:Full_tiling_dragon.svg) by [Prokofiev](https://commons.wikimedia.org/wiki/User:Prokofiev), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) via Wikimedia Commons.*
 
 ## What is the Dragon Curve ?
 
@@ -34,8 +36,13 @@ This article was inspired after the following Numberphile video:
 
 The dragon curve can be constructed by folding a strip of paper, which is how it was originally discovered. Take a strip of paper and fold it in half to the right. Fold it in half again to the right. If the strip was opened out now, unbending each fold to become a 90-degree turn, the turn sequence would be RRL, i.e. the second iteration of the dragon curve. Fold the strip in half again to the right, and the turn sequence of the unfolded strip is now RRLRRLL – the third iteration of the dragon curve. Continuing folding the strip in half to the right to create further iterations of the curve.
 
-![Dragon curve paper strip.png](https://upload.wikimedia.org/wikipedia/commons/f/f1/Dragon_curve_paper_strip.png)
-![Dragon](https://upload.wikimedia.org/wikipedia/commons/9/97/Dragon_curve_iterations_%282%29.svg)
+![Dragon curve paper strip](dragon-curve-paper-strip.png)
+
+*["Dragon curve paper strip"](https://commons.wikimedia.org/wiki/File:Dragon_curve_paper_strip.png) by [Avsa](https://en.wikipedia.org/wiki/User:Avsa), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via Wikimedia Commons.*
+
+![Dragon curve iterations](dragon-curve-iterations.svg)
+
+*["Dragon curve iterations (2)"](https://commons.wikimedia.org/wiki/File:Dragon_curve_iterations_(2).svg) by [Prokofiev](https://commons.wikimedia.org/wiki/User:Prokofiev), released into the [public domain](https://en.wikipedia.org/wiki/Public_domain) via Wikimedia Commons.*
 
 ### The algorithm
 

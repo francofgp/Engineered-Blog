@@ -114,6 +114,23 @@ Drafts: set `draft = true` in the front matter while writing. The Netlify build 
 - **Cross-bundle references** (e.g. linking to another post's image): use the site-absolute path `/blog/<other-slug>/<file>`.
 - Keep file sizes reasonable (compress before committing — there are no automatic image pipelines configured). Some existing images are multi-MB and should not be used as a model for new ones.
 - Do not put post-specific images in `static/images/` (that directory is for site chrome: logo, favicon, author photo, featured-post thumbnails wired into `data/gallery.yml`).
+- **External images (Wikimedia Commons, project brand assets, third-party screenshots)**: download into the Page Bundle — never hot-link. See [Image attribution](#image-attribution) below for the required caption format.
+
+## Image attribution
+
+Any image you didn't author (Wikimedia Commons, third-party screenshots, etc.) needs an italicized caption directly below it linking the **title**, **author**, and **license** — pull all three from the file's `Summary` and `Licensing` tables on Commons. Leave a blank Markdown line between the image and the caption so it renders as a separate `<p>`:
+
+```markdown
+![descriptive alt](image-file.jpg)
+
+*["Koch Snowflake"](https://commons.wikimedia.org/wiki/File:KochFlake.svg) by [Wxs](https://commons.wikimedia.org/wiki/User:Wxs), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) via Wikimedia Commons.*
+```
+
+Notes:
+
+- The license must be a **link** to the Creative Commons deed (`creativecommons.org/licenses/...`), not plain text.
+- Brand logos (Go, Python, Django) are trademarks, not CC works — link to the official brand page; no formal attribution needed.
+- Own diagrams and screenshots need no attribution.
 
 ## Styling
 
@@ -160,9 +177,11 @@ Do not commit `public/` or `resources/_gen/`. Do not run `hugo` and check in its
 
 - Good: new post is a Page Bundle `content/blog/<slug>/index.md` + co-located images, TOML front matter, `type = "post"`, `image = "/blog/<slug>/cover.<ext>"`, reuses an existing category, builds clean with `hugo --minify --gc`.
 - Good: SCSS change lands in `assets/scss/_common.scss` (or a similarly-scoped partial) and is verified in `hugo server`.
+- Good: any externally-sourced image is downloaded into the Page Bundle and captioned with TASL attribution (see [Image attribution](#image-attribution)).
 - Avoid: switching a post to YAML front matter, dropping `type = "post"`, or inventing a new category for a single use.
 - Avoid: editing `public/`, vendoring new JS into `static/plugins/`, or adding inline `<style>` blocks in templates.
 - Avoid: committing large unoptimized images (>1MB) into the bundle without being asked.
+- Avoid: hot-linking external images (e.g. `https://upload.wikimedia.org/...`) or embedding a CC-licensed image without an attribution caption.
 
 ## Permissions
 
