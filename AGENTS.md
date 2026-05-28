@@ -112,6 +112,7 @@ Rules derived from existing posts (`content/blog/<slug>/index.md`):
 
 - `lastmod = <RFC 3339>` — set ONLY when meaningfully editing a published post (typos don't count). Surfaces as JSON-LD `dateModified` and as a visible "Updated" label, **but only when ≥24h after `date`**. Omitting it suppresses both signals (no fake "updated today"). See `docs/AI-SEO.md` §"When to update what".
 - `toc = true` — renders a `<nav>` Table of Contents (Hugo's `.TableOfContents`, built from H2-H4) at the top of the post. Off by default. Helps LLMs ground citations to specific sections of long posts.
+- `featured = true` — pins the post to the home-page slider (`layouts/index.html`). Off by default. **Keep `type = "post"`** — `featured` is a presentation flag, not a content type. (Earlier versions of this repo used `type = "featured"`, which silently excluded those posts from the JSON-LD schema and llms.txt index because the AI SEO filters look for `type = "post"`.)
 
 Drafts: set `draft = true` in the front matter while writing. The Netlify build runs `hugo` without `-D`, so drafts will not be published. Three drafts live in `content/blog/` as personal references (`new-post.md`, `post-10.md`, `_markdown-reference.md`) — they are intentionally kept as drafts; do not "fix" or delete them without being asked.
 

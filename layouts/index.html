@@ -7,8 +7,14 @@
       <section class="splide featured-post-slider col-10" aria-label="Featured posts">
         <div class="splide__track">
           <ul class="splide__list">
-            <!-- slider item -->
-            {{ range ( where .Site.RegularPages "Type" "featured" )}}
+            <!-- slider item — filtered by `featured = true` in the post's front matter,
+                 NOT by `type`. Keeping `type = "post"` consistent across every blog post means
+                 they all get the AI SEO treatment in head-schema.html / index.llmstxt.txt /
+                 head.html (article meta). `featured` is a presentation flag, not a content type.
+                 The "eq" operator is REQUIRED for boolean comparisons — without it Hugo's where
+                 function silently returns an empty slice (verified against the Hugo docs at
+                 https://gohugo.io/functions/collections/where/#boolean-comparison). -->
+            {{ range ( where .Site.RegularPages "Params.featured" "eq" true )}}
             <li class="splide__slide">
               <article class="card featured-post">
                 <div class="row g-0 align-items-center">

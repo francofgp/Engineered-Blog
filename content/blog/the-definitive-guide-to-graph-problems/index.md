@@ -2,10 +2,11 @@
 categories = ["Programming"]
 date = 2022-09-17T03:00:00Z
 description = "Do you want to learn how to solve graph problems? Are you preparing for a coding interview? Do you want to polish your problem-solving skills? In this article I will try to answer these questions and more, and you will learn the patterns necessary to deal with these problems."
+featured = true
 image = "/blog/the-definitive-guide-to-graph-problems/cover.png"
 tags = ["Python", "Algorithms"]
 title = "The Definitive Guide to Graph Problems"
-type = "featured"
+type = "post"
 # disableShare = true # disable share buttons
 +++
 

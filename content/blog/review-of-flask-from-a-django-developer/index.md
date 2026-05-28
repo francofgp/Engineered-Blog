@@ -3,10 +3,11 @@ categories = ["Engineering"]
 date = 2022-07-09T02:07:47+06:00
 description = "Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is? Well today I am going to share my experience with Flask"
 draft = false
+featured = true
 image = "/blog/review-of-flask-from-a-django-developer/cover.png"
 tags = ["Python", "Django", "Flask"]
 title = "Review of Flask, From a Django Developer"
-type = "featured"
+type = "post"
 +++
 Are you familiar with Django, but you want to give Flask a try? or maybe you have no idea what a microframework is?
 
