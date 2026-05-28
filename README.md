@@ -33,6 +33,7 @@ hugo server -D
 - Serves the site at <http://localhost:1313/>
 - `-D` includes posts marked as `draft: true`
 - Auto-reloads on file changes
+- Uses the `development` environment: `config/development/hugo.toml` overrides `baseURL` so every internal link, image, and meta tag resolves against `http://localhost:1313/` (Hugo 0.114+ no longer rewrites `baseURL` automatically). Production (`hugo --minify --gc`) keeps the real `baseURL` from `config.toml`.
 
 > **Note on drafts**: A few posts in `content/blog/` have `draft = true` — they serve as personal markdown references (`_markdown-reference.md`, `new-post.md`, `post-10.md`). The `-D` flag shows them locally; the Netlify build (`hugo` without `-D`) ignores them. To see exactly what visitors see, run `hugo server` (without `-D`).
 

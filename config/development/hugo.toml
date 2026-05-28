@@ -1,0 +1,16 @@
+# Development environment overrides.
+#
+# Hugo automatically loads this file when running `hugo server` (the default
+# environment for the server is "development"). It is merged on top of the
+# root `config.toml`, so any keys defined here override their counterparts
+# during local development. The production build (`hugo --minify --gc`, run
+# by Netlify) ignores this file and keeps using `config.toml` as-is.
+#
+# Why this exists:
+# Hugo 0.114+ no longer rewrites `baseURL` to `http://localhost:1313/` at
+# serve time in every context (single-page covers via `absURL`, OG/Twitter
+# meta tags, share buttons, etc.). Setting baseURL here makes `hugo server`
+# resolve all absolute URLs against localhost, so links and images work for
+# local debugging without dragging you to production.
+
+baseURL = "http://localhost:1313/"

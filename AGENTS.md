@@ -52,6 +52,9 @@ content/blog/              # All blog posts live here as Hugo Page Bundles
   new-post.md, post-10.md  # Draft placeholders from upstream theme
 content/{about,contact}/   # Static pages
 config.toml                # Site config (baseURL, menus, params, social links, analytics ID)
+config/development/hugo.toml  # Dev-environment overrides (baseURL = http://localhost:1313/)
+                              # Merged on top of config.toml when `hugo server` runs.
+                              # Production (`hugo --minify --gc`) ignores it.
 netlify.toml               # Build command + headers — do not change HUGO_VERSION lightly
 archetypes/default.md      # Template used by `hugo new` (rich TOML front matter + cheatsheet)
 layouts/                   # Hugo templates (Liva theme, vendored — edit with care)
