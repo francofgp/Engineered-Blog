@@ -366,7 +366,7 @@ The following surfaces are auto-themed via the ramps — you don't touch them wh
 - Borders/focus rings (`.form-control:focus`, `.btn-outline-primary` resting border) — from `--bs-primary`
 - Tag pills + social icons (`.eb-tag`, `.social-links li a`) — from `rgba(var(--bs-primary-rgb), …)`
 - `::selection` background — from `--bs-primary-lighter` (light) / `--bs-primary-darker` (dark)
-- Pagination active state — from `--bs-accent` (2px underline echoes the editorial category treatment); pagination hover — from `--bs-primary-darker`; numbered items rest on `--bs-primary`
+- Pagination active state — from `--bs-accent` (2px underline echoes the editorial category treatment); pagination hover — reveals the reserved 2px underline in `--bs-primary` (verde) + lifts arrows from `--eb-text-light` to `--bs-primary`; numbered items rest on `--bs-primary`
 - Splide pagination dot active marker — from `--bs-primary` (intentional; see §Brand solid vs brand text)
 - Dropdown active — from `--eb-brand-solid`
 - Categories on the home + post pages + **sidebar widget** — from `--bs-accent` via `.text-accent` (asymmetric per theme). **Exception**: the footer "Categories" widget uses `text-body-emphasis` (`--eb-text-strong`) by design — the footer is a navigation block where every link follows the same emphasis pattern (Contact Me, Social Contacts, Quick Links, Categories) for internal visual coherence, not a metadata-display surface. Don't "fix" this in a future audit.
@@ -453,6 +453,25 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 ---
 
 ## History
+
+### 2026-05-29 — Pagination hover made perceptible (verde underline)
+
+`/impeccable polish` flagged that the pagination hover was effectively invisible. The hover only shifted text colour from `--bs-primary` to `--bs-primary-darker`, which fails in BOTH themes:
+
+- **Light**: `#004225` → `#002E19` — two near-black dark greens on cream; the delta is below the perceptual threshold, so hover read as "nothing happened".
+- **Dark**: `#6FB089` → `#4F9269` — the "darker" ramp step goes the WRONG direction on a dark bg, *reducing* the number's contrast against `#0A1814`. Hover looked like a fade-out, not a highlight.
+
+No second affordance existed: the `border-bottom: 2px solid transparent` space was reserved at rest but only ever coloured by `.active` (ocre).
+
+**Fix**: `.page-link:hover/:focus` now reveals that reserved underline in `--bs-primary` (verde) and holds the text colour at `--bs-primary` (no colour shift on the numbers — the underline is the signal). Arrow hover lifts from muted `--eb-text-light` to `--bs-primary` and inherits the same underline from the base rule. The signal is now a binary, symmetric "underline appears" that reads identically in both themes, with zero layout shift (the space was already reserved) and no new tokens.
+
+**Why an underline, not a bg tint**: pagination is the one component explicitly specified as "numbered text, not boxes" (DESIGN.md §5). A hover bg would reintroduce the box. The underline reuses the system's existing "current-context" marker and preserves the Verde-and-Ocre role split — **verde = action/hover, ocre = current page** — so hover (verde) and active (ocre) stay visually distinct. Specificity check: `.active .page-link` (0,4,0) is declared after `.page-link:hover` (0,4,0), so hovering the current page keeps the ocre underline.
+
+**Files touched**
+
+- `assets/scss/templates/_main.scss` — `.page-link:hover/:focus` adds `border-bottom-color: var(--bs-primary)` and holds `color: var(--bs-primary)`; arrow hover `--bs-primary-darker` → `--bs-primary`; both inline comment blocks rewritten with the rationale above
+- `DESIGN.md` — §5 Pagination updated to describe the verde hover underline
+- `docs/THEME.md` — auto-theme line in §"What still uses the brand colour automatically" updated (hover now `--bs-primary`, not `--bs-primary-darker`); this entry
 
 ### 2026-05-29 — Form-control WCAG SC 1.4.11 fix (`--eb-input-border`)
 

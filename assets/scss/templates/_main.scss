@@ -280,10 +280,19 @@
       font-weight: 500;
       transition: color 0.15s ease, border-color 0.15s ease;
 
+      // Hover/focus affordance — reveal the reserved 2px underline in verde
+      // (the action colour). The previous treatment only shifted text colour to
+      // --bs-primary-darker, which is imperceptible on cream (#004225 -> #002E19)
+      // and goes the WRONG way on dark (#6FB089 -> #4F9269 LOSES contrast on the
+      // dark bg). An appearing underline is a binary, symmetric signal that reads
+      // in both themes with zero layout shift (the border-bottom space is already
+      // reserved above). Verde hover underline + ocre active underline preserves
+      // the Verde-and-Ocre role split: verde = action/hover, ocre = current page.
       &:hover,
       &:focus {
-        color: var(--bs-primary-darker);
+        color: var(--bs-primary);
         background: transparent;
+        border-bottom-color: var(--bs-primary);
       }
 
       // Keyboard focus ring — explicit outline because the refactor stripped the
@@ -310,11 +319,13 @@
       font-size: 0.9rem;
     }
 
-    // Hover on flechas — specificity (0,2,0 attribute) outranks the generic
-    // .page-link:hover (0,1,1 pseudo), so the hover color above doesn't reach
-    // them. Re-declare hover here so they get the same affordance as numbered
-    // items: clickeable surfaces darken on hover. Same target colour
-    // (--bs-primary-darker) for visual coherence across all pagination items.
+    // Hover on flechas — the attribute selector (higher specificity) overrides
+    // the muted resting colour above, so re-declare hover here. Lift them from
+    // muted --eb-text-light to the verde brand colour: a muted-gray -> saturated-
+    // green jump that's clearly perceptible in BOTH themes (the old
+    // --bs-primary-darker barely moved in light and darkened-on-dark in dark).
+    // The underline is inherited from the base .page-link:hover rule above, so
+    // arrows get the same verde underline + colour lift as the numbers.
     .page-link[aria-label="First"]:hover,
     .page-link[aria-label="Previous"]:hover,
     .page-link[aria-label="Next"]:hover,
@@ -323,7 +334,7 @@
     .page-link[aria-label="Previous"]:focus,
     .page-link[aria-label="Next"]:focus,
     .page-link[aria-label="Last"]:focus {
-      color: var(--bs-primary-darker);
+      color: var(--bs-primary);
     }
 
     // Disabled (first/prev unavailable on page 1, next/last on last page).

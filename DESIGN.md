@@ -283,7 +283,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 
 ### Pagination
 
-- **Editorial numbered-text** — *not* boxes. No bg, no border. Page numbers as plain Raleway; active page anchored with a `2px` `--bs-accent` underline + `font-weight: 600` (the same ocre that marks categories — repeating the accent in two surfaces unifies "current context"). Arrows (`«`, `‹`, `›`, `»`) muted to `--eb-text-light` and slightly smaller so the eye lands on the numbers. No layout shift on hover (`border-bottom: 2px solid transparent` reserves the underline space at rest). Same pattern as Substack, Stripe Blog, Vercel Blog, NYT.
+- **Editorial numbered-text** — *not* boxes. No bg, no border. Page numbers as plain Raleway; active page anchored with a `2px` `--bs-accent` underline + `font-weight: 600` (the same ocre that marks categories — repeating the accent in two surfaces unifies "current context"). Arrows (`«`, `‹`, `›`, `»`) muted to `--eb-text-light` and slightly smaller so the eye lands on the numbers. **Hover/focus reveals the reserved underline in `--bs-primary` (verde)** and lifts the arrows from muted to verde — a binary "underline appears" signal that reads in both themes, where the older colour-only shift (`--bs-primary` → `--bs-primary-darker`) was imperceptible on cream and went the wrong way on dark. No layout shift (`border-bottom: 2px solid transparent` reserves the underline space at rest, so both hover and `.active` only toggle its colour). Verde hover underline + ocre active underline keeps the Verde-and-Ocre role split (verde = action, ocre = current page). Same pattern as Substack, Stripe Blog, Vercel Blog, NYT.
 
 ### Categories — the signature
 
