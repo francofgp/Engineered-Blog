@@ -15,3 +15,6 @@ Thumbs.db
 # Env files
 .env
 .env.local
+
+# Design exploration artifacts (not source, not build output)
+mockups/

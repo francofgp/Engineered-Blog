@@ -19,8 +19,14 @@
   }
 }
 
+// .btn-primary uses $brand-solid (constant #004225) for the bg so the white text
+// keeps full contrast in BOTH themes. $primary-color for the border is theme-aware:
+// in light it resolves to #004225 (same as bg — border invisible, as expected),
+// in dark it resolves to #6FB089 (lighter green) which adds a subtle outline so the
+// button doesn't disappear into the dark green-tinted body. White-on-#004225 still
+// owns the contrast contract — the border is purely a definition cue, not a colour swap.
 .btn-primary {
-  background: $primary-color;
+  background: $brand-solid;
   color: $white;
   border-color: $primary-color;
 
@@ -28,11 +34,15 @@
   &:hover,
   &.focus,
   &.active {
-    background: $primary-color !important;
+    background: $brand-solid !important;
     border-color: $primary-color !important;
   }
 }
 
+// .btn-outline-primary: resting border uses $primary-color (varies by theme)
+// so the outline is visible on dark bg too. On hover it fills with $brand-solid
+// (constant green for the bg) while the border keeps $primary-color so the dark-mode
+// button stays visually defined against the body — same logic as .btn-primary above.
 .btn-outline-primary {
   background: transparent;
   color: $text-color-dark;
@@ -42,7 +52,7 @@
   &:hover,
   &.focus,
   &.active {
-    background: $primary-color !important;
+    background: $brand-solid !important;
     border-color: $primary-color !important;
     color: $white;
   }

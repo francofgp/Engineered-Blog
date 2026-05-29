@@ -1,5 +1,61 @@
 <!doctype html>
-<meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=dark-mode-preview.html">
-<title>Redirecting…</title>
-<a href="dark-mode-preview.html">Open dark mode palette preview</a>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mockups · giulianopertile.com</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,600,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Raleway', -apple-system, sans-serif;
+      background: #16181c;
+      color: #e6e4e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .wrap { max-width: 640px; width: 100%; }
+    h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; }
+    p.lede { color: #b3b6bd; margin-bottom: 36px; font-size: 15px; line-height: 1.6; }
+    .links { display: flex; flex-direction: column; gap: 1px; background: #3a3e48; border: 1px solid #3a3e48; }
+    .links a {
+      background: #1f2128;
+      padding: 18px 22px;
+      text-decoration: none;
+      color: #e6e4e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s ease;
+    }
+    .links a:hover { background: #2a2d36; }
+    .links a strong { font-size: 16px; font-weight: 600; display: block; margin-bottom: 4px; }
+    .links a small { color: #b3b6bd; font-size: 13px; font-weight: 400; }
+    .arrow { color: #2DD4CC; font-size: 18px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Mockups</h1>
+    <p class="lede">Internal design playground. Static HTML, no Hugo. Open with the local server or double-click.</p>
+    <nav class="links">
+      <a href="palette-explorer.html">
+        <span>
+          <strong>Palette Explorer</strong>
+          <small>British Racing Green + Nugget · 4 palettes × dark/light · home + single post</small>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="dark-mode-preview.html">
+        <span>
+          <strong>Dark Mode Preview (legacy)</strong>
+          <small>The original 4-palette comparison that picked "Warm-dark" (palette D, the teal one)</small>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </nav>
+  </div>
+</body>
+</html>

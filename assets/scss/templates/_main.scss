@@ -47,7 +47,13 @@
        is brand-coloured and scaled up 20% for clarity (a horizontal-line
        design at <600px collapsed visually when there are only 2-3 slides).
      Theme-reactive via $primary-color / $border-color (which alias
-     var(--bs-primary) / var(--eb-border)). */
+     var(--bs-primary) / var(--eb-border)).
+     Why $primary-color (theme-aware) and NOT $brand-solid (constant #004225):
+     in dark mode, the active dot needs to STAND OUT against the dark green-tinted
+     bg. $primary-color resolves to #6FB089 (lighter green) in dark, which carries
+     enough luminance to read as "the active one"; #004225 would melt into the
+     surrounding dark surface. In light, both vars resolve to the same #004225,
+     so behaviour is unchanged. */
   &-slider {
     position: relative;
 
@@ -245,44 +251,95 @@
   }
 }
 
-/* pagination — matches the ghost design language used by .eb-tag and .social-links.
-   Hover lifts the bg alpha; active uses a slightly lower bg + a full-primary border
-   to read as "current page". All colours flow from --bs-primary / --bs-primary-rgb so
-   the same rules work in both themes. */
+/* Pagination — editorial style: numbered text with no boxes, anchored by a 2px ocre
+   underline on the active page. The ocre marker echoes the editorial treatment used
+   by category labels (a.text-accent) — the same accent colour identifies "current
+   context" in two surfaces (categories + active page). Flechas first/prev/next/last
+   are muted with --eb-text-light so the eye lands on the numbers, not the chrome.
+   Same pattern as Substack, Stripe Blog, Vercel Blog, NYT — anchored by the active
+   marker, not container chrome. Replaces the previous Bootstrap-default boxed look
+   which carried a cool gray bg that didn't blend with the cream/verde/ocre palette.
+   Falls back to standard Bootstrap pagination markup; only the styling changes. */
 .pagination {
   justify-content: center;
+  gap: 0.25rem;
 
   .page-item {
 
     .page-link {
       display: inline-block;
-      width: 40px;
-      height: 40px;
+      min-width: 32px;
+      padding: 8px 10px;
       text-align: center;
       color: $primary-color;
-      border-top: 0;
-      border-bottom: 0;
-      transition: background-color 0.15s ease;
+      background: transparent;
+      border: 0;
+      // Reserve 2px for the active underline so toggling .active doesn't shift layout.
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      font-weight: 500;
+      transition: color 0.15s ease, border-color 0.15s ease;
 
-      &:hover {
-        background: rgba(var(--bs-primary-rgb), 0.20);
-        color: $primary-color;
+      &:hover,
+      &:focus {
+        color: var(--bs-primary-darker);
+        background: transparent;
+      }
+
+      // Keyboard focus ring — explicit outline because the refactor stripped the
+      // bg + border, which can suppress the Bootstrap default `box-shadow:focus`
+      // depending on cascade order. WCAG 2.4.7 Focus Visible requires the
+      // keyboard focus state to be clearly distinguishable. Use the theme-aware
+      // --bs-primary so the ring matches the theme (verde profundo in light,
+      // lighter green in dark). Only :focus-visible (not :focus) — avoids the
+      // ring on mouse click, shows it on Tab navigation.
+      &:focus-visible {
+        outline: 2px solid var(--bs-primary);
+        outline-offset: 2px;
       }
     }
 
-    &:first-child,
-    &:last-child {
-      .page-link {
-        border-radius: 0;
-      }
+    // Flechas (First, Previous, Next, Last) — muted vs numbered items so the
+    // numbers carry the visual weight. Targets by aria-label since they're not
+    // always :first-child / :last-child (depends on enabled/disabled state).
+    .page-link[aria-label="First"],
+    .page-link[aria-label="Previous"],
+    .page-link[aria-label="Next"],
+    .page-link[aria-label="Last"] {
+      color: var(--eb-text-light);
+      font-size: 0.9rem;
     }
 
-    &.active {
-      .page-link {
-        background: rgba(var(--bs-primary-rgb), 0.15);
-        color: $primary-color;
-        border: 1px solid $primary-color;
-      }
+    // Hover on flechas — specificity (0,2,0 attribute) outranks the generic
+    // .page-link:hover (0,1,1 pseudo), so the hover color above doesn't reach
+    // them. Re-declare hover here so they get the same affordance as numbered
+    // items: clickeable surfaces darken on hover. Same target colour
+    // (--bs-primary-darker) for visual coherence across all pagination items.
+    .page-link[aria-label="First"]:hover,
+    .page-link[aria-label="Previous"]:hover,
+    .page-link[aria-label="Next"]:hover,
+    .page-link[aria-label="Last"]:hover,
+    .page-link[aria-label="First"]:focus,
+    .page-link[aria-label="Previous"]:focus,
+    .page-link[aria-label="Next"]:focus,
+    .page-link[aria-label="Last"]:focus {
+      color: var(--bs-primary-darker);
+    }
+
+    // Disabled (first/prev unavailable on page 1, next/last on last page).
+    &.disabled .page-link {
+      color: var(--eb-text-light);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    // Active page — anchored with a 2px --bs-accent underline + 600 weight.
+    // --bs-accent is asymmetric per theme (bronze #856814 light, vibrant #C59922 dark)
+    // — same hex that categories use, deliberately. Two surfaces share the ocre marker.
+    &.active .page-link {
+      color: var(--bs-accent);
+      border-bottom-color: var(--bs-accent);
+      font-weight: 600;
     }
   }
 }

@@ -15,7 +15,9 @@
 // =================================================================
 
 // Theme-reactive aliases (resolve at runtime, switch with data-bs-theme)
-$primary-color: var(--bs-primary);
+$primary-color: var(--bs-primary);      // verde for TEXT/LINK/BORDER — varies by theme
+$brand-solid: var(--eb-brand-solid);    // verde for SOLID BG (#004225) — constant in both themes
+$accent-color: var(--bs-accent);        // ocre — ASYMMETRIC: bronze #856814 in light, vibrant #C59922 in dark
 $text-color: var(--eb-text-muted);
 $text-color-dark: var(--eb-text-strong);
 $text-color-light: var(--eb-text-light);

@@ -9,7 +9,7 @@
       <article class="col-lg-8 mx-auto">
         <header>
         {{ range .Params.Categories }}
-        <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}" class="text-primary">{{ . | title | humanize
+        <a href="{{ `categories/` | relLangURL }}{{ . | urlize | lower }}" class="text-accent">{{ . | title | humanize
           }}</a>
         {{ end }}
         {{/* H1 — exactly one per page is the strongest signal of "what this page is about"
@@ -99,11 +99,12 @@
           <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
           <script
             type='text/javascript'>
-            // Use the brand teal so the button doesn't fight the rest of the design system.
-            // Ko-fi reads this colour at init time and bakes it into the widget — it's the only
-            // styling hook the widget exposes. We pick the light-theme teal (#00AAA1) because it
-            // reads cleanly against both bg colours; the dark teal (#2DD4CC) would be neon on light.
-            kofiwidget2.init('Support Me on Ko-fi', '#00AAA1', 'W7W2DRG2T'); kofiwidget2.draw();</script>
+            // Use --eb-brand-solid (#004225, British Racing Green) so the Ko-fi button matches
+            // the rest of the design system. Ko-fi reads this colour at init time and bakes it
+            // into the widget — it's the only styling hook the widget exposes, so the hex MUST
+            // be hardcoded here (CSS vars can't reach the widget script). White text on the
+            // verde-solido passes AAA in both themes. See docs/THEME.md §"Color exceptions".
+            kofiwidget2.init('Support Me on Ko-fi', '#004225', 'W7W2DRG2T'); kofiwidget2.draw();</script>
         </div>
 
         {{/* Giscus: inject the script programmatically so we can pick the theme based on

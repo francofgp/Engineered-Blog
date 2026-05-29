@@ -23,30 +23,66 @@
 // =================================================================
 
 // -----------------------------------------------------------------
-// LIGHT THEME (default)
+// LIGHT THEME (default) · Conservatory
 // -----------------------------------------------------------------
+// British Racing Green (#004225) brand + Nugget ocre accent (bronze #856814 in
+// light text, vibrant #C59922 in dark text + decorative role in light) on a warm
+// cream-tinted bg. Verde profundo as headings is the distinctive feature — the
+// site reads as "engineering with character", not generic dev blog.
+// See docs/THEME.md §History → "2026-05-28 — Conservatory rebrand" for rationale.
 :root {
-  // ---------- Brand ramp ----------
-  // To swap the brand colour: change these 4 values (light) + the 4 (dark below).
-  // Every derivative token in this file references `var(--bs-primary*)`, so no other
-  // edits are needed downstream. See docs/THEME.md §"How to swap the brand colour".
-  --bs-primary: #00AAA1;
-  --bs-primary-rgb: 0, 170, 161;
-  --bs-primary-darker: #007F7A;    // ~-25% lightness; AA-pass text on tinted bg (ghost tag fg, focus rings)
-  --bs-primary-lighter: #1ac4ba;   // ~+10% lightness; vivid accent (selection bg)
+  // ---------- Brand ramp · verde (British Racing Green) ----------
+  // Used for TEXT/LINK/BORDER-primary. Pairs with --eb-brand-solid for backgrounds.
+  // To swap the brand: change these 4 values (light) + the 4 (dark below) + --eb-brand-solid.
+  // Every derivative token references var(--bs-primary*), so no other edits needed downstream.
+  // See docs/THEME.md §"How to swap the brand colour".
+  --bs-primary: #004225;           // body links, .text-primary, .border-primary, focus rings
+  --bs-primary-rgb: 0, 66, 37;
+  --bs-primary-darker: #002E19;    // ~-25% lightness; deep green for headings, ghost-tag fg (AAA on tinted bg)
+  --bs-primary-lighter: #006939;   // ~+10% lightness; selection bg (vivid pop on cream)
+
+  // ---------- Accent ramp · ocre (Nugget) ----------
+  // Co-protagonist of the brand. Used for METADATA (categories, dates, decorative lines)
+  // — not hierarchically below primary, just a different role.
+  //
+  // IMPORTANT: the ramp is ASYMMETRIC between themes (same pattern as --bs-primary).
+  // In light, --bs-accent is a bronze (#856814 — darker than the vibrant nugget used
+  // in dark mode; 4.57:1 over cream — AA Normal pass with margin). The vibrant nugget
+  // #C59922 is reserved for --bs-accent-lighter, where it plays a DECORATIVE role
+  // (chips, borders, bg fills) — not text. In dark, the ramp flips: --bs-accent IS
+  // the vibrant #C59922 (6.80:1 over dark — pass) because the dark bg gives it enough
+  // luminance contrast to read as text.
+  //
+  // EDITORIAL TREATMENT: the .text-accent utility for <a> tags adds uppercase + 600 weight +
+  // letter-spacing in _common.scss — makes categories read as "magazine label" rather than
+  // plain text. The combination of editorial weight + bronze hex sells the brand identity
+  // without needing the loud vibrant nugget (which would fail WCAG on cream).
+  // See docs/THEME.md §"Why accent uses different hex per theme" for the full rationale.
+  --bs-accent: #856814;            // text role: a.text-accent (body categories, dates) — AA Normal pass on cream (4.57:1)
+  --bs-accent-rgb: 133, 104, 20;
+  --bs-accent-darker: #5C440D;     // hover/active state for accent links — AAA (7.97:1) on cream
+  --bs-accent-lighter: #C59922;    // decorative role: vibrant nugget for bg fills, borders, chips (NOT for text on cream)
+
+  // ---------- Brand solid · constant green ----------
+  // The unwavering #004225, identical in both themes. Used for SOLID BACKGROUNDS where
+  // white text sits on top (btn-primary, footer accents). Decoupled from --bs-primary
+  // because dark mode needs a LIGHTER primary for text legibility but should KEEP the
+  // same green bg for visual identity. Industry pattern: Material `primary-container`,
+  // Tailwind `primary-600`. See docs/THEME.md §"Brand solid vs brand text".
+  --eb-brand-solid: #004225;
 
   // ---------- Surfaces ----------
-  --eb-body-bg: #ffffff;
-  --eb-surface: #f4fcff;            // cards, code blocks, blockquote, tbody
-  --eb-surface-emphasis: #daf6ff;   // thead, hover (darker than surface)
+  --eb-body-bg: #F2EFE3;            // warm cream, not pure white — "papered" feel
+  --eb-surface: #E8E4D2;            // cards, code blocks, blockquote, tbody (one step down)
+  --eb-surface-emphasis: #DCD7C0;   // thead, hover (one more step for clear hierarchy)
 
   // ---------- Text ----------
-  --eb-text-strong: #222222;        // headings, emphasis
-  --eb-text-muted: #666666;         // body copy
-  --eb-text-light: #959595;         // tertiary / disabled
+  --eb-text-strong: #002E19;        // headings — VERDE PROFUNDO, the distinctive feature
+  --eb-text-muted: #3D4A40;         // body copy — warm green-tinted gray, harmonises with bg
+  --eb-text-light: #8A9088;         // tertiary / disabled
 
   // ---------- Borders ----------
-  --eb-border: #ACB9C4;
+  --eb-border: #C9CDB5;             // cream-green tinted, blends with the editorial feel
 
   // ---------- Interactive ----------
   --eb-selection-bg: var(--bs-primary-lighter);
@@ -69,9 +105,9 @@
   // `.border-secondary-subtle`, etc. follow the same registry.
   --bs-body-bg: var(--eb-body-bg);
   --bs-body-color: var(--eb-text-muted);
-  --bs-body-color-rgb: 102, 102, 102;
+  --bs-body-color-rgb: 61, 74, 64;
   --bs-emphasis-color: var(--eb-text-strong);
-  --bs-emphasis-color-rgb: 34, 34, 34;
+  --bs-emphasis-color-rgb: 0, 46, 25;
   --bs-secondary-color: var(--eb-text-muted);
   --bs-border-color: var(--eb-border);
 
@@ -90,64 +126,88 @@
 // AFTER Bootstrap's CSS loads (which is the case: plugins/bootstrap.min.css comes before
 // our compiled scss/style.scss in head.html).
 //
-// `var(--bs-primary)` is theme-aware via the ramp above, so a single declaration
-// covers both light and dark themes — no need to duplicate per data-bs-theme.
+// The custom properties used below (`--eb-brand-solid`, `--bs-primary`) are declared on
+// both `:root` and `[data-bs-theme="dark"]`. A single override here covers both themes
+// because the cascade resolves the variable at use-time against the active theme — no
+// need to duplicate the .dropdown-menu block per `[data-bs-theme]`.
 .dropdown-menu {
   --bs-dropdown-border-radius: 0;
   --bs-dropdown-inner-border-radius: 0;
-  --bs-dropdown-link-active-bg: var(--bs-primary);
+  // Active bg uses --eb-brand-solid (constant #004225) so the white text on top
+  // keeps full contrast in BOTH themes. Using --bs-primary here would make the dark-mode
+  // active item #6FB089 (lighter green), and white-on-light-green fails WCAG.
+  --bs-dropdown-link-active-bg: var(--eb-brand-solid);
   --bs-dropdown-link-active-color: #ffffff;
 }
 
 // -----------------------------------------------------------------
-// DARK THEME · "Warm-dark" (palette D)
+// DARK THEME · Conservatory
 // -----------------------------------------------------------------
-// Chosen 2026-05-28 over GitHub (too stark/cold), Slate (too blue) and
-// Material (teal pop too weak, body↔surface step too small).
-// See docs/THEME.md §History for full rationale.
+// Green-tinted dark bg (#0A1814) keeps the brand identity in dark mode without
+// going pure black. --bs-primary INVERTS to a lighter green for text legibility,
+// but --eb-brand-solid stays #004225 for solid backgrounds (button bg, etc.).
+// See docs/THEME.md §"Brand solid vs brand text" for the split rationale.
 [data-bs-theme="dark"] {
-  // ---------- Brand ramp ----------
+  // ---------- Brand ramp · verde (text/link role) ----------
   // Note: the ramp meaning INVERTS between themes — in dark, "lighter" is what we use
   // for text on tinted bg (because dark text on dark bg doesn't work) and "darker" is
   // what we use for selection bg (because the body is already dark, selection needs a
-  // saturated mid-shade to pop without going neon). See docs/THEME.md for the swap recipe.
-  --bs-primary: #2DD4CC;            // brighter teal so it still pops on dark
-  --bs-primary-rgb: 45, 212, 204;
-  --bs-primary-darker: #1eb8b0;     // selection bg in dark (saturated mid-teal)
-  --bs-primary-lighter: #5EEAD4;    // text on tinted bg in dark; Tailwind teal-300 equivalent
+  // saturated mid-shade to pop). See docs/THEME.md for the swap recipe.
+  --bs-primary: #6FB089;            // lighter green so links/text stay legible on dark bg
+  --bs-primary-rgb: 111, 176, 137;
+  --bs-primary-darker: #4F9269;     // selection bg in dark (saturated mid-green)
+  --bs-primary-lighter: #8FC8A5;    // text on tinted bg in dark; tag-fg alt, AAA contrast
+
+  // ---------- Accent ramp · ocre (Nugget) ----------
+  // ASYMMETRIC with light: here --bs-accent IS the vibrant #C59922 because the dark
+  // green-tinted bg gives it 6.80:1 contrast (AA Normal pass). In light we had to
+  // darken it to #856814 because cream bg only gives the vibrant nugget 2.36:1 (fail).
+  // The ramp semantics still hold: --bs-accent is the text role, --bs-accent-lighter
+  // is a higher-luminance variant for text-on-solid-green (e.g. inside footer/buttons).
+  // Editorial treatment (uppercase + 600 + letter-spacing) in _common.scss applies
+  // identically in both themes — the brand mark feels consistent across modes.
+  --bs-accent: #C59922;             // text role on dark bg — 6.80:1 (AA Normal pass)
+  --bs-accent-rgb: 197, 153, 34;
+  --bs-accent-darker: #A8801C;      // hover/active state — slightly desaturated
+  --bs-accent-lighter: #E5C572;     // text on solid green bg (e.g. accent text inside footer)
+
+  // ---------- Brand solid · CONSTANT green ----------
+  // Same #004225 as light — the identity green never changes. Solid bgs (btn-primary,
+  // etc.) always carry white text, so the contrast works in both themes.
+  --eb-brand-solid: #004225;
 
   // ---------- Surfaces ----------
-  --eb-body-bg: #16181c;            // warm-dark, not pure black
-  --eb-surface: #1f2128;            // clear step up from body
-  --eb-surface-emphasis: #2a2d36;   // bumped from #262931 for clearer thead/row-hover step over --eb-surface
+  --eb-body-bg: #0A1814;            // green-tinted dark, not pure black
+  --eb-surface: #0F2419;            // clear step up from body
+  --eb-surface-emphasis: #163024;   // thead, row hover (one more step for hierarchy)
 
   // ---------- Text ----------
-  --eb-text-strong: #e6e4e0;        // cream white (lower halation than #fff)
-  --eb-text-muted: #b3b6bd;         // bumped from #8e8f93 → WCAG ~8.6:1 (AAA) for body copy
-  --eb-text-light: #6b6c70;
+  --eb-text-strong: #E8EDE3;        // cream-green tinted white (subtle warmth)
+  --eb-text-muted: #B5C0B5;         // body copy, WCAG ~8:1 (AAA)
+  --eb-text-light: #6E786E;
 
   // ---------- Borders ----------
-  --eb-border: #3a3e48;             // bumped from #2b2e35 so hairlines are actually visible
+  --eb-border: #25382D;             // green-tinted dark border (visible but quiet)
 
   // ---------- Interactive ----------
   --eb-selection-bg: var(--bs-primary-darker);
-  --eb-selection-fg: #16181c;       // text contrast (matches --eb-body-bg), not brand-derived
+  --eb-selection-fg: #0A1814;       // text contrast (matches --eb-body-bg), not brand-derived
 
   // ---------- Tag pills (ghost variant — GitHub/Linear/Vercel pattern) ----------
-  --eb-tag-bg: rgba(var(--bs-primary-rgb), 0.15);    // translucent teal
-  --eb-tag-fg: var(--bs-primary-lighter);            // AAA contrast against the translucent dark bg
+  --eb-tag-bg: rgba(var(--bs-primary-rgb), 0.15);    // translucent green
+  --eb-tag-fg: var(--bs-primary-lighter);            // AAA contrast on translucent dark bg
   --eb-tag-border: rgba(var(--bs-primary-rgb), 0.35);
 
   // ---------- Overlays ----------
-  --eb-overlay-bg: #2b2e35;         // intentionally a step below --eb-border for a recessed feel
-  --eb-overlay-fg: #e6e4e0;
+  --eb-overlay-bg: #1B2A22;         // step below --eb-border for a recessed feel
+  --eb-overlay-fg: #E8EDE3;
 
   // ---------- Bootstrap pass-through ----------
   --bs-body-bg: var(--eb-body-bg);
   --bs-body-color: var(--eb-text-muted);
-  --bs-body-color-rgb: 142, 143, 147;
+  --bs-body-color-rgb: 181, 192, 181;
   --bs-emphasis-color: var(--eb-text-strong);
-  --bs-emphasis-color-rgb: 230, 228, 224;
+  --bs-emphasis-color-rgb: 232, 237, 227;
   --bs-secondary-color: var(--eb-text-muted);
   --bs-border-color: var(--eb-border);
 

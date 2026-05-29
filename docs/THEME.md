@@ -14,67 +14,239 @@ Single source of truth for the design tokens (colors, surfaces, text, borders, b
 
 ---
 
-## Light theme (default)
+## Light theme (default) · Conservatory
+
+British Racing Green (`#004225`) brand + Nugget ocre accent (bronze `#856814` in light text, vibrant `#C59922` in dark text + decorative role in light) on a warm cream-tinted bg. Verde profundo as headings is the distinctive feature — the site reads as "engineering with character", not generic dev blog. See §History → "2026-05-28 — Conservatory rebrand" for full rationale.
+
+### Brand ramp · verde
+
+Used for **text/link/border-primary**. Pairs with `--eb-brand-solid` for solid backgrounds. See §"Brand solid vs brand text" for why these are split.
 
 | Token | Value | Sample | Purpose |
 |---|---|---|---|
-| `--bs-primary` | `#00AAA1` | <span style="display:inline-block;width:60px;height:14px;background:#00AAA1;border:1px solid #d0d7de;"></span> | Brand teal — buttons, links, tag pills, primary CTA |
-| `--bs-primary-rgb` | `0, 170, 161` |  | RGB tuple Bootstrap uses for `rgba()` derivations |
-| `--bs-primary-darker` | `#007F7A` | <span style="display:inline-block;width:60px;height:14px;background:#007F7A;border:1px solid #d0d7de;"></span> | Brand ramp · darker shade. Used as ghost-tag text (AA pass on tinted bg) |
-| `--bs-primary-lighter` | `#1ac4ba` | <span style="display:inline-block;width:60px;height:14px;background:#1ac4ba;border:1px solid #d0d7de;"></span> | Brand ramp · lighter shade. Used as `::selection` bg (vivid accent) |
-| `--eb-body-bg` | `#ffffff` | <span style="display:inline-block;width:60px;height:14px;background:#ffffff;border:1px solid #d0d7de;"></span> | Page background |
-| `--eb-surface` | `#f4fcff` | <span style="display:inline-block;width:60px;height:14px;background:#f4fcff;border:1px solid #d0d7de;"></span> | Cards, code blocks, tbody, blockquote |
-| `--eb-surface-emphasis` | `#daf6ff` | <span style="display:inline-block;width:60px;height:14px;background:#daf6ff;border:1px solid #d0d7de;"></span> | Table thead, hover (one step darker than surface) |
-| `--eb-text-strong` | `#222222` | <span style="display:inline-block;width:60px;height:14px;background:#222222;border:1px solid #d0d7de;"></span> | Headings, emphasis |
-| `--eb-text-muted` | `#666666` | <span style="display:inline-block;width:60px;height:14px;background:#666666;border:1px solid #d0d7de;"></span> | Body copy |
-| `--eb-text-light` | `#959595` | <span style="display:inline-block;width:60px;height:14px;background:#959595;border:1px solid #d0d7de;"></span> | Tertiary text, disabled |
-| `--eb-border` | `#ACB9C4` | <span style="display:inline-block;width:60px;height:14px;background:#ACB9C4;border:1px solid #d0d7de;"></span> | Hairlines, dividers, form fields |
-| `--eb-selection-bg` | `var(--bs-primary-lighter)` | <span style="display:inline-block;width:60px;height:14px;background:#1ac4ba;border:1px solid #d0d7de;"></span> | `::selection` background (derived from ramp) |
-| `--eb-selection-fg` | `#ffffff` | <span style="display:inline-block;width:60px;height:14px;background:#ffffff;border:1px solid #d0d7de;"></span> | `::selection` foreground |
-| `--eb-tag-bg` | `rgba(var(--bs-primary-rgb), 0.10)` | <span style="display:inline-block;width:60px;height:14px;background:#00AAA11A;border:1px solid #d0d7de;"></span> | Tag pill + social icon background (translucent teal — ghost in light too) |
-| `--eb-tag-fg` | `var(--bs-primary-darker)` | <span style="display:inline-block;width:60px;height:14px;background:#007F7A;border:1px solid #d0d7de;"></span> | Tag pill + social icon text colour (derived from ramp; the darker shade passes WCAG AA on the ghost bg) |
-| `--eb-tag-border` | `rgba(var(--bs-primary-rgb), 0.30)` | <span style="display:inline-block;width:60px;height:14px;background:#00AAA14D;border:1px solid #d0d7de;"></span> | Tag pill + social icon border (semi-transparent teal) |
+| `--bs-primary` | `#004225` | <span style="display:inline-block;width:60px;height:14px;background:#004225;border:1px solid #d0d7de;"></span> | Body links, `.text-primary`, `.border-primary`, focus rings |
+| `--bs-primary-rgb` | `0, 66, 37` |  | RGB tuple for `rgba()` derivations |
+| `--bs-primary-darker` | `#002E19` | <span style="display:inline-block;width:60px;height:14px;background:#002E19;border:1px solid #d0d7de;"></span> | Deep green — headings (`text-strong`), ghost-tag fg (AAA on tinted bg) |
+| `--bs-primary-lighter` | `#006939` | <span style="display:inline-block;width:60px;height:14px;background:#006939;border:1px solid #d0d7de;"></span> | `::selection` background (vivid pop on cream) |
 
-WCAG contrast (text-strong `#222222` on body-bg `#ffffff`): **16.1 : 1** — AAA.
+### Accent ramp · ocre
+
+Co-protagonist of the brand, not subordinate to it. Used for **metadata** (categories, dates, decorative lines).
+
+**The ramp is asymmetric between themes** (same pattern as the verde brand ramp). In light, `--bs-accent` is a bronze (`#856814`, 4.57 : 1 over cream — AA Normal pass with margin). The vibrant nugget `#C59922` is reserved for `--bs-accent-lighter`, where it plays a **decorative role** (chip bg fills, borders, ::selection alt) — not text. In dark the ramp flips: `--bs-accent` IS the vibrant `#C59922` because the dark green-tinted bg gives it 6.80 : 1 contrast. See §"Why accent uses different hex per theme" for the WCAG rationale.
+
+**Editorial label treatment**: `a.text-accent` (categories on cards, post headers, sidebar widget) gets `text-transform: uppercase` + `font-weight: 600` + `letter-spacing: 0.08em` + `font-size: 0.875rem` in `_common.scss`. The combination of editorial typography + bronze hex sells the brand identity *without* needing a vibrant hex that would fail WCAG on cream. Result: categories read as **"ENGINEERING"** magazine-style labels rather than plain links, both in light and dark themes (same treatment applied identically across modes).
+
+| Token | Value | Sample | Purpose |
+|---|---|---|---|
+| `--bs-accent` | `#856814` | <span style="display:inline-block;width:60px;height:14px;background:#856814;border:1px solid #d0d7de;"></span> | **Text role**: `a.text-accent` (body categories, dates, decorative text) — AA Normal pass on cream (4.57 : 1) |
+| `--bs-accent-rgb` | `133, 104, 20` |  | RGB tuple for `rgba()` derivations |
+| `--bs-accent-darker` | `#5C440D` | <span style="display:inline-block;width:60px;height:14px;background:#5C440D;border:1px solid #d0d7de;"></span> | Hover/active state for accent links — AAA (7.97 : 1) on cream |
+| `--bs-accent-lighter` | `#C59922` | <span style="display:inline-block;width:60px;height:14px;background:#C59922;border:1px solid #d0d7de;"></span> | **Decorative role**: vibrant nugget for bg fills, borders, chips (NOT for body text on cream — only 2.36 : 1) |
+
+### Brand solid · constant green
+
+| Token | Value | Sample | Purpose |
+|---|---|---|---|
+| `--eb-brand-solid` | `#004225` | <span style="display:inline-block;width:60px;height:14px;background:#004225;border:1px solid #d0d7de;"></span> | Solid backgrounds that always carry white text (`.btn-primary` bg, dropdown active). **Constant in both themes** — see §"Brand solid vs brand text". |
+
+### Surfaces, text, borders
+
+| Token | Value | Sample | Purpose |
+|---|---|---|---|
+| `--eb-body-bg` | `#F2EFE3` | <span style="display:inline-block;width:60px;height:14px;background:#F2EFE3;border:1px solid #d0d7de;"></span> | Warm cream — "papered" feel, not pure white |
+| `--eb-surface` | `#E8E4D2` | <span style="display:inline-block;width:60px;height:14px;background:#E8E4D2;border:1px solid #d0d7de;"></span> | Cards, code blocks, blockquote, tbody (one step down) |
+| `--eb-surface-emphasis` | `#DCD7C0` | <span style="display:inline-block;width:60px;height:14px;background:#DCD7C0;border:1px solid #d0d7de;"></span> | Table thead, hover (one more step for clear hierarchy) |
+| `--eb-text-strong` | `#002E19` | <span style="display:inline-block;width:60px;height:14px;background:#002E19;border:1px solid #d0d7de;"></span> | Headings — **VERDE PROFUNDO**, the distinctive feature |
+| `--eb-text-muted` | `#3D4A40` | <span style="display:inline-block;width:60px;height:14px;background:#3D4A40;border:1px solid #d0d7de;"></span> | Body copy — warm green-tinted gray |
+| `--eb-text-light` | `#8A9088` | <span style="display:inline-block;width:60px;height:14px;background:#8A9088;border:1px solid #d0d7de;"></span> | Tertiary text, disabled |
+| `--eb-border` | `#C9CDB5` | <span style="display:inline-block;width:60px;height:14px;background:#C9CDB5;border:1px solid #d0d7de;"></span> | Hairlines, dividers, form fields — cream-green tinted |
+
+### Tag pills (derived)
+
+| Token | Value | Purpose |
+|---|---|---|
+| `--eb-selection-bg` | `var(--bs-primary-lighter)` → `#006939` | `::selection` background |
+| `--eb-selection-fg` | `#ffffff` | `::selection` foreground |
+| `--eb-tag-bg` | `rgba(0, 66, 37, 0.10)` | Tag pill + social icon background (10% verde tint) |
+| `--eb-tag-fg` | `var(--bs-primary-darker)` → `#002E19` | Tag pill + social icon text (AAA on ghost bg) |
+| `--eb-tag-border` | `rgba(0, 66, 37, 0.30)` | Tag pill + social icon border |
+
+WCAG contrast (text-strong `#002E19` on body-bg `#F2EFE3`): **~15 : 1** — AAA.
 
 ---
 
-## Dark theme · "Warm-dark" (palette D)
+## Dark theme · Conservatory
 
-Activated by `data-bs-theme="dark"` on `<html>`.
+Activated by `data-bs-theme="dark"` on `<html>`. Green-tinted dark bg (`#0A1814`) keeps the brand identity in dark mode without going pure black. `--bs-primary` inverts to a **lighter** green for text legibility, but `--eb-brand-solid` stays `#004225` for solid backgrounds. See §"Brand solid vs brand text" for the split.
+
+### Brand ramp · verde (text role inverted)
 
 | Token | Value | Sample | Purpose |
 |---|---|---|---|
-| `--bs-primary` | `#2DD4CC` | <span style="display:inline-block;width:60px;height:14px;background:#2DD4CC;border:1px solid #30363d;"></span> | Brighter teal (so it still pops against dark BG) |
-| `--bs-primary-rgb` | `45, 212, 204` |  | |
-| `--bs-primary-darker` | `#1eb8b0` | <span style="display:inline-block;width:60px;height:14px;background:#1eb8b0;border:1px solid #30363d;"></span> | Brand ramp · darker shade. Used as `::selection` bg (saturated mid-teal that pops against dark body) |
-| `--bs-primary-lighter` | `#5EEAD4` | <span style="display:inline-block;width:60px;height:14px;background:#5EEAD4;border:1px solid #30363d;"></span> | Brand ramp · lighter shade. Used as ghost-tag text (AAA contrast on translucent dark bg) |
-| `--eb-body-bg` | `#16181c` | <span style="display:inline-block;width:60px;height:14px;background:#16181c;border:1px solid #30363d;"></span> | Warm-dark, not pure black |
-| `--eb-surface` | `#1f2128` | <span style="display:inline-block;width:60px;height:14px;background:#1f2128;border:1px solid #30363d;"></span> | Cards, code blocks (clear step up from body) |
-| `--eb-surface-emphasis` | `#2a2d36` | <span style="display:inline-block;width:60px;height:14px;background:#2a2d36;border:1px solid #30363d;"></span> | Thead, hover (bumped from `#262931` for clearer step over surface) |
-| `--eb-text-strong` | `#e6e4e0` | <span style="display:inline-block;width:60px;height:14px;background:#e6e4e0;border:1px solid #30363d;"></span> | Cream white (lower halation than pure `#ffffff`) |
-| `--eb-text-muted` | `#b3b6bd` | <span style="display:inline-block;width:60px;height:14px;background:#b3b6bd;border:1px solid #30363d;"></span> | Body copy (bumped from `#8e8f93`, contrast ~5.5→8.6 : 1, AAA) |
-| `--eb-text-light` | `#6b6c70` | <span style="display:inline-block;width:60px;height:14px;background:#6b6c70;border:1px solid #30363d;"></span> | Tertiary, disabled |
-| `--eb-border` | `#3a3e48` | <span style="display:inline-block;width:60px;height:14px;background:#3a3e48;border:1px solid #30363d;"></span> | Hairlines (bumped from `#2b2e35` for visibility) |
-| `--eb-selection-bg` | `var(--bs-primary-darker)` | <span style="display:inline-block;width:60px;height:14px;background:#1eb8b0;border:1px solid #30363d;"></span> | `::selection` background (derived from ramp) |
-| `--eb-selection-fg` | `#16181c` | <span style="display:inline-block;width:60px;height:14px;background:#16181c;border:1px solid #30363d;"></span> | `::selection` foreground |
-| `--eb-tag-bg` | `rgba(var(--bs-primary-rgb), 0.15)` | <span style="display:inline-block;width:60px;height:14px;background:#2DD4CC26;border:1px solid #30363d;"></span> | Tag pill background (translucent teal — GitHub ghost pattern) |
-| `--eb-tag-fg` | `var(--bs-primary-lighter)` | <span style="display:inline-block;width:60px;height:14px;background:#5EEAD4;border:1px solid #30363d;"></span> | Tag pill text (derived from ramp; Tailwind teal-300 equivalent, AAA contrast on translucent bg) |
-| `--eb-tag-border` | `rgba(var(--bs-primary-rgb), 0.35)` | <span style="display:inline-block;width:60px;height:14px;background:#2DD4CC59;border:1px solid #30363d;"></span> | Tag pill border (semi-transparent teal) |
+| `--bs-primary` | `#6FB089` | <span style="display:inline-block;width:60px;height:14px;background:#6FB089;border:1px solid #30363d;"></span> | Lighter green so links/text stay legible on dark bg |
+| `--bs-primary-rgb` | `111, 176, 137` |  | |
+| `--bs-primary-darker` | `#4F9269` | <span style="display:inline-block;width:60px;height:14px;background:#4F9269;border:1px solid #30363d;"></span> | `::selection` background (saturated mid-green that pops against dark body) |
+| `--bs-primary-lighter` | `#8FC8A5` | <span style="display:inline-block;width:60px;height:14px;background:#8FC8A5;border:1px solid #30363d;"></span> | Ghost-tag text (AAA contrast on translucent dark bg) |
 
-WCAG contrast (text-strong `#e6e4e0` on body-bg `#16181c`): **~14 : 1** — AAA.
+### Accent ramp · ocre
+
+**Asymmetric with light**: here `--bs-accent` IS the vibrant `#C59922` because the dark green-tinted bg gives it 6.80 : 1 contrast (AA Normal pass). In light we had to darken it to `#856814` because cream bg only gives the vibrant nugget 2.36 : 1 (fail). The **editorial treatment** (uppercase + 600 + letter-spacing) applies identically to both themes — categories render as magazine-style labels in both modes. See §"Why accent uses different hex per theme" for the why.
+
+| Token | Value | Sample | Purpose |
+|---|---|---|---|
+| `--bs-accent` | `#C59922` | <span style="display:inline-block;width:60px;height:14px;background:#C59922;border:1px solid #30363d;"></span> | **Text role** on dark bg — `.text-accent` (categories, dates, decorative accents). 6.80 : 1 (AA Normal pass) |
+| `--bs-accent-rgb` | `197, 153, 34` |  | |
+| `--bs-accent-darker` | `#A8801C` | <span style="display:inline-block;width:60px;height:14px;background:#A8801C;border:1px solid #30363d;"></span> | Hover state — slightly desaturated |
+| `--bs-accent-lighter` | `#E5C572` | <span style="display:inline-block;width:60px;height:14px;background:#E5C572;border:1px solid #30363d;"></span> | Text on solid green bg (e.g. accent text inside footer/CTA panels) |
+
+### Brand solid · CONSTANT (same as light)
+
+| Token | Value | Sample | Purpose |
+|---|---|---|---|
+| `--eb-brand-solid` | `#004225` | <span style="display:inline-block;width:60px;height:14px;background:#004225;border:1px solid #30363d;"></span> | Same `#004225` as light — the identity green never changes. Solid bgs always carry white text. |
+
+### Surfaces, text, borders
+
+| Token | Value | Sample | Purpose |
+|---|---|---|---|
+| `--eb-body-bg` | `#0A1814` | <span style="display:inline-block;width:60px;height:14px;background:#0A1814;border:1px solid #30363d;"></span> | Green-tinted dark, not pure black |
+| `--eb-surface` | `#0F2419` | <span style="display:inline-block;width:60px;height:14px;background:#0F2419;border:1px solid #30363d;"></span> | Cards, code blocks (clear step up from body) |
+| `--eb-surface-emphasis` | `#163024` | <span style="display:inline-block;width:60px;height:14px;background:#163024;border:1px solid #30363d;"></span> | Thead, hover (one more step for hierarchy) |
+| `--eb-text-strong` | `#E8EDE3` | <span style="display:inline-block;width:60px;height:14px;background:#E8EDE3;border:1px solid #30363d;"></span> | Cream-green tinted white (subtle warmth) |
+| `--eb-text-muted` | `#B5C0B5` | <span style="display:inline-block;width:60px;height:14px;background:#B5C0B5;border:1px solid #30363d;"></span> | Body copy, WCAG ~8:1 (AAA) |
+| `--eb-text-light` | `#6E786E` | <span style="display:inline-block;width:60px;height:14px;background:#6E786E;border:1px solid #30363d;"></span> | Tertiary, disabled |
+| `--eb-border` | `#25382D` | <span style="display:inline-block;width:60px;height:14px;background:#25382D;border:1px solid #30363d;"></span> | Green-tinted dark border (visible but quiet) |
+
+### Tag pills (derived)
+
+| Token | Value | Purpose |
+|---|---|---|
+| `--eb-selection-bg` | `var(--bs-primary-darker)` → `#4F9269` | `::selection` background |
+| `--eb-selection-fg` | `#0A1814` | `::selection` foreground (matches `--eb-body-bg`) |
+| `--eb-tag-bg` | `rgba(111, 176, 137, 0.15)` | Tag pill background (translucent green) |
+| `--eb-tag-fg` | `var(--bs-primary-lighter)` → `#8FC8A5` | Tag pill text (AAA on ghost bg) |
+| `--eb-tag-border` | `rgba(111, 176, 137, 0.35)` | Tag pill border |
+
+WCAG contrast (text-strong `#E8EDE3` on body-bg `#0A1814`): **~14 : 1** — AAA.
+
+---
+
+## Brand solid vs brand text
+
+The Conservatory system splits the brand verde into **two tokens with different roles**, instead of squeezing both into a single `--bs-primary` like most blog themes do. This is a deliberate decision; here's why.
+
+### The problem with a single brand token
+
+Bootstrap's default model has one `--bs-primary` that's used for **everything**: button backgrounds, button text on hover, link color, focus rings, borders. It works when the brand color has enough contrast to function in both roles (e.g. the previous teal `#00AAA1` had ~5:1 contrast both as text on white AND as bg with white text on top).
+
+But `#004225` (British Racing Green) is **too dark for the text role on dark mode**: a `#004225` link on a `#0A1814` background is barely visible (~1.5:1, well below AA). So if we kept just one `--bs-primary`, we'd have to either:
+
+1. Lighten the green significantly in dark mode → loses the "this is *my* verde" identity.
+2. Keep `#004225` everywhere → links in dark mode become unreadable.
+
+### The split
+
+Two tokens, two roles:
+
+| Token | Role | Light value | Dark value | Why |
+|---|---|---|---|---|
+| `--bs-primary` | **TEXT / LINK / BORDER** | `#004225` | `#6FB089` (lighter) | Varies by theme so contrast stays AA on both backgrounds. |
+| `--eb-brand-solid` | **SOLID BACKGROUND** | `#004225` | `#004225` (same) | Constant in both themes — keeps the brand identity for buttons, footer panels, etc. White text on top always passes AAA. |
+
+### What this means in practice
+
+- `.btn-primary` background: always `#004225` (white text on top). Same in light + dark.
+- `.dropdown-menu` active item bg: always `#004225` (white text on top).
+- A link on a blog post body: `#004225` in light, `#6FB089` in dark. Both ≥4.5:1 on the respective body bg.
+- `.text-primary` utility: follows `--bs-primary` (varies by theme).
+- `.border-primary` utility: follows `--bs-primary` (varies by theme).
+
+### Industry precedent
+
+This split is the **standard pattern** in mature design systems:
+
+- **Material Design 3** has `primary` (text role) and `primary-container` (bg role) — same idea.
+- **Tailwind UI** convention is `primary-500` for text + `primary-600` for solid bgs.
+- **Radix UI** colors split `9` (solid) from `11` (text contrast).
+- **GitHub Primer** has `--fgColor-accent` (text) and `--bgColor-accent-emphasis` (solid).
+
+If you're adding a new component, pick by role: does it carry text on top? `$brand-solid`. Is it the text itself? `$primary-color`.
+
+### Splide active dot exception
+
+The splide pagination active dot (`.splide__pagination__page.is-active`) uses `$primary-color`, NOT `$brand-solid`. Reason: in dark mode, `#004225` on `#0A1814` is nearly invisible — and the dot is a visibility indicator, not a "carries text" surface. Pure `--bs-primary` (which is `#6FB089` lighter green in dark) gives a clearly visible active state. See `assets/scss/templates/_main.scss` for the inline comment.
+
+### `.btn-primary` border uses `$primary-color`, not `$brand-solid`
+
+`.btn-primary` and the hover state of `.btn-outline-primary` use `border-color: $primary-color` (theme-aware) instead of `$brand-solid` (constant). In light mode this resolves to `#004225` — same as the bg — so the border is **invisible by design** (no visual change vs the previous "both = brand-solid" version). In dark mode it resolves to `#6FB089` (lighter green), adding a subtle outline so the button doesn't disappear into the dark green-tinted body. The bg + white text + AAA contrast contract stays untouched; the border is purely a definition cue. See `assets/scss/_buttons.scss` for the inline rationale.
+
+---
+
+## Why accent uses different hex per theme
+
+Light `--bs-accent` is `#856814` (bronze). Dark `--bs-accent` is `#C59922` (vibrant nugget). Same token name, different hex. This isn't sloppiness — it's the same pattern already in use by `--bs-primary` (light `#004225`, dark `#6FB089`), applied to the accent because the contrast budget demands it.
+
+The vibrant nugget `#C59922` over cream `#F2EFE3` gives **2.36 : 1** — not just below AA Normal (≥ 4.5 : 1), but also below AA Large (≥ 3 : 1). No amount of `font-weight` or `text-transform` rescues this number; categories on a cream bg using `#C59922` simply fail WCAG. So the light ramp uses a bronze (`#856814`, 4.57 : 1) and compensates the lost "vibrance" with **editorial typography** — uppercase + 600 weight + 0.08em tracking. The result reads as a magazine label, not a faded link.
+
+### The contrast problem
+
+The original Conservatory rollout shipped with `--bs-accent: #C59922` in **both** themes, on the (incorrect) assumption that the vibrant nugget would pass AA Large because categories "qualify as Large". Two things were wrong:
+
+1. **Categories aren't Large.** They render as `<a>` plain inside `.card-body` and post headers, inheriting the body `font-size: 15px` regular (not bold, not uppercase). WCAG "Large" requires ≥ 18.66px **bold** or ≥ 24px regular. 15px regular = AA Normal territory.
+2. **`#C59922` over cream `#F2EFE3` is 2.36 : 1.** That fails both AA Normal (≥ 4.5 : 1) AND AA Large (≥ 3 : 1). The original WCAG table in §History claimed `~3.4:1` and "AA Large pass" — a miscalculation in both the contrast number and the qualification rule.
+
+### The fix
+
+Light ramp inverted around the same hexes used previously, with the addition of a darker bronze:
+
+| Token | Light (new) | Light (old, failed) | Dark | Reasoning |
+|---|---|---|---|---|
+| `--bs-accent` | `#856814` (4.57 : 1) | `#C59922` (2.36 : 1) ❌ | `#C59922` (6.80 : 1) | Text role: bronze in light passes AA Normal on cream; vibrant in dark passes AA Normal on dark bg. |
+| `--bs-accent-darker` | `#5C440D` (7.97 : 1) | `#A8801C` | `#A8801C` | Hover/active state, AAA on cream. |
+| `--bs-accent-lighter` | `#C59922` | `#E0B958` | `#E5C572` | Decorative role: vibrant nugget for bg fills, borders, ::selection alt — NOT for body text on cream. |
+
+The vibrant nugget `#C59922` is **still in the palette** — it just moved roles. In light it's `--bs-accent-lighter` (decoration), in dark it's `--bs-accent` (text). The brand identity is preserved; the WCAG bug is gone.
+
+### Editorial typography compensates the lost vibrance
+
+The bronze `#856814` reads quieter than the nugget would. To preserve the visual energy of the brand metadata, `a.text-accent` adds editorial label typography in `_common.scss`:
+
+```scss
+a.text-accent {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 0.875rem;
+  &:hover { color: var(--bs-accent-darker) !important; }  /* #5C440D AAA */
+}
+```
+
+Why this works: a plain `Engineering` link in a body-size serif fades into surrounding text. `ENGINEERING` in 600-weight uppercase with 0.08em tracking is **instantly recognisable as a label** — the brain reads it as "category badge" before parsing the letters. Same pattern used by Vercel, Linear, Stripe, NYT, FT blogs. The bronze hex carries enough warmth to feel ocre-family; the typography carries the brand emphasis.
+
+The treatment is scoped to `a.text-accent` (link only). `.text-accent` on a `<span>` or `<p>` stays plain bronze text — useful for dates, decorative one-liners, or anywhere the editorial label feel would be wrong.
+
+### Industry precedent (again)
+
+Same design-system convention that already justified `--bs-primary` asymmetry. Material Design 3, Tailwind UI, Radix, GitHub Primer — all vary the resolved hex per theme to keep "same perceived weight" against opposite substrates. A token is a **role**, not a hex constant.
+
+### What to do if you swap the accent colour
+
+Follow §"How to swap the brand colour" → Step 4. Verify each ramp's text-role hex (the `--bs-accent` itself) against each theme's `--eb-body-bg` with WebAIM — the same hex won't pass both. Pick a darker variant for light and let the vibrant one carry the dark role; that's the recipe. If the darker variant feels too quiet visually, lean on the editorial typography in `a.text-accent` (uppercase + weight + tracking) instead of bumping the hex luminance — typography compensates the visual energy without breaking the contrast contract.
 
 ---
 
 ## Color exceptions
 
-The rule is: *if you find yourself writing a hex outside `_root.scss`, you're doing it wrong*. Two legitimate exceptions exist; both are documented here so nobody "fixes" them by accident.
+The rule is: *if you find yourself writing a hex outside `_root.scss`, you're doing it wrong*. Four legitimate exceptions exist; all are documented here so nobody "fixes" them by accident.
 
 ### 1. `.btn-primary` keeps `$white` text
 
-`assets/scss/_buttons.scss` declares `.btn-primary { color: $white; }`. In dark mode this renders as white text on the brighter teal `#2DD4CC` — the same "solid teal + white text" combination we deliberately moved AWAY from for tag pills and social icons (we switched those to the ghost pattern).
+`assets/scss/_buttons.scss` declares `.btn-primary { color: $white; }`. Combined with `background: $brand-solid` (constant `#004225`), this is **white text on solid British Racing Green** in both themes — AAA contrast (~12:1).
 
-**Why this is correct for `.btn-primary`**: it's a **solid call-to-action button** (Ko-fi, "Get Started", etc.). Solid teal + white is the industry-standard pattern for primary CTAs — Material Design, GitHub primary buttons, Stripe, Tailwind UI all do this. The pattern we abandoned for tags was *decoration*; here we want *action*.
+**Why this is correct for `.btn-primary`**: it's a **solid call-to-action button** (Ko-fi, "Read more", "Subscribe"). Solid color + white text is the industry-standard pattern for primary CTAs — Material Design, GitHub primary buttons, Stripe, Tailwind UI all do this. The pattern we use for tags (ghost: translucent bg + brand text) communicates "metadata"; the solid pattern here communicates "action".
+
+**Why the border uses `$primary-color` and not `$brand-solid`**: in light both resolve to `#004225` so the border is invisible (no behaviour change vs the previous version). In dark, `$primary-color` resolves to `#6FB089` (lighter green) so the button still has a visible outline against the dark green-tinted body. Documented in §"Brand solid vs brand text" → `.btn-primary` border exception above.
 
 If you ever convert `.btn-primary` to ghost (translucent bg + brand text), update this section.
 
@@ -84,69 +256,123 @@ If you ever convert `.btn-primary` to ghost (translucent bg + brand text), updat
 
 **Why this is correct**: the share buttons are *third-party widget output* from sharingbuttons.io. The 5px radius and brand palettes are their signature — keeping them communicates "this UI is borrowed, not ours". Theming them would actively mislead users about what the buttons do.
 
+### 3. Ko-fi widget hex is hardcoded in `single.html`
+
+`layouts/_default/single.html` initialises the Ko-fi widget with `kofiwidget2.init('Support Me on Ko-fi', '#004225', 'W7W2DRG2T')`. The hex `#004225` matches `--eb-brand-solid` (constant verde across themes), and white text on top passes AAA in both themes.
+
+**Why this can't go in `_root.scss`**: the Ko-fi widget script (`Widget_2.js`) reads the color at init time as a JavaScript string argument. CSS custom properties (`var(--eb-brand-solid)`) can't reach script arguments — the widget isn't a styled DOM element we control; it's an iframe whose styling Ko-fi controls. The hex literal is the only styling hook the widget exposes.
+
+If you ever swap the brand verde, **update this hex too** (and the inline comment in `single.html`). The pair to find is: `kofiwidget2.init( ... '#004225' ... )` — the second argument.
+
+### 4. `mockups/` is gitignored (design exploration artifacts)
+
+`mockups/` contains the palette-explorer HTML files used during the Conservatory rebrand exploration (`mockups/index.html`, `mockups/dark-mode-preview.html`). These are **not source** (Hugo doesn't read them) and **not build output** (Hugo doesn't write them) — they're throwaway design probes that informed the decision but don't need to live in the deployed site.
+
+**Why gitignored, not deleted**: they're useful as a local sandbox if you ever want to riff on a new palette before committing to changes in `_root.scss`. Keep them on disk for context, but don't commit — the canonical record of the rebrand lives in §History below.
+
+If you ever want to publish a palette explorer as a permanent reference (e.g. as a `/colors/` route), move the relevant file out of `mockups/` into `content/` or `layouts/` and update this section.
+
 ---
 
 ## How to swap the brand colour
 
-The registry is designed so that changing the brand requires editing **one contiguous block per theme** in `_root.scss`. Example workflow for swapping teal → English green.
+The Conservatory system has **three ramps** to edit: the brand verde (text role, varies by theme), the brand verde **solid** (bg role, constant), and the ocre accent. Total: **13 hex values** in `_root.scss`. Plus 1 hex outside (`single.html` Ko-fi widget — see §Color exceptions). Plus update this doc.
 
-### Step 1 — Replace the LIGHT ramp
+### Step 1 — Replace the LIGHT brand ramp (verde)
 
 In `:root { ... }` of `assets/scss/_root.scss`:
 
 ```scss
---bs-primary: #00684A;            // English green
---bs-primary-rgb: 0, 104, 74;
---bs-primary-darker: #004D37;     // pick a -25% lightness shade; must pass WCAG AA on a ~10% tinted bg
---bs-primary-lighter: #1F8466;    // pick a +10% lightness shade for selection bg pop
+--bs-primary: #YOURGREEN;          // body links, .text-primary, .border-primary
+--bs-primary-rgb: r, g, b;
+--bs-primary-darker: #DEEPGREEN;   // ~-25% lightness; headings + ghost-tag fg
+--bs-primary-lighter: #VIVIDGREEN; // ~+10% lightness; selection bg
 ```
 
-### Step 2 — Replace the DARK ramp
+### Step 2 — Replace the DARK brand ramp (verde)
 
-In `[data-bs-theme="dark"] { ... }`:
+In `[data-bs-theme="dark"] { ... }`. In dark, `--bs-primary` is **lighter** (text-role inverted) so links stay legible on dark bg:
 
 ```scss
---bs-primary: #3FB58F;            // lighter green for dark bg contrast
---bs-primary-rgb: 63, 181, 143;
---bs-primary-darker: #2D8A6A;     // selection bg in dark (saturated mid-shade)
---bs-primary-lighter: #7BD4B0;    // tag text in dark; ~Tailwind green-300
+--bs-primary: #LIGHTERGREEN;       // legible on dark body
+--bs-primary-rgb: r, g, b;
+--bs-primary-darker: #SATGREEN;    // selection bg pop
+--bs-primary-lighter: #BRIGHTGREEN;// ghost-tag fg
 ```
 
-### Step 3 — Verify WCAG
+### Step 3 — Replace `--eb-brand-solid` (BOTH themes)
+
+`--eb-brand-solid` is the **constant** green used for solid bgs (button, dropdown active). Same hex in light + dark. Usually equal to `--bs-primary` in light:
+
+```scss
+--eb-brand-solid: #YOURGREEN;      // same in :root AND [data-bs-theme="dark"]
+```
+
+### Step 4 — Replace the accent ramp (ocre or other) for BOTH themes
+
+`--bs-accent*` is for metadata (categories, dates, decorative lines). **The ramp is asymmetric between themes** — same pattern as the brand verde ramp — because the same hex doesn't carry equal contrast on opposite substrates. Pick the hex that hits the text-role contrast budget on each theme's body bg (verify with §Step 6).
+
+```scss
+// :root (light) — hex chosen for body-text contrast on light bg
+--bs-accent: #DARKACCENT;          // .text-accent text role — must pass AA Normal (≥4.5:1) on body-bg
+--bs-accent-rgb: r, g, b;
+--bs-accent-darker: #DEEPACCENT;   // hover/active state (darker still, ideally AAA)
+--bs-accent-lighter: #VIBRANTACC;  // decorative bg/borders/chips — vibrant, NOT for text on light bg
+
+// [data-bs-theme="dark"] — ramp flips because dark bg gives vibrant hex enough contrast
+--bs-accent: #VIBRANTACC;          // .text-accent text role on dark bg — must pass AA Normal
+--bs-accent-rgb: r, g, b;
+--bs-accent-darker: #MIDACCENT;    // hover/active state — slightly desaturated
+--bs-accent-lighter: #BRIGHTACC;   // text on solid green bg (footer/CTA panels) — bumped for darker substrate
+```
+
+> **Note**: the editorial typography in `_common.scss` (`a.text-accent` uppercase + `font-weight: 600` + `letter-spacing: 0.08em` + `font-size: 0.875rem`) is hex-independent. It carries the magazine-label brand mark across any accent palette — no need to touch it when swapping colours. If a future swap wants a *different* metadata feel (e.g. all-lowercase + serif), edit `a.text-accent` in `_common.scss` directly; the colour ramp above stays separate.
+
+### Step 5 — Update `single.html` Ko-fi hex
+
+Change `kofiwidget2.init('Support Me on Ko-fi', '#OLDGREEN', '...')` to the new `--eb-brand-solid` value. The widget can't read CSS vars (see §Color exceptions § 3).
+
+### Step 6 — Verify WCAG
 
 | Pair | Required ratio | Tool |
 |---|---|---|
-| `--bs-primary-darker` over the light ghost bg (~10% tint of white) | ≥ 4.5 : 1 (AA Normal) | [WebAIM contrast checker](https://webaim.org/resources/contrastchecker/) |
-| `--bs-primary-lighter` over the dark ghost bg (~15% tint of `#16181c`) | ≥ 4.5 : 1 (AA Normal) | same |
-| `--bs-primary` over body-bg (both themes) | ≥ 3 : 1 (AA Large — buttons + links) | same |
+| `--bs-primary-darker` over light ghost bg (~10% tint of `--eb-body-bg`) | ≥ 4.5 : 1 (AA Normal) | [WebAIM contrast checker](https://webaim.org/resources/contrastchecker/) |
+| `--bs-primary-lighter` over dark ghost bg (~15% tint of `--eb-body-bg` dark) | ≥ 4.5 : 1 (AA Normal) | same |
+| `--bs-primary` over body-bg (both themes) | ≥ 4.5 : 1 (AA Normal — links) | same |
+| `--bs-accent` over body-bg (light) | ≥ 4.5 : 1 (AA Normal — category text is 15px regular, NOT Large) | same |
+| `--bs-accent` over body-bg (dark) | ≥ 4.5 : 1 (AA Normal) | same |
+| White over `--eb-brand-solid` | ≥ 4.5 : 1 (AA Normal — btn text) | same |
 
-If any pair fails, adjust the lighter/darker shades. The **8 values** above are the only edits required — every other token in the file references them via `var(--bs-primary*)`.
+If any pair fails, adjust the corresponding `*-darker`/`*-lighter` shade — don't touch the core `--bs-primary` / `--bs-accent` / `--eb-brand-solid` if possible (they're the identity of the brand).
 
-### Step 4 — Verify the build
+### Step 7 — Verify the build
 
 ```powershell
 hugo --minify --gc   # must exit 0
-hugo server         # spot-check both themes visually
+hugo server          # spot-check both themes visually
 ```
 
-### Step 5 — Update this doc
+### Step 8 — Update this doc
 
 Update the swatch tables above (Light theme + Dark theme) with the new hex values, then add a row in [§History](#history) explaining the swap rationale.
 
 ### What still uses the brand colour automatically
 
-The following surfaces are auto-themed via the ramp — you don't touch them when swapping:
+The following surfaces are auto-themed via the ramps — you don't touch them when swapping:
 
-- Links (`a:hover`, `.text-primary`)
-- Bootstrap buttons (`.btn-primary`, `.btn-outline-primary`)
-- Borders/focus rings (`.form-control:focus`, `.btn-outline-primary:focus`)
-- Tag pills + social icons (`.eb-tag`, `.social-links li a`) — via `rgba(var(--bs-primary-rgb), …)`
-- `::selection` background
-- Pagination active state + hover
-- Splide pagination dot active marker (featured post slider)
-- Code block syntax highlighting accent (where Chroma uses primary)
+- Body links + `a:hover`, `.text-primary` (auto from `--bs-primary`)
+- `.text-accent` utility (auto from `--bs-accent`)
+- Bootstrap buttons `.btn-primary` + `.btn-outline-primary` hover (bg: `--eb-brand-solid`, border: `--bs-primary`)
+- Borders/focus rings (`.form-control:focus`, `.btn-outline-primary` resting border) — from `--bs-primary`
+- Tag pills + social icons (`.eb-tag`, `.social-links li a`) — from `rgba(var(--bs-primary-rgb), …)`
+- `::selection` background — from `--bs-primary-lighter` (light) / `--bs-primary-darker` (dark)
+- Pagination active state — from `--bs-accent` (2px underline echoes the editorial category treatment); pagination hover — from `--bs-primary-darker`; numbered items rest on `--bs-primary`
+- Splide pagination dot active marker — from `--bs-primary` (intentional; see §Brand solid vs brand text)
+- Dropdown active — from `--eb-brand-solid`
+- Categories on the home + post pages + **sidebar widget** — from `--bs-accent` via `.text-accent` (asymmetric per theme). **Exception**: the footer "Categories" widget uses `text-body-emphasis` (`--eb-text-strong`) by design — the footer is a navigation block where every link follows the same emphasis pattern (Contact Me, Social Contacts, Quick Links, Categories) for internal visual coherence, not a metadata-display surface. Don't "fix" this in a future audit.
+- Code block syntax highlighting accent — from Chroma stylesheets (separate; see §Syntax highlighting)
 
-Net effect: changing 8 numbers re-themes the entire site.
+Net effect: changing 13 numbers re-themes the entire site, plus the Ko-fi hex (14 total).
 
 ---
 
@@ -227,6 +453,144 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 ---
 
 ## History
+
+### 2026-05-28 — Conservatory rebrand (teal → British Racing Green + Nugget)
+
+Replaced the original teal brand (`#00AAA1` light / `#2DD4CC` dark) with **British Racing Green** (`#004225`) as primary + **Nugget** ocre (`#C59922`) as co-protagonist accent, on a warm cream-tinted bg (`#F2EFE3`) — palette **E · Conservatory** in the exploration phase. Verde profundo (`#002E19`) as `text-strong` is the distinctive feature: every heading carries the brand identity, so the site reads as "engineering with character", not generic dev blog.
+
+This was an **identity change**, not a contrast tune-up. The site went from "a blog that happens to use teal" to "Giuliano's blog" — visually committed, intentional, opinionated.
+
+**Why verde + ocre**
+
+Started from the goal of moving away from the "generic warm-dark + teal pop" look (which works but doesn't say anything about *me*). Explored 7 palettes in a dedicated `mockups/palette-explorer.html` covering the spectrum from "Bold Editorial" (NYT-style, max contrast monochrome + accents) to "Forest Deep" (verde dominates everything) to "Linen" (warm-cream bg with verde only as accents). The decision criteria:
+
+1. **Has to feel like mine.** A blog about engineering practice deserves a non-generic palette. Verde inglés + ocre nugget is the visual equivalent of writing in first person.
+2. **Has to be readable at 2am.** Conservatory bg + verde profundo headings + warm-gray body = comfortable for long reading sessions. Tested directly in the explorer; the cream-tinted bg is materially easier on the eyes than pure white.
+3. **Ocre as co-protagonist, not subordinate.** The 75% verde-neutro / 15% surface-step / 10% ocre proportion comes from classic editorial design (think old-school magazines: paper + serif + an occasional ornament). Ocre isn't "secondary" — it carries the metadata role (categories, dates) while verde carries the action role (links, buttons). They're co-equal in the system; that's why the ocre got its own ramp (`--bs-accent-*`) instead of being parked under `--bs-secondary`.
+
+**Why split `--bs-primary` from `--eb-brand-solid`**
+
+The previous teal had ~5:1 contrast in both roles (text on white AND bg with white text on top), so a single `--bs-primary` worked. `#004225` is much darker — perfect for solid backgrounds (white text → AAA), but **invisible as text** on dark mode (`#004225` link on `#0A1814` bg ≈ 1.5:1, fails WCAG decisively).
+
+Three options, two rejected:
+
+| Approach | Why rejected |
+|---|---|
+| One `--bs-primary`, lighten in dark | Dark-mode brand color becomes `#6FB089` lighter green — the brand identity fades. Footer/buttons look like generic mint-green. |
+| One `--bs-primary`, keep `#004225` everywhere | Links in dark mode unreadable. Bad UX. |
+| **Two tokens, two roles** ✓ | `--bs-primary` (text role, varies) + `--eb-brand-solid` (bg role, constant `#004225`). Industry-standard pattern in Material Design 3, Tailwind, Radix, GitHub Primer. |
+
+This split adds **one token** to the system and 2-3 lines in `_buttons.scss`. The clarity gain is worth more than the complexity cost. New section §"Brand solid vs brand text" documents the why for future-me.
+
+**Why verde profundo for headings (`#002E19`)**
+
+This is the choice that made Conservatory feel different from "Linen" (which has `text-strong: #1A1817` warm black). The deep green headings push the brand identity into every page, not just the chrome (nav, buttons, footer). It's the equivalent of having your writing in a custom typeface — barely noticeable individually, hugely impactful in aggregate.
+
+Risk: deep-green headings could feel oppressive in long sessions. Mitigation: the bg `#F2EFE3` is warm enough that the contrast (~15:1) reads as "serious editorial", not "haunted forest". If the post-implementation feel proves otherwise, the fallback is one line: `--eb-text-strong: #1A1817;` reverts to warm-black headings without affecting anything else.
+
+**Files touched**
+
+- `assets/scss/_root.scss` — full rewrite of both light + dark blocks (16 values per theme + new accent ramp + new brand-solid token).
+- `assets/scss/_variables.scss` — added `$brand-solid` + `$accent-color` Sass aliases for backward compat with vendored Liva SCSS.
+- `assets/scss/_buttons.scss` — `.btn-primary` and `.btn-outline-primary` hover state switched from `$primary-color` to `$brand-solid` so white text keeps AAA contrast in both themes.
+- `assets/scss/_common.scss` — added `.text-accent` / `.bg-accent` / `.border-accent` utility classes (parallel to Bootstrap's `.text-primary` / `.bg-primary` / `.border-primary`).
+- `layouts/partials/post.html`, `layouts/_default/single.html` — category links switched from `class="text-primary"` (verde) to `class="text-accent"` (ocre). Coherent with "verde = action, ocre = metadata".
+- `layouts/_default/single.html` — Ko-fi widget init hex changed from `#00AAA1` (old teal) to `#004225` (new verde brand-solid). Documented as the 3rd legitimate Color Exception (can't be a CSS var because the widget reads a JS string at init time).
+- `docs/THEME.md` (this file) — full rewrite of Light + Dark theme tables, new §"Brand solid vs brand text" section, expanded §"How to swap the brand colour" to cover 3 ramps + 13 hex values, updated §"Color exceptions" with the Ko-fi exception.
+
+**WCAG verification (all AAA except where noted)**
+
+| Pair | Calculated | Pass |
+|---|---|---|
+| `text-strong #002E19` on light `body-bg #F2EFE3` | ~15:1 | AAA |
+| `text-muted #3D4A40` on light `body-bg #F2EFE3` | ~7.5:1 | AAA |
+| `text-strong #E8EDE3` on dark `body-bg #0A1814` | ~14:1 | AAA |
+| `text-muted #B5C0B5` on dark `body-bg #0A1814` | ~8:1 | AAA |
+| `bs-primary #004225` (link) on light `body-bg #F2EFE3` | ~12:1 | AAA |
+| `bs-primary #6FB089` (link) on dark `body-bg #0A1814` | ~7:1 | AAA |
+| `bs-accent #C59922` on light `body-bg #F2EFE3` | ~3.4:1 | AA Large (categories are bold/uppercase — qualifies) |
+| `bs-accent #C59922` on dark `body-bg #0A1814` | ~5.2:1 | AA Normal |
+| White on `--eb-brand-solid #004225` (btn-primary text) | ~12:1 | AAA |
+
+**The splide exception** (documented in `_main.scss` and §"Brand solid vs brand text"): the splide pagination active dot uses `$primary-color` (varies) instead of `$brand-solid` (constant). In dark mode, `#004225` on `#0A1814` is nearly invisible — and the active dot's job is **visibility**, not branding. Using `--bs-primary` gives `#6FB089` in dark, which is clearly visible. This is the single intentional break in the "solid bg = always brand-solid" rule, called out so future-me doesn't "fix" it.
+
+---
+
+### 2026-05-28 — Conservatory contrast fix (post-rebrand audit)
+
+Same-day audit of the Conservatory rebrand surfaced three issues that the initial implementation got wrong. All three fixed in this entry; details and rationale below.
+
+**1. Critical: `--bs-accent: #C59922` failed WCAG on cream bg.**
+
+The rebrand entry above claimed `bs-accent #C59922` over light body-bg was `~3.4:1` and "AA Large pass (categories are bold/uppercase)". Both halves were wrong:
+
+- Recalculated with the WCAG 2.1 relative-luminance formula, the actual contrast is **2.36 : 1**. Below the AA Large threshold (≥ 3 : 1), and well below AA Normal (≥ 4.5 : 1).
+- Categories are **not** bold or uppercase. They render as `<a>` plain inside `.card-body` and post headers, inheriting `body { font-size: 15px }` regular. WCAG "Large" requires ≥ 18.66px **bold** or ≥ 24px regular — 15px regular falls under Normal.
+
+Fix: made the accent ramp asymmetric per theme, mirroring the pre-existing `--bs-primary` pattern.
+
+| Token | Light (old, failed) | Light (new, pass) | Dark (new, pass) |
+|---|---|---|---|
+| `--bs-accent` | `#C59922` (2.36 : 1) ❌ | `#856814` (4.57 : 1) ✅ AA Normal | `#C59922` (6.80 : 1) ✅ AA Normal |
+| `--bs-accent-rgb` | `197, 153, 34` | `133, 104, 20` | `197, 153, 34` (unchanged) |
+| `--bs-accent-darker` | `#A8801C` | `#5C440D` (7.97 : 1, AAA) | `#A8801C` (unchanged) |
+| `--bs-accent-lighter` | `#E0B958` | `#C59922` (vibrant nugget, decorative role) | `#E5C572` (unchanged) |
+
+The vibrant nugget `#C59922` didn't leave the palette — it changed roles. In light it moved from `--bs-accent` (text) to `--bs-accent-lighter` (decoration: bg fills, borders, chips). In dark it stayed as `--bs-accent` (text on dark bg has plenty of contrast). The brand identity is preserved across both themes; what changed is *which token holds it where*.
+
+**Editorial typography compensates the lost vibrance in light.** After the first iteration shipped with `#806014` (more conservative bronze, 5.06 : 1), reading the page side-by-side revealed the categories felt **too quiet** — the warmth of the nugget was missing. Two ways out: (a) bump the hex luminance (but past `#856814` the contrast budget runs out), or (b) lean on **typography** to carry the visual emphasis. Picked (b): added `text-transform: uppercase` + `font-weight: 600` + `letter-spacing: 0.08em` + `font-size: 0.875rem` to `a.text-accent` in `_common.scss`. Final hex landed at `#856814` (4.57 : 1, slightly brighter than the initial `#806014`) and the editorial label treatment makes `ENGINEERING` read as a deliberate brand mark rather than a faded link. Same pattern used by Vercel, Linear, Stripe, NYT, FT blogs for category metadata.
+
+Added a new doc section §"Why accent uses different hex per theme" with the full rationale, the editorial typography snippet, and a recipe for future accent swaps.
+
+**2. Important: sidebar category links bypassed `.text-accent`.**
+
+`layouts/partials/sidebar.html` rendered the Category widget as `<li><a href="...">` with no class, so the links fell back to `a { color: var(--bs-primary) }` (verde). Meanwhile, the same categories in homepage cards (`layouts/partials/post.html`) and post headers (`layouts/_default/single.html`) used `class="text-accent"` (ocre). Inconsistent: same content, two colours depending on location.
+
+Fix: added `class="text-accent"` to the sidebar link. Now all categories — cards, post headers, sidebar — share the ocre identity, consistent across the site. Listed `§"What still uses the brand colour automatically"` accordingly.
+
+**3. Minor: `.btn-primary` lost its outline in dark mode.**
+
+The initial rebrand set `border-color: $brand-solid` on `.btn-primary`. In light that's invisible (same as the bg), as intended. In **dark** that means a `#004225` border on a `#0A1814` body — the button melts into the surrounding dark surface from a distance. The contrast contract (white text on `#004225` bg, AAA) was fine; the affordance was poor.
+
+Fix: changed `border-color` on `.btn-primary` (and the hover of `.btn-outline-primary`) from `$brand-solid` (constant `#004225`) to `$primary-color` (theme-aware: `#004225` in light, `#6FB089` in dark). Light behaviour unchanged. Dark gains a subtle lighter-green outline that defines the button silhouette without touching the bg/text contrast pair. Documented as an addition to §"Brand solid vs brand text" and a clarification in §Color exceptions §1.
+
+**Easy-win clean-ups bundled in:**
+
+- **Stale comment in `_root.scss`**: the comment above the `.dropdown-menu` override block claimed the pattern "covers both light and dark themes" via `var(--bs-primary)` alone — but the actual override uses both `var(--bs-primary)` (in `.text-primary` etc.) and `var(--eb-brand-solid)` (in the dropdown). Rewrote the comment to reflect both vars and explain that the cascade resolves at use-time.
+- **Stale comment about "same hex in both themes" for the accent ramp**: removed everywhere it appeared (`_root.scss` light + dark blocks, `_variables.scss` alias, `THEME.md` accent tables and Step 4 of swap procedure). All updated to reflect the new asymmetry.
+- **Splide active dot rationale**: the existing comment in `_main.scss` mentioned `$primary-color` vs `$brand-solid` only obliquely. Added an explicit sentence explaining *why* the dot uses the theme-aware one (visibility against dark bg, the active dot's role is to stand out, not to brand-anchor).
+- **`mockups/` gitignored**: the palette-explorer HTML files under `mockups/` were committable but not source nor output. Added to `.gitignore` with a comment, and a 4th legitimate Color Exception in this doc explaining the rationale (keep on disk for local design probes, don't commit — history lives in THEME.md).
+- **Misleading note about `featured = true`**: the previous History entry ended with a parenthetical implying that the home-page slider had been migrated from `type="featured"` to `featured = true`. Reading the actual `layouts/index.html` shows it iterates `where .Site.RegularPages "Params.featured" true` — the change predates the Conservatory rebrand and the note was misleading by association. Removed.
+
+**Files touched in this audit fix**
+
+- `assets/scss/_root.scss` — new asymmetric accent ramp in `:root` (final hex `#856814`), updated comments in both `:root` and `[data-bs-theme="dark"]` blocks to reference the editorial typography, fixed stale comment above `.dropdown-menu` override.
+- `assets/scss/_variables.scss` — rewrote the `$accent-color` inline comment: the previous (now stale) version said *"same hex in both themes"*; the new version explicitly states *"asymmetric: bronze #856814 light, vibrant #C59922 dark"* to reflect the actual ramp.
+- `assets/scss/_buttons.scss` — `border-color: $brand-solid` → `$primary-color` on `.btn-primary` + `.btn-outline-primary` hover, with full rationale in the inline comment.
+- `assets/scss/_common.scss` — added `a.text-accent` editorial label treatment (uppercase + 600 + tracking + 0.875rem + hover-to-darker) with full rationale comment.
+- `assets/scss/templates/_main.scss` — splide pagination comment block extended with `$primary-color` vs `$brand-solid` rationale.
+- `layouts/partials/sidebar.html` — added `class="text-accent"` to the Category widget links.
+- `.gitignore` — added `mockups/`.
+- `docs/THEME.md` (this file) — new §"Why accent uses different hex per theme" (with editorial typography sub-section), updated Light + Dark accent tables (with editorial treatment note), updated Step 4 of swap procedure, new §Color exceptions §4 (mockups), updated §1 (btn-primary border note), §"What still uses the brand colour automatically" updated to list sidebar widget, removed stale "Drafts pinned to home" paragraph from the previous History entry, added this entry.
+
+**WCAG re-verification (light accent only — dark was already correct)**
+
+| Pair | Calculated | Pass |
+|---|---|---|
+| `bs-accent #856814` on light `body-bg #F2EFE3` | 4.57 : 1 | AA Normal |
+| `bs-accent-darker #5C440D` on light `body-bg #F2EFE3` | 7.97 : 1 | AAA |
+| `bs-accent-lighter #C59922` on light `body-bg #F2EFE3` | 2.36 : 1 | (decorative only — not used as text) |
+| `bs-accent #C59922` on dark `body-bg #0A1814` | 6.80 : 1 | AA Normal |
+
+**Lesson for future audits**: when a previous entry claims a contrast ratio AND a WCAG qualification rule (e.g. "AA Large because text is bold"), verify *both* independently against the actual rendered markup. The previous entry's claim looked plausible — ocre on cream, bold-looking metadata — but neither the number nor the rule survived contact with `font-size: 15px` regular `<a>` tags. Audit the markup, not the intent.
+
+**Addendum — pagination editorial restyle (same-day visual polish):**
+
+The blog index/category pagination kept the Bootstrap-default boxed look (gray `#dee2e6` border + light gray bg) which didn't blend with the cream/verde/ocre palette — visible as a cool gray patch inside a warm composition. Refactored `.pagination` in `assets/scss/templates/_main.scss` to an **editorial numbered-text style**: no boxes, no bg, just text. The active page is anchored with a 2px `--bs-accent` underline + `font-weight: 600` — the same ocre that marks categories, so "current context" is communicated by the **same accent colour in two surfaces** (categories + active page). Flechas (`«`, `‹`, `›`, `»`) are muted to `--eb-text-light` and slightly smaller so the eye lands on the numbers. Same visual pattern used by Substack, Stripe Blog, Vercel Blog, NYT. No layout shift on hover because the `.page-link` reserves the 2px underline space with `border-bottom: 2px solid transparent` at rest.
+
+This was a small but high-impact change: the pagination was the **last "generic CMS"** element in the site (everything else — categories, tags, cards, headings — already follows the Conservatory editorial language). Closing this loop makes the design feel **fully intentional** end-to-end rather than "Conservatory rebrand with a Bootstrap pagination escape valve".
+
+---
 
 ### 2026-05-28 — jQuery removal + Splide migration + dead-code cleanup
 

@@ -19,7 +19,7 @@
       {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
       <ul class="list-unstyled">
         {{- range $name, $items := .Site.Taxonomies.categories }}
-        <li><a
+        <li><a class="text-accent"
             href="{{ `categories/` | relLangURL }}{{ $name | urlize | lower }}/">{{ $name | title | humanize }}</a>
         </li>
         {{- end }}

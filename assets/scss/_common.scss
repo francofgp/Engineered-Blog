@@ -226,3 +226,42 @@ textarea.form-control{
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
 }
+
+/* Accent (ocre) utility classes — parallel to Bootstrap's .text-primary / .bg-primary.
+   Used for metadata that is co-protagonist with the brand verde, not subordinate to it
+   (categories, dates, decorative lines). The !important matches Bootstrap utility
+   convention so these win over any per-component color rules. */
+.text-accent {
+  color: var(--bs-accent) !important;
+}
+
+.bg-accent {
+  background-color: var(--bs-accent) !important;
+}
+
+.border-accent {
+  border-color: var(--bs-accent) !important;
+}
+
+/* Editorial label treatment for accent links (categories on cards, post headers,
+   sidebar widget). Uppercase + 600 weight + letter-spacing turns the link into a
+   "magazine label" rather than plain inline text — adds visual emphasis WITHOUT
+   needing a vibrant hex that would fail WCAG on cream. The combo of editorial
+   typography + bronze --bs-accent (#856814 light, 4.57:1) sells brand identity
+   while staying AA Normal compliant.
+   Scoped to `a.text-accent` so the utility class can still be used on non-link
+   elements (e.g. dates in <span>) without inheriting the label treatment.
+   Hover transitions to --bs-accent-darker (#5C440D, AAA) for an obvious affordance. */
+a.text-accent {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-size: 0.875rem;
+  transition: color 0.15s ease;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: var(--bs-accent-darker) !important;
+  }
+}
