@@ -454,6 +454,26 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-29 — Wordmark ocre flourish (header brand mark)
+
+Follow-up to "Ocre above the fold": continued the `colorize` pass into the header. The wordmark is now flanked by two small ocre squares — `▪ Giuliano Pertile ▪` — the one ocre touch in the header chrome.
+
+**Why this does NOT break the Verde-and-Ocre rule.** The header is verde/chrome territory (verde = action). The guardrail that keeps this compliant: the squares are a **decorative mark**, not the text colour and not an interactive affordance. The wordmark text stays `--eb-text-strong` (verde profundo / cream); ocre lives only in the ornaments. Decorative marks are ocre's documented role ("decorative lines"), so this is the rule *applied to chrome*, not an exception.
+
+⚠️ **Two-way guard for future audits**: do **not** strip the ocre squares thinking they violate the role split (they don't — they're decorative), and do **not** escalate by colouring the wordmark *text* ocre (that WOULD promote ocre to chrome/action — the line we won't cross).
+
+**Shape**: a square, not a round period, to echo the system's `border-radius: 0` signature. Symmetric flanking suits the centred desktop masthead; on mobile (left-aligned wordmark) it reads as a bracketed mark.
+
+**Considered and rejected**: single trailing square ("square full-stop" — fine, but less balanced under the centred masthead); a colour period (round — clashes with the all-square rule); an accent underline (reads too close to a link affordance, and links are underline-free site-wide). Landed on two flanking squares.
+
+**Implementation**: `::before` + `::after` on `.navbar-brand.text-body-emphasis` in `_navigation.scss` — no HTML change. Scoped to `.text-body-emphasis` so only the TEXT wordmark is marked, never the logo-image variant (the `{{else}}` branch in `header.html`). `0.32em` square, `0.3em` gap, `vertical-align: 0.08em`. Decorative → no WCAG text-contrast budget; ocre reads in both themes (`#856814` bronze on cream, `#C59922` vibrant on forest).
+
+**Files touched**
+
+- `assets/scss/templates/_navigation.scss` — added `.navbar-brand.text-body-emphasis::before/::after` ocre squares + rationale comment
+- `DESIGN.md` — §5 Navigation: wordmark flourish note
+- `docs/THEME.md` — this entry
+
 ### 2026-05-29 — Ocre above the fold (hero kicker, flush-left hero, ocre byline separator)
 
 `/impeccable colorize` analysis: the nugget ocre accent — one of the two brand voices — was absent from the home page's **first viewport**. The featured-post hero rendered verde + neutral only; the first ocre element (the category label) lived in the post grid, three sections down. *"Rare by design (~10%)"* had quietly become *"absent above the fold"*, which is a different thing. Fix: surface ocre above the fold using the system's existing **signature component**, with **no new exception** to the Verde-and-Ocre role split (the header/chrome stays verde — promoting ocre to action/chrome was explicitly rejected).

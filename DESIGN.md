@@ -280,6 +280,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 
 - **Style:** plain Raleway, top horizontal bar with mobile collapse. Theme toggle lives OUTSIDE the `.navbar-collapse` so it's always visible on mobile (GitHub/Linear/Vercel pattern). Search icon (lupa) opens a fullscreen modal that focuses the input on open (`requestAnimationFrame`, not `setTimeout`); `Escape` closes.
 - **Active/Hover:** body links use `--bs-primary`. Hover transitions to `--bs-primary` with `0.2s ease`.
+- **Wordmark:** the author name in Raleway 700, `--eb-text-strong` (verde profundo / cream), flanked by two small ocre squares — `▪ Giuliano Pertile ▪`. This is the **one ocre touch in the header chrome**, kept **decorative** (the squares, not the text) so it stays inside the Verde-and-Ocre rule (ocre = decorative mark; verde = action/chrome). The square shape echoes the all-square signature. Two-way guard: don't colour the wordmark *text* ocre (that promotes ocre to chrome/action), and don't strip the squares in an audit (they're role-compliant). See `docs/THEME.md` History → 2026-05-29 "Wordmark ocre flourish".
 
 ### Pagination
 

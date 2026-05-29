@@ -43,6 +43,28 @@
   letter-spacing: -0.01em;
 }
 
+/* Wordmark ocre flourish — two small squares in the nugget accent flanking the
+   logotype (▪ Giuliano Pertile ▪). This is the ONE ocre touch in the header chrome,
+   and it is deliberately a DECORATIVE mark, never the text colour: the name stays
+   --eb-text-strong (verde profundo / cream) so the Verde-and-Ocre rule holds
+   (ocre = decorative lines, verde = action/chrome). The square shape echoes the
+   system's border-radius:0 signature; flanking them reads as a symmetric brand mark
+   that sits well under the centred desktop masthead. Scoped to .text-body-emphasis
+   so only the TEXT wordmark is marked, never the logo-image variant (the {{else}}
+   branch in header.html). Decorative only → no WCAG text-contrast budget; ocre is
+   visible in BOTH themes (#856814 bronze on cream, #C59922 vibrant on forest). */
+.navbar-brand.text-body-emphasis::before,
+.navbar-brand.text-body-emphasis::after {
+  content: "";
+  display: inline-block;
+  width: 0.32em;
+  height: 0.32em;
+  background: var(--bs-accent);
+  vertical-align: 0.08em;
+}
+.navbar-brand.text-body-emphasis::before { margin-right: 0.3em; }
+.navbar-brand.text-body-emphasis::after { margin-left: 0.3em; }
+
 /* Theme toggle sits in a .dropdown, OUTSIDE .navbar-nav, so the rule above can't
    reach it. Re-state the same contract and neutralise the .btn-link defaults
    (link colour + hover underline) so the sun/moon icon tracks the nav links
