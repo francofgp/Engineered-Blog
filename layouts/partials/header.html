@@ -53,8 +53,9 @@
         </ul>
       </div>
 
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navigation">
-        <i class="ti-menu"></i>
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
+              aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="ti-menu" aria-hidden="true"></i>
       </button>
 
       <div class="collapse navbar-collapse text-center" id="navigation">
@@ -62,7 +63,7 @@
           <ul class="navbar-nav me-auto">
             {{ range .Site.Params.social }}
             <li class="nav-item">
-              <a class="nav-link" href="{{ .link | safeURL }}"><i class="{{ .icon }}"></i></a>
+              <a class="nav-link" href="{{ .link | safeURL }}" aria-label="{{ .title | title }}"><i class="{{ .icon }}" aria-hidden="true"></i></a>
             </li>
             {{ end }}
           </ul>

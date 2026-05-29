@@ -6,15 +6,59 @@
   }
 }
 
+/* Header links (social cluster + main nav) share one resting/hover/focus contract.
+   Resting = --eb-text-strong (same emphasis as the wordmark). Hover EASES to the
+   verde $primary-color instead of snapping (the rest of the site — .social-links,
+   tag pills, .pagination — already transitions at 0.15s; this matches it). Keyboard
+   focus draws the documented 2px $primary-color outline, the same focus-visible
+   pattern as .pagination .page-link in templates/_main.scss, overriding Bootstrap's
+   default box-shadow ring so every focusable header control looks identical. */
 .navbar-white .navbar-nav .nav-link {
   color: $text-color-dark;
+  transition: color 0.15s ease;
   &:hover{
     color: $primary-color;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+    box-shadow: none;
   }
 }
 
 .navbar-expand-lg .navbar-nav .nav-link {
   padding: 20px;
+}
+
+/* Wordmark — the brand anchor of the header. Bootstrap's .navbar-brand default
+   (1.25rem, inherited 400 weight) read as just-another-nav-label; bumped to a
+   700-weight masthead so the author's name is the clear focal point. 700 echoes
+   the site heading weight (_typography.scss) — one type voice, not a new one.
+   Slight negative tracking gives the name a tighter logotype feel. Colour stays
+   --eb-text-strong (verde profundo) via the .text-body-emphasis class on the
+   anchor; applies to both the mobile-view and desktop-view brand links. */
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Theme toggle sits in a .dropdown, OUTSIDE .navbar-nav, so the rule above can't
+   reach it. Re-state the same contract and neutralise the .btn-link defaults
+   (link colour + hover underline) so the sun/moon icon tracks the nav links
+   rather than Bootstrap's link styling. */
+#theme-toggle {
+  color: $text-color-dark;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  &:hover {
+    color: $primary-color;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }
 
 .mobile-view{
@@ -32,11 +76,28 @@
 }
 
 /* search */
+/* The lupa is a peer of the nav links + theme toggle, so it carries the same
+   colour / hover / focus contract as them. Dropped the twin 1px side-borders the
+   Liva theme shipped: they bracketed ONLY the search icon (the adjacent theme
+   toggle has none), reading as orphaned chrome in a header that is otherwise
+   divider-free. Modest symmetric padding gives a comfortable hit target and
+   optically centres the icon; the navbar's flex align-items:center does the
+   vertical centring. */
 .search-btn {
   border: 0;
   background: transparent;
-  border-right: 1px solid $border-color;
-  border-left: 1px solid $border-color;
+  color: $text-color-dark;
+  padding: 0.5rem 0.75rem;
+  line-height: 1;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: $primary-color;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
 }
 
 /* Closed state uses `pointer-events: none` instead of `visibility: hidden`.
