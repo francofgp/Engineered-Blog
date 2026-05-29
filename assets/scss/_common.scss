@@ -141,6 +141,13 @@ a:hover {
 .form-control{
   height: 50px;
   border-radius: 0;
+  // WCAG SC 1.4.11 (non-text contrast ≥3:1): inputs sit at the same tonal level as body
+  // (--eb-body-bg as input bg), so the border IS the affordance distinguishing the input.
+  // Bootstrap default resolves to var(--bs-border-color) → var(--eb-border) which is the
+  // card-hairline tone (1.4:1 over cream, 1.5:1 over forest — fails 1.4.11). Cards are
+  // fine because they have a surface-step affordance; inputs are not. See docs/THEME.md
+  // §History → "2026-05-29 — Form-control WCAG SC 1.4.11 fix".
+  border-color: var(--eb-input-border);
   &:focus{
     box-shadow: none;
     outline: 0;

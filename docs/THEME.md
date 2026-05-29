@@ -454,6 +454,27 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-29 — Form-control WCAG SC 1.4.11 fix (`--eb-input-border`)
+
+`/impeccable critique` of the color system flagged a WCAG 2.1 SC 1.4.11 (non-text contrast) failure on `.form-control` in resting state. The control's resting border resolved to `var(--bs-border-color)` → `var(--eb-border)` (via Bootstrap 5.3's `.form-control` default + our `--bs-border-color: var(--eb-border)` mapping in `_root.scss`). At **1.42:1** over cream and **1.46:1** over forest (verified via the WCAG relative luminance formula), the input was effectively invisible to low-vision users until focus — and focus only triggers AFTER you've found and clicked the input. Catch-22.
+
+**Fix**: new token `--eb-input-border: #6E786E`, constant in both themes (declared in `:root` AND `[data-bs-theme="dark"]` with the same value, following the precedent set by `--eb-brand-solid`). Contrast:
+
+- vs. `#F2EFE3` (cream, light body): **3.99:1** ✓ passes SC 1.4.11
+- vs. `#0A1814` (forest, dark body): **3.97:1** ✓ passes SC 1.4.11
+
+`#6E786E` is mid-gray-green with WCAG relative luminance ~0.179 — one of the rare hexes that clears 3:1 over both very-light and very-dark substrates (the symmetric clearance is convenient but not unique: any hex whose luminance sits in the ~0.16–0.22 range over substrates of luminance ~0.01 and ~0.86 hits the same window). Same hex that `--eb-text-light` carries in dark mode (where it's tertiary text); reusing the visual tone keeps the system cohesive. Applied to `.form-control` directly in `_common.scss` as `border-color: var(--eb-input-border)`.
+
+**Why a new token rather than darkening `--eb-border`**: cards and inputs have different contrast requirements. A card distinguishes itself from the body via the surface step (`--eb-surface` is one tone up); the border is decorative hairline and does **not** need 3:1. An input, on the other hand, sits at the same level as body (`--eb-body-bg` IS the input bg), so the border IS the affordance — 3:1 is mandatory. Keeping the two roles in separate tokens preserves the quiet hairline aesthetic on cards while making inputs WCAG-compliant.
+
+**Known follow-up**: the placeholder text (also using `--eb-text-light` = `#8A9088` in light) sits at ~2.83:1 over cream — below 3:1 best-practice. SC 1.4.11 doesn't strictly require placeholder contrast (placeholders are presentational, not informational), but worth a future audit pass. Not fixed in this run.
+
+**Files touched**
+
+- `assets/scss/_root.scss` — added `--eb-input-border: #6E786E` to both `:root` and `[data-bs-theme="dark"]` blocks
+- `assets/scss/_common.scss` — `.form-control` now sets `border-color: var(--eb-input-border)` at rest (focus border stays as `$primary-color`)
+- `docs/THEME.md` — this entry
+
 ### 2026-05-28 — Conservatory rebrand (teal → British Racing Green + Nugget)
 
 Replaced the original teal brand (`#00AAA1` light / `#2DD4CC` dark) with **British Racing Green** (`#004225`) as primary + **Nugget** ocre (`#C59922`) as co-protagonist accent, on a warm cream-tinted bg (`#F2EFE3`) — palette **E · Conservatory** in the exploration phase. Verde profundo (`#002E19`) as `text-strong` is the distinctive feature: every heading carries the brand identity, so the site reads as "engineering with character", not generic dev blog.

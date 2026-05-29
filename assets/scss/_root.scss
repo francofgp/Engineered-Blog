@@ -84,6 +84,17 @@
   // ---------- Borders ----------
   --eb-border: #C9CDB5;             // cream-green tinted, blends with the editorial feel
 
+  // ---------- Input border (WCAG SC 1.4.11) ----------
+  // Constant in both themes (same role as --eb-brand-solid: a tone that passes ≥3:1 on
+  // both substrates so the form-control resting state is perceivable for low-vision users).
+  // #6E786E: 3.99:1 over cream (light), 3.97:1 over forest (dark) — verified via WCAG
+  // relative luminance formula. The plain --eb-border is too quiet on body-bg-as-input-bg
+  // (1.42:1 light, 1.46:1 dark, also verified) — fine for card hairlines
+  // and dividers (which have a tonal step affordance via --eb-surface), not for the ONLY
+  // affordance distinguishing an input. See docs/THEME.md §History → "2026-05-29 —
+  // Form-control WCAG SC 1.4.11 fix".
+  --eb-input-border: #6E786E;
+
   // ---------- Interactive ----------
   --eb-selection-bg: var(--bs-primary-lighter);
   --eb-selection-fg: #ffffff;       // text contrast, not brand-derived
@@ -188,6 +199,9 @@
 
   // ---------- Borders ----------
   --eb-border: #25382D;             // green-tinted dark border (visible but quiet)
+
+  // ---------- Input border (constant in both themes, see :root comment) ----------
+  --eb-input-border: #6E786E;
 
   // ---------- Interactive ----------
   --eb-selection-bg: var(--bs-primary-darker);

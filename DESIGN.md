@@ -133,7 +133,7 @@ Density is restrained. Type is set on a warm field. Layout breathes — `.sectio
 **Key Characteristics:**
 
 - **British Racing Green is the brand**, not a "primary accent". It's the heading color, the link color, the button color, the focus ring. You can't read a page without it. (`#004225` light, `#6FB089` lighter green for text legibility on dark bg — same brand, different role.)
-- **Nugget ocre is co-protagonist, not subordinate.** Categories, dates, decorative lines. It carries the *metadata* role while verde carries the *action* role. Two coequal colors with two separate roles, not one primary and one accent.
+- **Nugget ocre is dual-role with verde, not subordinate.** Categories, dates, decorative lines. It carries the *metadata* role while verde carries the *action* role. Two colors with two distinct roles, not one primary and one accent. Co-equal in **role-distinctness**, not in surface coverage — verde dominates by area (chrome + headings + links ≈ 65%); ocre is rarer by design (categories + decorative ≈ 10%). What matters is that each owns its role exclusively.
 - **The all-square rule.** `border-radius: 0` on every native surface — buttons, cards, form controls, tag pills, code blocks, inline code. The one exception is the third-party share-buttons widget (5px); kept as-is because borrowing should look borrowed.
 - **Conservatory cream, not white.** Body bg is `#F2EFE3` (warm, papered) in light and `#0A1814` (green-tinted dark, not black) in dark. Pure neutrals are absent on purpose.
 - **Categories are labels, not links.** `ENGINEERING` in uppercase + 600 weight + 0.08em letter-spacing. The combination of editorial typography + bronze ocre sells the brand identity *while staying AA Normal* on cream — see Section 3, *The Editorial Label Rule*.
@@ -157,7 +157,7 @@ The brand carries action: links, headings, buttons, focus rings.
 
 ### Secondary — Nugget Ocre family
 
-The accent carries metadata: categories, dates, decorative lines. Co-protagonist with verde, not subordinate.
+The accent carries metadata: categories, dates, decorative lines. Dual-role with verde, not subordinate — verde owns the action surface, ocre owns the metadata surface; neither is a sub-tier of the other.
 
 - **Nugget Bronze** (`#856814`): `a.text-accent` text role in light mode — categories, dates. 4.57:1 over cream (AA Normal pass with margin). Always rendered with the editorial label treatment (see Section 3).
 - **Nugget Bronze Deep** (`#5C440D`): hover state for accent links in light. 7.97:1 — AAA on cream.
@@ -197,7 +197,7 @@ The whole system sits on warm cream or green-tinted dark. White and black are de
 
 ### Named Rules
 
-**The Verde-and-Ocre Rule.** Verde carries action (links, buttons, focus, headings). Ocre carries metadata (categories, dates, decorative lines). The two are co-equal, *not* primary + secondary. Don't promote ocre to action use. Don't demote verde to decoration. The role split is the identity.
+**The Verde-and-Ocre Rule.** Verde carries action (links, buttons, focus, headings). Ocre carries metadata (categories, dates, decorative lines). The two are co-equal **in role-distinctness**, *not* in surface coverage — verde dominates by area (≈65% of colored elements), ocre is rarer (≈10%). What matters is that each owns its role exclusively: don't promote ocre to action use; don't demote verde to decoration. The role split is the identity; the area split is just how the roles land in practice.
 
 **The Tinted-Neutral Rule.** No pure black (`#000`), no pure white (`#fff`) on body surfaces. The only acceptable use of `#FFFFFF` is **text on `--eb-brand-solid`** (`.btn-primary`, dropdown active), where solid-green-with-white-text is the AAA-passing CTA pattern. Everywhere else: warmth.
 
@@ -323,7 +323,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 - **Don't** add ambient shadows to cards, modals, or panels. The single hover lift is the whole shadow vocabulary.
 - **Don't** introduce additional border radii (4px, 8px, "pill" buttons). The all-square rule is the spec.
 - **Don't** add a second font family. No serif "for editorial". No mono "for code in prose". One family.
-- **Don't** use Nugget Ocre vibrant (`#C59922`) as body text on cream — fails WCAG (2.36:1). It's a *decorative* hex in light mode.
+- **Don't** use `--bs-accent-lighter` as body text on cream in light mode. The token's *light* value is `#C59922` (vibrant nugget) — only 2.36:1 over cream, fails WCAG. In LIGHT it's reserved for **decorative-only** use (bg fills, borders, chips). In DARK the same token resolves to `#E5C572` and plays a **legitimate text role** (accent text on solid green panels, e.g. footer CTAs). Mind the asymmetric semantics: the *token* exists in both themes, but the *use-case* differs. If you need vibrant-ocre as text on cream, you can't — darken to `--bs-accent` (`#856814` bronze) and rely on the Editorial Label treatment for emphasis.
 - **Don't** render category links as plain `<a>` text without the Editorial Label treatment. The label *is* the signature; plain ocre links lose the brand mark.
 - **Don't** replicate the **AirSpace / Filterworld dev blog** template: gradient hero, equal-height card grid with icon-headline-summary, gray sans on white, decorative emoji. Anti-reference #1 from `PRODUCT.md`.
 - **Don't** replicate the **SaaS landing-page cliché**: big-number-small-label hero metrics, gradient text on h1, glass cards on gradient bg, icons-in-circles, three-pricing-tiers section. Anti-reference #2.
