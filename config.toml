@@ -110,8 +110,16 @@ author = "Franco Giuliano Pertile"
 mobile = "" #Add phone carefully
 email = "giulianopertile@gmail.com"
 location = "Villa María, Córdoba, Argentina"
-# copyright
-copyright = "| copyright &copy; 2022 [giulianopertile.com](https://github.com/francofgp/Engineered-Blog) All Rights Reserved |"
+# Copyright — composed and rendered by layouts/partials/footer.html, NOT stored as a
+# finished string here. The YEAR is deliberately not a literal: Hugo evaluates config
+# params as static strings (it never runs `now.Year` inside them), so the old hardcoded
+# "2022" silently went stale. The footer renders a `copyrightStartYear`–<current year>
+# range via `now.Year`, so it auto-updates on every build. These three params hold only
+# the rights-holder identity; the year, the © glyph and "All rights reserved" live in the
+# template. (copyrightURL keeps the original credit to the open-source repo.)
+copyrightStartYear = 2022
+copyrightText = "giulianopertile.com"
+copyrightURL = "https://github.com/francofgp/Engineered-Blog"
 
 # ---- AI SEO / Schema.org metadata ----------------------------------------------------------
 # Used by layouts/partials/head-schema.html to emit JSON-LD (WebSite, BlogPosting, Person,

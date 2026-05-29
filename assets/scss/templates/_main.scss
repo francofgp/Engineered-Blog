@@ -228,7 +228,9 @@
   }
 }
 
-/* Social icons share the .eb-tag ghost look — same tokens, same hover behaviour.
+/* Social icons — sidebar social row only (the footer's "Social Contacts" list is plain
+   text links by design; see _common.scss .eb-tag note). Share the .eb-tag ghost look —
+   same tokens, same hover behaviour.
    Box-sizing border-box + line-height: 33px keep the 35x35 footprint with the 1px border. */
 .social-links {
   li {
@@ -493,6 +495,21 @@ footer a {
   &:hover {
     color: $primary-color;
     text-decoration: underline;
+  }
+}
+
+/* Footer colophon — the bottom copyright bar. Muted body text so the page's last line
+   reads as quiet metadata; the year carries the ocre accent (.text-accent, the system's
+   metadata role — see DESIGN.md §Verde-and-Ocre) so the one auto-updating value gets the
+   brand mark. Slightly smaller than body. The holder link keeps the footer's text-strong
+   colour + verde hover from the rule above, so it reads as the one actionable token here. */
+.footer-colophon {
+  color: var(--eb-text-muted);
+  font-size: 0.9rem;
+
+  .footer-colophon__year {
+    font-weight: 600;
+    letter-spacing: 0.02em;
   }
 }
 

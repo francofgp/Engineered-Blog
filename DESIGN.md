@@ -260,7 +260,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 - **Style:** ghost — translucent verde bg with verde-darker text and verde border. `bg: rgba(0, 66, 37, 0.10)` light / `rgba(111, 176, 137, 0.15)` dark. `color: #002E19` light / `#8FC8A5` dark. `border: 1px solid rgba(0, 66, 37, 0.30)` light / `rgba(111, 176, 137, 0.35)` dark.
 - **Shape:** square (`border-radius: 0`). Padding `0.5rem 0.85rem`. Font 0.9rem / 500.
 - **State:** hover bumps bg opacity to 0.20 (light) — same color, more weight. No transform.
-- **Used for:** the sidebar tag widget. Also the social icons in the footer — same `--eb-tag-*` tokens. Visual consistency between metadata pills and social affordances.
+- **Used for:** the sidebar tag widget, plus the **sidebar** social-icon row (`.social-links`, same `--eb-tag-*` tokens — visual consistency between metadata pills and social affordances). **The footer's "Social Contacts" list is plain text links** (`text-body-emphasis`), *not* icon pills: the ghost-pill boxes read as washed-out squares on the cream footer, and the footer is a uniform navigation block (Contact Me / Social Contacts / Categories / Quick Links). This matches the footer-as-navigation-block exception already documented in `docs/THEME.md`. Don't convert the footer back to icon pills in a future audit.
 
 ### Cards / Containers
 

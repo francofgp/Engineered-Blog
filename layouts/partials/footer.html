@@ -50,6 +50,11 @@
       {{ end }}
       <div class="text-capitalize col-lg-3 col-sm-6 mb-5">
         <h6 class="mb-4">Social Contacts</h6>
+        {{/* Footer social is intentionally a plain text list, NOT the .social-links icon
+             pills used in the sidebar: the ghost-pill icon boxes read as washed-out squares
+             on the cream footer. Author preference is text here. NOTE: this diverges from
+             DESIGN.md §Tag Pills ("the social icons in the footer"); update that line if the
+             text treatment becomes the canonical spec. */}}
         <ul class="list-unstyled">
           {{ range .Site.Params.social }}
           <li class="mb-3"><a class="text-body-emphasis" href="{{ .link | safeURL }}">{{ .title }}</a></li>
@@ -78,8 +83,25 @@
           {{ end }}
         </ul>
       </div>
-      <div class="col-12 border-top py-4 text-center">
-        {{ .Site.Params.copyright | markdownify }}
+      {{/* Copyright colophon. The year is rendered dynamically (now.Year) as a
+           copyrightStartYear–<current year> range that collapses to a single year when
+           they match — so it auto-updates each build instead of going stale like the old
+           hardcoded "2022". The year carries the ocre accent (.text-accent = the system's
+           metadata role; see DESIGN.md §Verde-and-Ocre): the one changing value gets the
+           brand mark. Built in-template (not markdownify) so the pieces stay on one line. */}}
+      <div class="col-12 border-top py-4 text-center footer-colophon">
+        {{- $startYear := .Site.Params.copyrightStartYear | default 2022 -}}
+        {{- $thisYear := now.Year -}}
+        <p class="mb-0">
+          &copy;
+          <span class="footer-colophon__year text-accent">{{ $startYear }}{{ if ne (int $startYear) (int $thisYear) }}&ndash;{{ $thisYear }}{{ end }}</span>
+          {{ with .Site.Params.copyrightURL -}}
+          <a href="{{ . }}">{{ $.Site.Params.copyrightText | default $.Site.Title }}</a>
+          {{- else -}}
+          {{ .Site.Params.copyrightText | default .Site.Title }}
+          {{- end }}
+          &middot; All rights reserved
+        </p>
       </div> 
     </div>
   </div>

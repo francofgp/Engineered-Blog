@@ -162,7 +162,10 @@ textarea.form-control{
   height: 150px;
 }
 
-/* Tag pills (used in sidebar) and social icons (same look, see .social-links in _main.scss).
+/* Tag pills (sidebar tag widget) and social icons (sidebar social row — same look, see
+   .social-links in _main.scss). NOTE: the footer's "Social Contacts" list is plain TEXT
+   links by design (the ghost-pill boxes read as washed-out squares on cream), so .eb-tag /
+   .social-links are sidebar-only surfaces.
    Token-driven via --eb-tag-* in _root.scss. Ghost pattern in both themes.
    border-radius: 0 respects the theme's all-square aesthetic (.card, .btn, .form-control all 0). */
 .eb-tag {
