@@ -143,6 +143,19 @@
        requires `crossorigin` even for same-origin fonts. */}}
   <link rel="preload" href="{{ `plugins/themify-icons/fonts/themify.woff?-fvbane` | absURL }}" as="font" type="font/woff" crossorigin="anonymous">
 
+  {{/* Self-hosted webfonts — Archivo (text) + JetBrains Mono (code), declared as @font-face
+       in assets/scss/_fonts.scss (variable woff2, latin subset, served from /fonts/). This
+       replaced the Google Fonts <link>: no render-blocking third-party stylesheet, no
+       cross-origin handshake, no Google dependency. Preload ONLY Archivo — it paints every
+       page above the fold, so preloading shrinks the swap window (less CLS). JetBrains Mono
+       is code-only (usually below the fold) → loads on demand via @font-face + font-display:
+       swap, no preload. `crossorigin` is required even same-origin (font fetches are
+       CORS-mode) or the browser double-fetches. The href is root-relative (not absURL)
+       so it byte-matches the @font-face `src: url('/fonts/...')` regardless of www vs
+       non-www — a mismatch makes the browser fetch the font twice (preload wasted). See
+       docs/THEME.md §History "Self-host fonts". */}}
+  <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
   {{ "<!-- plugins -->" | safeHTML }}
   {{ range .Site.Params.plugins.css }}
   <link rel="stylesheet" href="{{ .URL | absURL }}">

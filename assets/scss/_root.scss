@@ -31,6 +31,15 @@
 // site reads as "engineering with character", not generic dev blog.
 // See docs/THEME.md §History → "2026-05-28 — Conservatory rebrand" for rationale.
 :root {
+  // ---------- Fonts ----------
+  // Code/inline-code monospace. Overrides Bootstrap's default --bs-font-monospace
+  // (the SFMono/Menlo/Consolas system stack) with JetBrains Mono so code reads as a
+  // deliberate engineering voice, not "whatever the OS ships". Bootstrap applies this
+  // token to code/pre/kbd/samp; pre.chroma + inline <code> inherit it. Loaded via <link>
+  // in head.html. One definition — fonts don't change between light/dark.
+  // (Body/headings use $primary-font = Archivo, set in _typography.scss.)
+  --bs-font-monospace: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
   // ---------- Brand ramp · verde (British Racing Green) ----------
   // Used for TEXT/LINK/BORDER-primary. Pairs with --eb-brand-solid for backgrounds.
   // To swap the brand: change these 4 values (light) + the 4 (dark below) + --eb-brand-solid.

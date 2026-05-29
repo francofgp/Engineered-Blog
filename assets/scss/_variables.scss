@@ -30,5 +30,11 @@ $black: #000;
 $white: #fff;
 
 // Font Variables
-$primary-font: 'Raleway', sans-serif;
+// Archivo — a squared humanist grotesque (Omnibus-Type). Replaces the inherited Raleway
+// theme default so the type carries its own opinion: a wide weight range (400 body →
+// 800 display) builds hierarchy without a second family, and the slightly squared
+// letterforms rhyme with the all-square (border-radius:0) system. Loaded via <link> in
+// head.html (not @import). Code uses --bs-font-monospace (JetBrains Mono) — see _root.scss.
+// See docs/THEME.md §History "2026-05-29 — Typeset: Archivo".
+$primary-font: 'Archivo', sans-serif;
 $icon-font: 'themify';

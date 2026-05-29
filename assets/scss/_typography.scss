@@ -1,18 +1,21 @@
 /*  typography */
-@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700&display=swap');
+/* Fonts (Archivo + JetBrains Mono) load via <link> in layouts/partials/head.html.
+   The old `@import url(...Raleway)` lived here, but @import is render-blocking AND
+   serial: the browser must download + parse this stylesheet before it even discovers
+   the font URL. A <link> in <head> (with preconnect) starts the fetch far earlier. */
 
 body {
   line-height: 1.4;
   font-family: $primary-font;
   -webkit-font-smoothing: antialiased;
-  font-size: 15px;
+  font-size: 1rem;            // 16px readability floor (was 15px — an inherited theme default)
   color: $text-color;
 }
 
 p, .paragraph {
   font-weight: 400;
   color: $text-color;
-  font-size: 15px;
+  font-size: 1rem;            // 16px
   line-height: 1.7;
   font-family: $primary-font;
 }
@@ -32,26 +35,34 @@ a{
   }
 }
 
+// Modular scale on a 1rem (16px) base, ratio ~1.25 (>=1.25 = committed hierarchy, not flat).
+// The top three levels are fluid via clamp(min, fluid, max) so the hero scales with the
+// viewport (the long-form / marketing register) while body stays fixed. rem (not px) so the
+// scale honours the reader's browser font-size setting (WCAG 1.4.4). h1 is Archivo 800 — the
+// display weight that carries the hero; h2-h6 stay 700 (set in the block above).
 h1, .h1{
-  font-size: 45px;
+  font-size: clamp(2.25rem, calc(1.7rem + 2.75vw), 3rem);   // 36 -> 48px (calc() so LibSass passes mixed units through)
+  font-weight: 800;
+  letter-spacing: -0.015em;                            // mild negative tracking tightens large Archivo
 }
 
 h2, .h2{
-  font-size: 36px;
+  font-size: clamp(1.75rem, calc(1.45rem + 1.5vw), 2.25rem); // 28 -> 36px
+  letter-spacing: -0.01em;
 }
 
 h3, .h3{
-  font-size: 28px;
+  font-size: clamp(1.4rem, calc(1.25rem + 0.75vw), 1.75rem); // ~22 -> 28px
 }
 
 h4, .h4{
-  font-size: 22px;
+  font-size: 1.25rem;    // 20px — below h3's mobile clamp floor (~22px) so the two don't collide on small screens
 }
 
 h5, .h5{
-  font-size: 18px;
+  font-size: 1.125rem;   // 18px
 }
 
 h6, .h6{
-  font-size: 16px;
+  font-size: 1rem;       // 16px — distinguished from body by weight 700, not size
 }

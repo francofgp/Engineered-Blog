@@ -151,7 +151,7 @@
       "display": { "displayName": "Display (H1)", "purpose": "Page-level title — post hero, home hero. Largest type on screen. Verde profundo in light, cream in dark." },
       "headline": { "displayName": "Headline (H2)", "purpose": "Major in-post sections. Most-used heading by volume." },
       "title": { "displayName": "Title (H3)", "purpose": "Sub-sections within a post." },
-      "body": { "displayName": "Body", "purpose": "Paragraph copy. Raleway 400 at 15px with 1.7 line-height for long-form reading." },
+      "body": { "displayName": "Body", "purpose": "Paragraph copy. Archivo 400 at 16px (1rem) with 1.7 line-height for long-form reading." },
       "label": { "displayName": "Editorial Label", "purpose": "The signature treatment for a.text-accent (categories). Uppercase + 600 + 0.08em letter-spacing. Compensates the muted bronze hex with editorial weight so categories pass WCAG AA Normal on cream without losing brand presence." }
     },
     "shadows": [
@@ -183,7 +183,7 @@
       "refersTo": "button-primary",
       "description": "The CTA. Solid British Racing Green bg, white text, theme-aware border. Used for 'Read More', Ko-fi support, Subscribe.",
       "html": "<button class=\"ds-btn-primary\">Read More</button>",
-      "css": ".ds-btn-primary { background: var(--eb-brand-solid, #004225); color: #ffffff; border: 1px solid var(--bs-primary, #004225); border-radius: 0; padding: 10px 15px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 500; text-transform: capitalize; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; } .ds-btn-primary:hover, .ds-btn-primary:focus-visible { background: var(--eb-brand-solid, #004225); outline: 0; }"
+      "css": ".ds-btn-primary { background: var(--eb-brand-solid, #004225); color: #ffffff; border: 1px solid var(--bs-primary, #004225); border-radius: 0; padding: 10px 15px; font-family: 'Archivo', sans-serif; font-size: 14px; font-weight: 500; text-transform: capitalize; cursor: pointer; transition: background 0.2s ease, border-color 0.2s ease; } .ds-btn-primary:hover, .ds-btn-primary:focus-visible { background: var(--eb-brand-solid, #004225); outline: 0; }"
     },
     {
       "name": "Outline Primary Button",
@@ -191,7 +191,7 @@
       "refersTo": "button-outline-primary",
       "description": "Secondary CTA. Transparent at rest, fills with British Racing Green + white text on hover. Used where solid would be too loud.",
       "html": "<button class=\"ds-btn-outline-primary\">Learn More</button>",
-      "css": ".ds-btn-outline-primary { background: transparent; color: var(--eb-text-strong, #002E19); border: 1px solid var(--bs-primary, #004225); border-radius: 0; padding: 10px 15px; font-family: 'Raleway', sans-serif; font-size: 14px; font-weight: 500; text-transform: capitalize; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; } .ds-btn-outline-primary:hover, .ds-btn-outline-primary:focus-visible { background: var(--eb-brand-solid, #004225); color: #ffffff; outline: 0; }"
+      "css": ".ds-btn-outline-primary { background: transparent; color: var(--eb-text-strong, #002E19); border: 1px solid var(--bs-primary, #004225); border-radius: 0; padding: 10px 15px; font-family: 'Archivo', sans-serif; font-size: 14px; font-weight: 500; text-transform: capitalize; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; } .ds-btn-outline-primary:hover, .ds-btn-outline-primary:focus-visible { background: var(--eb-brand-solid, #004225); color: #ffffff; outline: 0; }"
     },
     {
       "name": "Tag Pill",
@@ -199,7 +199,7 @@
       "refersTo": "tag-pill",
       "description": "Ghost-style metadata pill. Uses --eb-tag-* tokens which are theme-aware (translucent verde with verde-darker text in light, translucent lighter-green with bright-green text in dark). Same tokens drive the sidebar tag widget AND footer social icons.",
       "html": "<a class=\"ds-tag\" href=\"#\">django</a>",
-      "css": ".ds-tag { display: inline-block; background: var(--eb-tag-bg, rgba(0, 66, 37, 0.10)); color: var(--eb-tag-fg, #002E19); border: 1px solid var(--eb-tag-border, rgba(0, 66, 37, 0.30)); border-radius: 0; padding: 0.5rem 0.85rem; font-family: 'Raleway', sans-serif; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: background-color 0.15s ease, opacity 0.15s ease; } .ds-tag:hover, .ds-tag:focus-visible { background: rgba(var(--bs-primary-rgb, 0, 66, 37), 0.20); color: var(--eb-tag-fg, #002E19); outline: 0; }"
+      "css": ".ds-tag { display: inline-block; background: var(--eb-tag-bg, rgba(0, 66, 37, 0.10)); color: var(--eb-tag-fg, #002E19); border: 1px solid var(--eb-tag-border, rgba(0, 66, 37, 0.30)); border-radius: 0; padding: 0.5rem 0.85rem; font-family: 'Archivo', sans-serif; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: background-color 0.15s ease, opacity 0.15s ease; } .ds-tag:hover, .ds-tag:focus-visible { background: rgba(var(--bs-primary-rgb, 0, 66, 37), 0.20); color: var(--eb-tag-fg, #002E19); outline: 0; }"
     },
     {
       "name": "Form Control",
@@ -207,7 +207,7 @@
       "refersTo": "form-control",
       "description": "Square 50px-tall input. Body-bg background, cream-green border. Focus shifts border to verde with no glow. Theme-aware via --eb-* tokens.",
       "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Your name\" />",
-      "css": ".ds-input { width: 100%; height: 50px; background: var(--eb-body-bg, #F2EFE3); color: var(--eb-text-muted, #3D4A40); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; padding: 0 12px; font-family: 'Raleway', sans-serif; font-size: 15px; transition: border-color 0.2s ease; } .ds-input::placeholder { color: var(--eb-text-light, #8A9088); font-size: 13px; } .ds-input:focus, .ds-input:focus-visible { border-color: var(--bs-primary, #004225); outline: 0; box-shadow: none; }"
+      "css": ".ds-input { width: 100%; height: 50px; background: var(--eb-body-bg, #F2EFE3); color: var(--eb-text-muted, #3D4A40); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; padding: 0 12px; font-family: 'Archivo', sans-serif; font-size: 15px; transition: border-color 0.2s ease; } .ds-input::placeholder { color: var(--eb-text-light, #8A9088); font-size: 13px; } .ds-input:focus, .ds-input:focus-visible { border-color: var(--bs-primary, #004225); outline: 0; box-shadow: none; }"
     },
     {
       "name": "Card",
@@ -215,7 +215,7 @@
       "refersTo": "card",
       "description": "Square surface-shaded container with one-step tonal lift from body. Hover adds the system's only shadow (card-lift). Featured cards on the home slider stay flat at all states. Cover slot uses a literal placeholder gradient — real images would come from Hugo's render-image hook with a srcset.",
       "html": "<article class=\"ds-card\"><div class=\"ds-card-cover\"></div><div class=\"ds-card-body\"><a class=\"ds-category-label\" href=\"#\">Engineering</a><h3 class=\"ds-card-title\">When to Pick Django over FastAPI</h3><p class=\"ds-card-summary\">A short essay on choosing the right tool for the job.</p></div></article>",
-      "css": ".ds-card { background: var(--eb-surface, #E8E4D2); color: var(--eb-text-muted, #3D4A40); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; overflow: hidden; transition: transform 0.18s ease, box-shadow 0.18s ease; font-family: 'Raleway', sans-serif; } .ds-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); } .ds-card-cover { width: 100%; height: 160px; background: linear-gradient(135deg, var(--eb-border, #C9CDB5), var(--eb-surface-emphasis, #DCD7C0)); } .ds-card-body { padding: 1rem; } .ds-category-label { display: inline-block; color: var(--bs-accent, #856814); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; margin-bottom: 0.5rem; transition: color 0.15s ease; } .ds-category-label:hover { color: var(--bs-accent-darker, #5C440D); } .ds-card-title { color: var(--eb-text-strong, #002E19); font-size: 22px; font-weight: 700; line-height: 1.3; margin: 0 0 0.5rem 0; } .ds-card-summary { color: var(--eb-text-muted, #3D4A40); font-size: 15px; line-height: 1.7; margin: 0; }"
+      "css": ".ds-card { background: var(--eb-surface, #E8E4D2); color: var(--eb-text-muted, #3D4A40); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; overflow: hidden; transition: transform 0.18s ease, box-shadow 0.18s ease; font-family: 'Archivo', sans-serif; } .ds-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18); } .ds-card-cover { width: 100%; height: 160px; background: linear-gradient(135deg, var(--eb-border, #C9CDB5), var(--eb-surface-emphasis, #DCD7C0)); } .ds-card-body { padding: 1rem; } .ds-category-label { display: inline-block; color: var(--bs-accent, #856814); font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; margin-bottom: 0.5rem; transition: color 0.15s ease; } .ds-category-label:hover { color: var(--bs-accent-darker, #5C440D); } .ds-card-title { color: var(--eb-text-strong, #002E19); font-size: 22px; font-weight: 700; line-height: 1.3; margin: 0 0 0.5rem 0; } .ds-card-summary { color: var(--eb-text-muted, #3D4A40); font-size: 15px; line-height: 1.7; margin: 0; }"
     },
     {
       "name": "Editorial Category Label",
@@ -223,7 +223,7 @@
       "refersTo": "category-label",
       "description": "The signature. Uppercase + 600 + 0.08em letter-spacing renders 'ENGINEERING' as a magazine category badge rather than a link. Same pattern used by Vercel, Linear, Stripe, NYT, FT. The trick that lets bronze --bs-accent pass WCAG AA Normal on cream without losing brand presence.",
       "html": "<a class=\"ds-category-label-standalone\" href=\"#\">Engineering</a>",
-      "css": ".ds-category-label-standalone { color: var(--bs-accent, #856814); font-family: 'Raleway', sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.15s ease; } .ds-category-label-standalone:hover, .ds-category-label-standalone:focus-visible { color: var(--bs-accent-darker, #5C440D); outline: 0; }"
+      "css": ".ds-category-label-standalone { color: var(--bs-accent, #856814); font-family: 'Archivo', sans-serif; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: color 0.15s ease; } .ds-category-label-standalone:hover, .ds-category-label-standalone:focus-visible { color: var(--bs-accent-darker, #5C440D); outline: 0; }"
     },
     {
       "name": "Editorial Pagination",
@@ -231,7 +231,7 @@
       "refersTo": null,
       "description": "Numbered-text pagination with no boxes. Active page anchored with a 2px ocre underline + font-weight: 600 (the same ocre that marks categories — repeats the accent in two surfaces to unify 'current context'). Arrows muted to text-light. Same pattern as Substack, Stripe Blog, Vercel Blog, NYT. Reserves the underline space at rest to prevent layout shift on hover.",
       "html": "<nav class=\"ds-pagination\" aria-label=\"Pagination\"><a class=\"ds-page-link ds-page-arrow\" href=\"#\">&laquo;</a><a class=\"ds-page-link\" href=\"#\">1</a><a class=\"ds-page-link ds-page-active\" href=\"#\">2</a><a class=\"ds-page-link\" href=\"#\">3</a><a class=\"ds-page-link ds-page-arrow\" href=\"#\">&raquo;</a></nav>",
-      "css": ".ds-pagination { display: flex; gap: 1rem; align-items: center; font-family: 'Raleway', sans-serif; } .ds-page-link { color: var(--eb-text-strong, #002E19); text-decoration: none; font-size: 15px; font-weight: 400; padding: 0.25rem 0.5rem; border-bottom: 2px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; } .ds-page-link:hover, .ds-page-link:focus-visible { color: var(--bs-accent-darker, #5C440D); outline: 0; } .ds-page-active { border-bottom-color: var(--bs-accent, #856814); font-weight: 600; } .ds-page-arrow { color: var(--eb-text-light, #8A9088); font-size: 13px; }"
+      "css": ".ds-pagination { display: flex; gap: 1rem; align-items: center; font-family: 'Archivo', sans-serif; } .ds-page-link { color: var(--eb-text-strong, #002E19); text-decoration: none; font-size: 15px; font-weight: 400; padding: 0.25rem 0.5rem; border-bottom: 2px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; } .ds-page-link:hover, .ds-page-link:focus-visible { color: var(--bs-accent-darker, #5C440D); outline: 0; } .ds-page-active { border-bottom-color: var(--bs-accent, #856814); font-weight: 600; } .ds-page-arrow { color: var(--eb-text-light, #8A9088); font-size: 13px; }"
     },
     {
       "name": "Code Block",
@@ -239,7 +239,7 @@
       "refersTo": null,
       "description": "Block and inline code surfaces. Both use --eb-surface (one tonal step above body) with the border + square corners common to every native surface. Class names mimic Chroma's class-based output (k=keyword, s=string, c=comment, n=name) so the visual matches what the rendered site produces with the manni (light) / dracula (dark) Chroma styles.",
       "html": "<pre class=\"ds-code-block\"><code><span class=\"ds-k\">def</span> <span class=\"ds-nf\">post_url</span>(slug: <span class=\"ds-nb\">str</span>) -&gt; <span class=\"ds-nb\">str</span>:\n    <span class=\"ds-k\">return</span> <span class=\"ds-s\">f\"/blog/{slug}/\"</span>  <span class=\"ds-c\"># resolves against Hugo baseURL</span></code></pre>\n<p class=\"ds-prose\">Inline code looks like <code class=\"ds-code-inline\">--bs-primary</code> — same surface, no padding bump.</p>",
-      "css": ".ds-code-block { display: block; background: var(--eb-surface, #E8E4D2); color: var(--eb-text-strong, #002E19); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; padding: 1rem; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.5; overflow-x: auto; white-space: pre; margin: 0 0 1rem 0; } .ds-code-block code { background: transparent; padding: 0; font-family: inherit; font-size: inherit; color: inherit; } .ds-code-inline { background: var(--eb-surface, #E8E4D2); color: var(--eb-text-strong, #002E19); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; padding: 0.1em 0.35em; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; } .ds-prose { color: var(--eb-text-muted, #3D4A40); font-family: 'Raleway', sans-serif; font-size: 15px; line-height: 1.7; margin: 0; } .ds-k { color: var(--bs-accent, #856814); font-weight: 600; } .ds-s { color: var(--bs-primary, #004225); } .ds-c { color: var(--eb-text-light, #8A9088); font-style: italic; } .ds-nf { color: var(--bs-primary-darker, #002E19); font-weight: 600; } .ds-nb { color: var(--bs-accent-darker, #5C440D); }"
+      "css": ".ds-code-block { display: block; background: var(--eb-surface, #E8E4D2); color: var(--eb-text-strong, #002E19); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; padding: 1rem; font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; line-height: 1.5; overflow-x: auto; white-space: pre; margin: 0 0 1rem 0; } .ds-code-block code { background: transparent; padding: 0; font-family: inherit; font-size: inherit; color: inherit; } .ds-code-inline { background: var(--eb-surface, #E8E4D2); color: var(--eb-text-strong, #002E19); border: 1px solid var(--eb-border, #C9CDB5); border-radius: 0; padding: 0.1em 0.35em; font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; } .ds-prose { color: var(--eb-text-muted, #3D4A40); font-family: 'Archivo', sans-serif; font-size: 15px; line-height: 1.7; margin: 0; } .ds-k { color: var(--bs-accent, #856814); font-weight: 600; } .ds-s { color: var(--bs-primary, #004225); } .ds-c { color: var(--eb-text-light, #8A9088); font-style: italic; } .ds-nf { color: var(--bs-primary-darker, #002E19); font-weight: 600; } .ds-nb { color: var(--bs-accent-darker, #5C440D); }"
     }
   ],
   "narrative": {
@@ -259,8 +259,8 @@
       { "name": "The Tinted-Neutral Rule", "body": "No pure black (#000), no pure white (#fff) on body surfaces. The only acceptable use of #FFFFFF is text on --eb-brand-solid (.btn-primary, dropdown active), where solid-green-with-white-text is the AAA-passing CTA pattern. Everywhere else: warmth.", "section": "colors" },
       { "name": "The Asymmetric-Ramp Rule", "body": "A token is a role, not a hex constant. Both --bs-primary and --bs-accent resolve to different hexes per theme because the same hex can't carry equal weight on opposite substrates. The Brand-Solid-vs-Brand-Text split (--bs-primary varies, --eb-brand-solid is constant #004225) is the canonical example of this rule applied to a single color family.", "section": "colors" },
       { "name": "The Editorial Label Rule", "body": "Every a.text-accent (categories on cards, post headers, sidebar widget) is rendered as a label, not a link: text-transform: uppercase + font-weight: 600 + letter-spacing: 0.08em + font-size: 0.875rem. The brain reads ENGINEERING as a category badge before parsing the letters. This is the trick that lets bronze #856814 pass WCAG AA Normal on cream — typography carries the brand emphasis the muted hex can't.", "section": "typography" },
-      { "name": "The One-Family Rule", "body": "Raleway carries everything. Don't add a serif 'for editorial feel'. Don't add a mono 'for code in copy'. The discipline of one family is the editorial choice.", "section": "typography" },
-      { "name": "The 700-on-Headings Rule", "body": "Every <h1>-<h6> is Raleway 700. Hierarchy comes from size, not weight contrast. Don't introduce a 500 or 800 headline weight.", "section": "typography" },
+      { "name": "The One-Text-Family Rule", "body": "Archivo carries all text — prose, headings, UI. Don't add a serif 'for editorial feel'. The discipline of one text family is the editorial choice. The single sanctioned exception is JetBrains Mono, scoped to code (blocks + inline) via --bs-font-monospace, so code reads as a deliberate engineering voice rather than a second text family.", "section": "typography" },
+      { "name": "The Display-800 / Headings-700 Rule", "body": "h1 (display) is Archivo 800; h2-h6 are Archivo 700; body is 400; editorial labels are 600. Hierarchy comes mostly from size on a modular rem scale, with the 800 display weight as the one deliberate weight jump at the top. Don't introduce other headline weights.", "section": "typography" },
       { "name": "The Flat-By-Default Rule", "body": "Surfaces are flat at rest. Shadows are a response to state — and only one state (hover) on one surface (.card:not(.featured-post)). Don't add ambient shadows to convey 'this is a card'. The tonal step does that.", "section": "elevation" },
       { "name": "The Tonal-Step Rule", "body": "When you need depth, change the tone, not the shadow. Cards step up one cream level. Hover steps up one more. Picking the right step is the answer; 'give it a shadow' is the wrong answer.", "section": "elevation" }
     ],
@@ -271,7 +271,7 @@
       "Do keep border-radius: 0 on every native surface — buttons, cards, form controls, tag pills, code blocks, inline code, blockquotes",
       "Do use Conservatory Cream (#F2EFE3) as the body background in light, Forest Floor (#0A1814) — green-tinted, not black — in dark",
       "Do use tonal steps for depth (body → surface → surface-emphasis). Shadows are a state response, not an ambient layer",
-      "Do keep Raleway as the sole font family — one typeface across the whole site",
+      "Do keep Archivo as the sole text family — one typeface for prose, headings, and UI. JetBrains Mono is the only exception, scoped to code (blocks + inline)",
       "Do verify any new color pair against WCAG AA Normal (4.5:1) on the actual rendered substrate — both themes — before adding it to _root.scss",
       "Do document the why of every visual decision inline (the codebase's posture; see docs/THEME.md history for the model)"
     ],
@@ -282,7 +282,7 @@
       "Don't use pure black (#000) — use Verde Profundo (#002E19) for the darkest light-mode heading and Forest Floor (#0A1814) for the darkest dark-mode bg",
       "Don't add ambient shadows to cards, modals, or panels — the single hover lift is the whole shadow vocabulary",
       "Don't introduce additional border radii (4px, 8px, 'pill' buttons) — the all-square rule is the spec",
-      "Don't add a second font family — no serif 'for editorial', no mono 'for code in prose'",
+      "Don't add a second text family — no serif 'for editorial', no mono in prose. JetBrains Mono is the sanctioned exception, scoped to code blocks + inline code only; don't extend it to running prose",
       "Don't use --bs-accent-lighter as body text on cream in light mode. The token's LIGHT value is #C59922 (vibrant nugget) — only 2.36:1 over cream, fails WCAG. In LIGHT it's reserved for decorative-only use (bg fills, borders, chips). In DARK the same token resolves to #E5C572 and plays a legitimate text role (accent text on solid green panels, e.g. footer CTAs). Mind the asymmetric semantics: the token exists in both themes but the use-case differs. If you need vibrant-ocre as text on cream, you can't — darken to --bs-accent (#856814 bronze) and rely on the Editorial Label treatment for emphasis",
       "Don't render category links as plain <a> text without the Editorial Label treatment — the label is the signature",
       "Don't replicate the AirSpace / Filterworld dev blog template: gradient hero, equal-height card grid, gray sans on white, decorative emoji",

@@ -23,3 +23,17 @@ X-Frame-Options = "DENY"
 X-XSS-Protection = "1; mode=block"
 Referrer-Policy = "same-origin"
 Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Self-hosted webfonts (static/fonts/*.woff2 -> /fonts/*). Without this they fall to
+# Netlify's default and revalidate on every visit, wasting the main perf win of
+# self-hosting. `immutable` + a 1-year max-age means the browser never revalidates
+# within the year. Netlify MERGES matching header rules, so the /* security headers
+# above still apply to /fonts/* — no need to repeat them here.
+# CAVEAT: filenames aren't content-hashed. If you ever change a glyph, RENAME the file
+# (e.g. archivo.v2.woff2) to bust the cache — otherwise returning visitors keep the
+# stale font for up to a year. See docs/THEME.md §History "Self-host fonts".
+[[headers]]
+for = "/fonts/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"

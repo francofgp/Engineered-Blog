@@ -454,6 +454,63 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-29 — Self-host fonts (variable woff2) + post-typeset audit fixes
+
+An `audit-then-fix` pass over the "Typeset: Archivo" change surfaced one 🔴 regression plus perf/CLS findings. Fixes:
+
+**Self-hosted fonts — supersedes the Google Fonts `<link>` from the entry below.** Both families now ship from `/fonts/` as **variable** woff2 (latin subset): `archivo.woff2` (~35KB, axis 100–900) and `jetbrainsmono.woff2` (~31KB, axis 100–800). One `@font-face` per family with a `font-weight` RANGE (`assets/scss/_fonts.scss`) → a single request per family covers every weight we use. This removes the render-blocking third-party stylesheet + the cross-origin handshake (🟡 #3), lets `head.html` **preload** the Archivo woff2 to shrink the swap window (🟡 #2 / CLS), and drops the Google dependency (privacy). `font-display: swap` keeps text visible during load. Naturally moots the earlier "drop JetBrains 500" idea — a variable file has no per-weight downloads.
+  - **Why variable + range, not 7 static files**: Google's css2 serves Archivo/JetBrains as variable fonts — requesting discrete weights returned the SAME file 5×/2× (byte-identical). One variable file + a weight range is ~66KB total vs ~237KB of redundant static copies.
+  - **Why preload only Archivo**: it paints every page above the fold; JetBrains Mono is code-only (usually below the fold), so it loads on demand via `@font-face` + swap (no preload).
+  - **Latin subset is enough for ES/EN**: Latin-1 Supplement (U+00A0–00FF) carries á é í ó ú ñ ¿ ¡.
+
+**🔴 Byline wrap fixed.** `.post-meta` had no `font-size`, so it inherited body — and after body went 15px→16px + the wider Archivo, "By {author} · {date}" wrapped to a second line in the narrow grid cards. Set `.post-meta { font-size: 0.875rem }` (14px): restores the single line and puts metadata one step below body, where the scale always intended it.
+
+**🔵 Heading-scale collision.** `h4` 1.375rem → 1.25rem (20px), so it stays below `h3`'s mobile `clamp()` floor (~22px) instead of sitting at the same size on small screens.
+
+**🔵 Antialiasing kept.** `-webkit-font-smoothing: antialiased` (pre-existing) left as-is: it's conventional, and removing it thickens/blurs text on some displays. Archivo 400's mild lightness is acceptable.
+
+**Closure (audit Fase 2).** Remaining audit items resolved:
+- **Glyph coverage verified.** Google's `latin` subset declares the General Punctuation glyphs we use — em-dash `—` (U+2014), en-dash `–` (U+2013), curly quotes, ellipsis (U+2026) — so they render in Archivo, not a fallback (checked in a post). No fallback-font flash on punctuation.
+- **Cache header (🟡).** `netlify.toml` now sets `Cache-Control: public, max-age=31536000, immutable` for `/fonts/*`; the self-host perf win was being lost to Netlify's default revalidation. Filenames aren't content-hashed, so changing a glyph means renaming the file to bust the cache.
+- **`design.json` synced.** `.impeccable/design.json` (the source of truth the `/impeccable` skills read) still said "Raleway 400 at 15px" and hardcoded Raleway/Consolas in component CSS. Updated to Archivo + JetBrains Mono, body 16px, and renamed the two type rules (One-Text-Family, Display-800/Headings-700).
+- **Preload made root-relative.** `head.html` preload href `absURL` → `/fonts/archivo.woff2`, so it byte-matches the `@font-face` fetch regardless of the `baseURL` (www) vs `HUGO_BASEURL` (non-www) split. Resolving the www/non-www mismatch site-wide is a separate SEO decision, intentionally deferred.
+
+**Files touched**
+
+- `assets/scss/_fonts.scss` — NEW: two variable `@font-face` (Archivo, JetBrains Mono)
+- `assets/scss/style.scss` — `@import 'fonts';` as the first import
+- `layouts/partials/head.html` — removed the Google `<link>` + preconnects; added `preload` of `/fonts/archivo.woff2` (root-relative, not absURL — matches the @font-face fetch)
+- `static/fonts/archivo.woff2`, `static/fonts/jetbrainsmono.woff2` — NEW (variable, latin subset)
+- `assets/scss/templates/_main.scss` — `.post-meta { font-size: 0.875rem }`
+- `assets/scss/_typography.scss` — `h4` → 1.25rem
+- `DESIGN.md` — §3: self-hosted note, h4 20px, new Meta bullet
+- `netlify.toml` — `Cache-Control: public, max-age=31536000, immutable` for `/fonts/*`
+- `.impeccable/design.json` — typography synced (Archivo + JetBrains Mono, body 16px, 2 rules renamed, dos/donts)
+- `docs/THEME.md` — this entry
+
+### 2026-05-29 — Typeset: Archivo replaces inherited Raleway + rem modular scale
+
+`/impeccable typeset` flagged that the type was the one part of the system still wearing the category uniform. The brand (verde + ocre + cream + all-square) was a sharp, documented set of choices — but the *font* was **Raleway, the Liva theme default**, never actually chosen. `DESIGN.md` had rationalised it post-hoc as deliberate ("humanist geometric sans … a deliberate pick"); it wasn't. This pass makes the type an actual decision.
+
+**Font: Raleway → Archivo (Omnibus-Type).** A squared humanist grotesque. Picked against the brand-voice words (*opinionated · crafted · useful*; physical object: "a 1960s engineering field manual") and *against* the reflex defaults — Inter, IBM Plex, Space Grotesk were rejected (training-data monoculture), and the editorial-serif lane (Fraunces/Playfair display-italic) rejected as the second-order reflex. Archivo's slightly squared letterforms rhyme with the `border-radius: 0` signature, and its wide weight range carries hierarchy without a second text family.
+
+**Code: system monospace → JetBrains Mono.** The blog is code-heavy; the code font is now a deliberate engineering voice, not "whatever the OS ships". Wired by overriding Bootstrap's `--bs-font-monospace` token in `_root.scss` — one definition, since Bootstrap applies it to `code/pre/kbd/samp` and `pre.chroma` + inline `<code>` inherit it. This is the documented exception to the old One-Family Rule (now "One-Text-Family"): mono is scoped to code only.
+
+**Scale: flat px → modular rem with fluid `clamp()`.** The old scale was px-based, body 15px (below the 16px readability floor), and muddy at the bottom (body 15 → h6 16 ≈ 1.07×). New scale: 1rem (16px) base, ~1.25 ratio, `rem` units (honours the reader's browser font-size — WCAG 1.4.4). The top three levels (h1/h2/h3) are fluid via `clamp(min, calc(min + vw), max)` so the hero scales with the viewport. **h1 is Archivo 800** (the display weight that carries the hero); h2–h6 stay 700.
+
+**Loading: SCSS `@import` → `<link>` + `preconnect`.** The fonts were loaded by an `@import url(…Raleway)` at the top of `_typography.scss`. `@import` is render-blocking *and* serial — the browser must download + parse the stylesheet before it even discovers the font URL. Moved to a `<link rel="stylesheet">` in `head.html` with `preconnect` to the font hosts and `display=swap` (no FOIT).
+
+⚠️ **LibSass gotcha** (recorded so it isn't re-hit): `clamp(2.25rem, 1.7rem + 2.75vw, 3rem)` fails Hugo's `toCSS` (LibSass) with *"Incompatible units: 'vw' and 'rem'"* — LibSass tries to evaluate the `+` at compile time. Wrapping the fluid term in `calc()` — `clamp(2.25rem, calc(1.7rem + 2.75vw), 3rem)` — defers it to the browser. Valid CSS, compiles clean.
+
+**Files touched**
+
+- `assets/scss/_variables.scss` — `$primary-font: 'Raleway'` → `'Archivo'` + rationale comment
+- `assets/scss/_root.scss` — new `--bs-font-monospace` (JetBrains Mono) in the `:root` Fonts section
+- `assets/scss/_typography.scss` — removed the render-blocking `@import`; body 15px → 1rem; flat px scale → modular rem scale with fluid `clamp()` on h1/h2/h3; h1 weight 800
+- `layouts/partials/head.html` — added `preconnect` + Google Fonts `<link>` for Archivo + JetBrains Mono (replacing the @import)
+- `DESIGN.md` — §3 Typography rewritten (Archivo + JetBrains Mono, new scale, weights, One-Text-Family + Display-800 rules); frontmatter `typography.*` updated; §5 component font references
+- `docs/THEME.md` — this entry
+
 ### 2026-05-29 — Wordmark ocre flourish (header brand mark)
 
 Follow-up to "Ocre above the fold": continued the `colorize` pass into the header. The wordmark is now flanked by two small ocre squares — `▪ Giuliano Pertile ▪` — the one ocre touch in the header chrome.

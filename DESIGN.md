@@ -35,31 +35,36 @@ colors:
   pure-white: "#FFFFFF"
 typography:
   display:
-    fontFamily: "Raleway, sans-serif"
-    fontSize: "45px"
-    fontWeight: 700
+    fontFamily: "Archivo, sans-serif"
+    fontSize: "48px"
+    fontWeight: 800
     lineHeight: 1.3
   headline:
-    fontFamily: "Raleway, sans-serif"
+    fontFamily: "Archivo, sans-serif"
     fontSize: "36px"
     fontWeight: 700
     lineHeight: 1.3
   title:
-    fontFamily: "Raleway, sans-serif"
+    fontFamily: "Archivo, sans-serif"
     fontSize: "28px"
     fontWeight: 700
     lineHeight: 1.3
   body:
-    fontFamily: "Raleway, sans-serif"
-    fontSize: "15px"
+    fontFamily: "Archivo, sans-serif"
+    fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.7
   label:
-    fontFamily: "Raleway, sans-serif"
+    fontFamily: "Archivo, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: "0.08em"
+  mono:
+    fontFamily: "JetBrains Mono, monospace"
+    fontSize: "0.875em"
+    fontWeight: 400
+    lineHeight: 1.65
 rounded:
   flat: "0px"
 spacing:
@@ -207,28 +212,33 @@ The whole system sits on warm cream or green-tinted dark. White and black are de
 
 ## 3. Typography
 
-**Display Font:** Raleway (Google Fonts, weights 300/400/500/600/700).
-**Body Font:** Raleway. Same family, all weights.
-**Label/Mono Font:** Raleway for labels (the editorial categories below). System monospace for code blocks; syntax-highlighted with Chroma (`manni` light, `dracula` dark).
+**Display / Body / Label Font:** Archivo (**self-hosted** variable woff2, weight axis 400–800; `assets/scss/_fonts.scss`). One grotesque carries headings, body, and the editorial labels.
+**Code Font:** JetBrains Mono (**self-hosted** variable woff2) for code blocks (`pre.chroma`) + inline `<code>`; syntax-highlighted with Chroma (`manni` light, `dracula` dark). Wired via Bootstrap's `--bs-font-monospace` token in `_root.scss`.
 
-**Character:** Raleway is a humanist geometric sans — a calm, modern, mostly-rounded letterform that doesn't pretend to be a serif and doesn't read as corporate-Calibri-on-spreadsheet either. It carries enough personality to feel like a deliberate pick, not enough to fight the verde for attention. One family across the whole site keeps the system disciplined: identity comes from color and rhythm, not from font collisions.
+Fonts are **self-hosted** (one variable woff2 per family, latin subset, ~66KB total, served from `/fonts/`), not loaded from Google — no render-blocking third-party stylesheet, Archivo is preloaded in `head.html`, and there's no Google dependency. See `docs/THEME.md` History → "Self-host fonts".
+
+**Character:** Archivo is a squared humanist grotesque (Omnibus-Type) — a confident, slightly mechanical letterform whose near-square geometry rhymes with the all-square (`border-radius: 0`) system. It replaced the inherited Raleway theme default (Raleway was never chosen — it shipped with Liva). Archivo earns its place against the brand-voice words (*opinionated · crafted · useful*) and *against* the reflex defaults (Inter, IBM Plex, Space Grotesk — rejected as training-data monoculture; the editorial-serif lane rejected as the second-order reflex). Its wide weight range (400 body → 800 display) carries the hierarchy so the system still needs only one *text* family; the verde + ocre + rhythm do the rest. See `docs/THEME.md` History → 2026-05-29 "Typeset: Archivo".
 
 ### Hierarchy
 
-- **Display** (Raleway 700, 45px, 1.3 line-height): `<h1>` on post pages and the home hero title. The biggest type on the screen. Renders in Verde Profundo (`#002E19`) on cream; in cream-white (`#E8EDE3`) on Forest Floor.
-- **Headline** (Raleway 700, 36px, 1.3): `<h2>` — major in-post sections. The most-used heading by volume.
-- **Title** (Raleway 700, 28px, 1.3): `<h3>` — sub-sections.
-- **Body** (Raleway 400, 15px, 1.7 line-height): paragraph text. Body line length is intentionally **not** capped at 65–75ch. Posts use Bootstrap's `.col-lg-8` grid, which at xl/xxl viewports produces ~115–135ch lines — past the typographic recommendation. Known deviation; reconsider with `max-width: 70ch` on `p` in `_typography.scss` if reader feedback surfaces complaints.
-- **Label** (Raleway 600, 0.875rem, 0.08em letter-spacing, uppercase): the editorial category treatment — see *The Editorial Label Rule* below.
-- **Sub-headings** (h4 22px, h5 18px, h6 16px, Raleway 700 / 1.3): same scale pattern as Display/Headline/Title at smaller sizes. Not formal roles in the Stitch frontmatter; documented here so an agent designing a new h4 doesn't reinvent the size.
+The scale is **modular on a 1rem (16px) base, ratio ~1.25**, expressed in `rem` (honours the reader's browser font-size — WCAG 1.4.4). The top three levels are **fluid** via `clamp(min, calc(min + vw), max)` so the hero scales with the viewport; body stays fixed.
+
+- **Display** (Archivo **800**, `clamp(2.25rem, calc(1.7rem + 2.75vw), 3rem)` → 36–48px, 1.3, `-0.015em` tracking): `<h1>` on post pages and the home hero title. The biggest type on the screen, and the **only** 800-weight in the system. Renders in Verde Profundo (`#002E19`) on cream; cream-white (`#E8EDE3`) on Forest Floor.
+- **Headline** (Archivo 700, `clamp(1.75rem, calc(1.45rem + 1.5vw), 2.25rem)` → 28–36px, 1.3, `-0.01em`): `<h2>` — major in-post sections. The most-used heading by volume.
+- **Title** (Archivo 700, `clamp(1.4rem, calc(1.25rem + 0.75vw), 1.75rem)` → ~22–28px, 1.3): `<h3>` — sub-sections.
+- **Body** (Archivo 400, 1rem/16px, 1.7 line-height): paragraph text — bumped from the old 15px (below the 16px readability floor). Body line length is intentionally **not** capped at 65–75ch. Posts use Bootstrap's `.col-lg-8` grid, which at xl/xxl viewports produces ~115–135ch lines — past the typographic recommendation. Known deviation; reconsider with `max-width: 70ch` on `p` in `_typography.scss` if reader feedback surfaces complaints.
+- **Label** (Archivo 600, 0.875rem, 0.08em letter-spacing, uppercase): the editorial category treatment — see *The Editorial Label Rule* below.
+- **Meta** (Archivo 500, 0.875rem/14px, muted): the byline/date row (`.post-meta`) — one step below body so it reads as secondary metadata and fits on a single line in the narrow grid cards (it had inherited body size, which wrapped after the Archivo + 16px change).
+- **Sub-headings** (h4 1.25rem/20px, h5 1.125rem/18px, h6 1rem/16px, Archivo 700 / 1.3): h6 equals body size — distinguished by weight (700), not size. Not formal roles in the Stitch frontmatter; documented here so an agent designing a new h4 doesn't reinvent the size.
+- **Code** (JetBrains Mono 400): code blocks (`pre.chroma`) and inline `<code>` — see §5 Code Blocks.
 
 ### Named Rules
 
 **The Editorial Label Rule.** Every `a.text-accent` (categories on cards, post headers, sidebar widget) is rendered as a *label*, not a link. Specifically: `text-transform: uppercase` + `font-weight: 600` + `letter-spacing: 0.08em` + `font-size: 0.875rem`. The brain reads `ENGINEERING` as a category badge before parsing the letters. This is the trick that lets the bronze ocre `#856814` pass WCAG AA Normal on cream — typography carries the brand emphasis that the muted hex can't. Same pattern used by Vercel, Linear, Stripe, NYT, FT blogs. Scoped to `<a>` only: plain `.text-accent` on `<span>` or `<p>` (dates, decorative one-liners) stays as bronze body text without the label treatment.
 
-**The One-Family Rule.** Raleway carries everything. Don't add a serif "for editorial feel". Don't add a mono "for code in copy" (use `<code>` with the existing Chroma stylesheets). The discipline of one family is the editorial choice; diversifying weakens it.
+**The One-Text-Family Rule.** Archivo carries all *prose* — headings, body, labels. Don't add a serif "for editorial feel"; don't add a second sans. The single text family is the editorial choice; diversifying weakens it. **The one deliberate exception is JetBrains Mono for code** (`pre.chroma`, inline `<code>`) — a register-justified pick for a code-heavy blog, wired via `--bs-font-monospace`. Mono is scoped to code only; never use it for prose or labels.
 
-**The 700-on-Headings Rule.** Every `<h1>`-`<h6>` is Raleway 700. The hierarchy comes from size, not weight contrast. Headlines are bold; body is regular; labels are 600 (the editorial label is the *only* mid-weight in the system). Don't introduce a 500 or 800 headline weight.
+**The Display-800 / Headings-700 Rule.** `<h1>` (the display role) is Archivo **800** — the single 800-weight, reserved for the hero. `<h2>`–`<h6>` are 700. Body is 400; labels are 600 (the only mid-weight). Hierarchy comes from **size + the h1 weight jump**, not from per-level weight contrast. Don't introduce a 500 or 900 heading weight, and don't promote h2–h6 to 800.
 
 ## 4. Elevation
 
@@ -246,11 +256,11 @@ The whole system sits on warm cream or green-tinted dark. White and black are de
 
 ## 5. Components
 
-Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uniformly committed to the verde + ocre + cream palette. The whole component shelf is short — buttons, cards, form controls, tag pills, the category label — and that's it. There's no chip variant family, no modal system worth documenting, no toast pattern. The blog reads.
+Components are uniformly square (`border-radius: 0`), uniformly Archivo, and uniformly committed to the verde + ocre + cream palette. The whole component shelf is short — buttons, cards, form controls, tag pills, the category label — and that's it. There's no chip variant family, no modal system worth documenting, no toast pattern. The blog reads.
 
 ### Buttons
 
-- **Shape:** square (`border-radius: 0`). `1px solid` border. Padding `10px 15px`. Font Raleway 14px / 500 / `text-transform: capitalize`. Transition `0.2s ease`.
+- **Shape:** square (`border-radius: 0`). `1px solid` border. Padding `10px 15px`. Font Archivo 14px / 500 / `text-transform: capitalize`. Transition `0.2s ease`.
 - **Primary** (`.btn-primary`): bg `--eb-brand-solid` (`#004225` constant in both themes), text pure white, border `--bs-primary` (theme-aware: `#004225` light, `#6FB089` dark). Used for CTAs — "Read More", Ko-fi support button, "Subscribe". The bg/text contract gives AAA contrast (~12:1) in both modes; the border is the *definition* cue (invisible in light because same hex as bg; subtly visible lighter-green in dark so the button doesn't melt into Forest Floor).
 - **Outline Primary** (`.btn-outline-primary`): transparent bg, text `--eb-text-strong` (verde profundo light, cream dark), border `--bs-primary`. On hover fills with `--eb-brand-solid` + white text — same contract as `.btn-primary`. Used as a secondary CTA where solid would be too loud.
 - **Hover / Focus:** no scale transforms, no shadow, no glow. The state change is the color fill (outline → primary on hover) or staying-the-same (primary stays primary; no hover-darken). Focus ring is the standard browser outline scoped via `--bs-primary`. No bouncy easing.
@@ -278,24 +288,24 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 
 ### Navigation
 
-- **Style:** plain Raleway, top horizontal bar with mobile collapse. Theme toggle lives OUTSIDE the `.navbar-collapse` so it's always visible on mobile (GitHub/Linear/Vercel pattern). Search icon (lupa) opens a fullscreen modal that focuses the input on open (`requestAnimationFrame`, not `setTimeout`); `Escape` closes.
+- **Style:** plain Archivo, top horizontal bar with mobile collapse. Theme toggle lives OUTSIDE the `.navbar-collapse` so it's always visible on mobile (GitHub/Linear/Vercel pattern). Search icon (lupa) opens a fullscreen modal that focuses the input on open (`requestAnimationFrame`, not `setTimeout`); `Escape` closes.
 - **Active/Hover:** body links use `--bs-primary`. Hover transitions to `--bs-primary` with `0.2s ease`.
-- **Wordmark:** the author name in Raleway 700, `--eb-text-strong` (verde profundo / cream), flanked by two small ocre squares — `▪ Giuliano Pertile ▪`. This is the **one ocre touch in the header chrome**, kept **decorative** (the squares, not the text) so it stays inside the Verde-and-Ocre rule (ocre = decorative mark; verde = action/chrome). The square shape echoes the all-square signature. Two-way guard: don't colour the wordmark *text* ocre (that promotes ocre to chrome/action), and don't strip the squares in an audit (they're role-compliant). See `docs/THEME.md` History → 2026-05-29 "Wordmark ocre flourish".
+- **Wordmark:** the author name in Archivo 700, `--eb-text-strong` (verde profundo / cream), flanked by two small ocre squares — `▪ Giuliano Pertile ▪`. This is the **one ocre touch in the header chrome**, kept **decorative** (the squares, not the text) so it stays inside the Verde-and-Ocre rule (ocre = decorative mark; verde = action/chrome). The square shape echoes the all-square signature. Two-way guard: don't colour the wordmark *text* ocre (that promotes ocre to chrome/action), and don't strip the squares in an audit (they're role-compliant). See `docs/THEME.md` History → 2026-05-29 "Wordmark ocre flourish".
 
 ### Pagination
 
-- **Editorial numbered-text** — *not* boxes. No bg, no border. Page numbers as plain Raleway; active page anchored with a `2px` `--bs-accent` underline + `font-weight: 600` (the same ocre that marks categories — repeating the accent in two surfaces unifies "current context"). Arrows (`«`, `‹`, `›`, `»`) muted to `--eb-text-light` and slightly smaller so the eye lands on the numbers. **Hover/focus reveals the reserved underline in `--bs-primary` (verde)** and lifts the arrows from muted to verde — a binary "underline appears" signal that reads in both themes, where the older colour-only shift (`--bs-primary` → `--bs-primary-darker`) was imperceptible on cream and went the wrong way on dark. No layout shift (`border-bottom: 2px solid transparent` reserves the underline space at rest, so both hover and `.active` only toggle its colour). Verde hover underline + ocre active underline keeps the Verde-and-Ocre role split (verde = action, ocre = current page). Same pattern as Substack, Stripe Blog, Vercel Blog, NYT.
+- **Editorial numbered-text** — *not* boxes. No bg, no border. Page numbers as plain Archivo; active page anchored with a `2px` `--bs-accent` underline + `font-weight: 600` (the same ocre that marks categories — repeating the accent in two surfaces unifies "current context"). Arrows (`«`, `‹`, `›`, `»`) muted to `--eb-text-light` and slightly smaller so the eye lands on the numbers. **Hover/focus reveals the reserved underline in `--bs-primary` (verde)** and lifts the arrows from muted to verde — a binary "underline appears" signal that reads in both themes, where the older colour-only shift (`--bs-primary` → `--bs-primary-darker`) was imperceptible on cream and went the wrong way on dark. No layout shift (`border-bottom: 2px solid transparent` reserves the underline space at rest, so both hover and `.active` only toggle its colour). Verde hover underline + ocre active underline keeps the Verde-and-Ocre role split (verde = action, ocre = current page). Same pattern as Substack, Stripe Blog, Vercel Blog, NYT.
 
 ### Categories — the signature
 
-- **Style:** `a.text-accent` rendered with the Editorial Label treatment — Raleway 600, 0.875rem, `text-transform: uppercase`, `letter-spacing: 0.08em`. Color is `--bs-accent` (bronze `#856814` light / vibrant `#C59922` dark). Hover transitions to `--bs-accent-darker` (`#5C440D` light / `#A8801C` dark) — AAA on respective bg.
+- **Style:** `a.text-accent` rendered with the Editorial Label treatment — Archivo 600, 0.875rem, `text-transform: uppercase`, `letter-spacing: 0.08em`. Color is `--bs-accent` (bronze `#856814` light / vibrant `#C59922` dark). Hover transitions to `--bs-accent-darker` (`#5C440D` light / `#A8801C` dark) — AAA on respective bg.
 - **Placement:** leads the card on listings, the post header on `single.html`, **and the featured-post hero on the home**. The home hero reorders to category → title → meta → summary so the kicker sits **above the fold**; the hero title is flush-left with it (the theme's `-10%` break-out overhang was removed). See `docs/THEME.md` History → 2026-05-29 "Ocre above the fold".
 - **Why this is the signature component:** it's the one place where typography and color work together to produce the "magazine label" feel that defines the system's mood. It's also the workaround that makes the asymmetric accent ramp pass WCAG without losing brand warmth in light mode (see Section 2, *The Asymmetric-Ramp Rule*).
 
 ### Code Blocks
 
-- **Style:** `background --eb-surface` (one tonal step up from body), `border-radius: 0`, monospace, syntax-highlighted via Chroma class-based output. Two stylesheets shipped: `chroma-light.css` (manni style) and `chroma-dark.css` (dracula). The dark rules are wrapped under `[data-bs-theme="dark"]` and concatenated at build time into a single fingerprinted stylesheet with SRI integrity.
-- **Inline `<code>`:** same `--eb-surface` background, `border-radius: 0`, monospace. Used in body copy for variable names and short identifiers.
+- **Style:** `background --eb-surface` (one tonal step up from body), `border-radius: 0`, **JetBrains Mono** (via Bootstrap's `--bs-font-monospace`, overridden in `_root.scss`), syntax-highlighted via Chroma class-based output. Two stylesheets shipped: `chroma-light.css` (manni style) and `chroma-dark.css` (dracula). The dark rules are wrapped under `[data-bs-theme="dark"]` and concatenated at build time into a single fingerprinted stylesheet with SRI integrity.
+- **Inline `<code>`:** same `--eb-surface` background, `border-radius: 0`, JetBrains Mono. Used in body copy for variable names and short identifiers.
 
 ### Splide Slider (home featured post)
 
@@ -312,7 +322,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 - **Do** keep `border-radius: 0` on every native surface. Buttons, cards, form controls, tag pills, code blocks, inline code, blockquotes.
 - **Do** use Conservatory Cream (`#F2EFE3`) as the body background in light. Use Forest Floor (`#0A1814`) — green-tinted, not black — in dark.
 - **Do** use tonal steps for depth (body → surface → surface-emphasis). Shadows are a state response, not an ambient layer.
-- **Do** keep Raleway as the sole font family. One typeface across the whole site.
+- **Do** keep Archivo as the sole *text* family (headings, body, labels). JetBrains Mono is the one deliberate exception, scoped to code only.
 - **Do** verify any new color pair against WCAG AA Normal (4.5:1) on the actual rendered substrate — both themes — before adding it to `_root.scss`. Update `docs/THEME.md` with the ratio.
 - **Do** document the *why* of every visual decision inline (the codebase's posture; see `docs/THEME.md` history for the model).
 
@@ -324,7 +334,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 - **Don't** use pure black (`#000`). Use Verde Profundo (`#002E19`) for the darkest light-mode heading and Forest Floor (`#0A1814`) for the darkest dark-mode bg.
 - **Don't** add ambient shadows to cards, modals, or panels. The single hover lift is the whole shadow vocabulary.
 - **Don't** introduce additional border radii (4px, 8px, "pill" buttons). The all-square rule is the spec.
-- **Don't** add a second font family. No serif "for editorial". No mono "for code in prose". One family.
+- **Don't** add a second *text* family. No serif "for editorial", no second sans. (JetBrains Mono for code is the one sanctioned non-text family — don't extend it to prose or labels.)
 - **Don't** use `--bs-accent-lighter` as body text on cream in light mode. The token's *light* value is `#C59922` (vibrant nugget) — only 2.36:1 over cream, fails WCAG. In LIGHT it's reserved for **decorative-only** use (bg fills, borders, chips). In DARK the same token resolves to `#E5C572` and plays a **legitimate text role** (accent text on solid green panels, e.g. footer CTAs). Mind the asymmetric semantics: the *token* exists in both themes, but the *use-case* differs. If you need vibrant-ocre as text on cream, you can't — darken to `--bs-accent` (`#856814` bronze) and rely on the Editorial Label treatment for emphasis.
 - **Don't** render category links as plain `<a>` text without the Editorial Label treatment. The label *is* the signature; plain ocre links lose the brand mark.
 - **Don't** replicate the **AirSpace / Filterworld dev blog** template: gradient hero, equal-height card grid with icon-headline-summary, gray sans on white, decorative emoji. Anti-reference #1 from `PRODUCT.md`.

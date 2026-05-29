@@ -161,6 +161,12 @@
 }
 
 .post-meta {
+  // Metadata sits one step BELOW body (0.875rem/14px). The scale (DESIGN.md §3) always
+  // intended meta < body, but .post-meta had no font-size and inherited body — so when
+  // body went 15px → 16px AND the family changed to the wider Archivo, the
+  // "By {author} · {date}" byline wrapped onto a second line in the narrow grid cards.
+  // 14px restores the single line and matches the label/colophon metadata size.
+  font-size: 0.875rem;
   span {
     color: var(--eb-text-muted);
     font-weight: 500;
