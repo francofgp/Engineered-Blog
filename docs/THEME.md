@@ -454,6 +454,34 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-29 — Ocre above the fold (hero kicker, flush-left hero, ocre byline separator)
+
+`/impeccable colorize` analysis: the nugget ocre accent — one of the two brand voices — was absent from the home page's **first viewport**. The featured-post hero rendered verde + neutral only; the first ocre element (the category label) lived in the post grid, three sections down. *"Rare by design (~10%)"* had quietly become *"absent above the fold"*, which is a different thing. Fix: surface ocre above the fold using the system's existing **signature component**, with **no new exception** to the Verde-and-Ocre role split (the header/chrome stays verde — promoting ocre to action/chrome was explicitly rejected).
+
+**Changes**
+
+1. **Hero category kicker.** The featured-post slider (`layouts/index.html`) now leads with the ocre editorial category label (`a.text-accent`), reordered to **category → title → meta → summary** — matching the grid card (`post.html`) and single-post header (`single.html`). Puts the signature ocre mark above the fold; no new tokens; role-compliant (categories = metadata = ocre). Title got `mt-2` for breathing room under the kicker.
+
+2. **Flush-left hero.** Removed `.featured-post .card-title { margin-left: -10% }` from `_main.scss`. The theme's left "break-out" overhang read as a *misalignment* once the kicker sat directly above the title; flush-left also matches the grid cards + single-post. Mobile font-size (30px) retained; rationale comment added inline.
+
+3. **Byline separator: verde → ocre.** The `.post-meta` separator (`<span class="border-bottom …">`) switched from `border-primary` (verde) to `border-accent` (ocre) across all five instances (hero, recent posts, grid card, single ×2). Concrete instance of the *ocre owns decorative lines* role (§Accent ramp) — the verde separator was the prior deviation. Non-text hairline, so no WCAG contrast requirement.
+
+**Tried and reverted** (recorded so a future pass doesn't re-litigate)
+
+- **Bullet separator (`•`).** Swapped the hairline for a middot/bullet (the conventional editorial byline separator). Reverted — preferred the original hairline, kept ocre.
+- **Date in ocre.** Added `text-accent` to the publish `<time>`. Reverted: with the ocre kicker + ocre separator already on the row, an ocre date pushed the meta zone past the ~10% ocre budget — "too much". Date stays `--eb-text-muted`. This was a **density** call, not a contrast one — an ocre date passes AA in both themes (`#856814` 4.57:1 light, `#C59922` 6.80:1 dark). The single-post "Updated" date was always left muted as a secondary signal.
+
+**Net effect**: two ocre touchpoints above the fold (category kicker + byline hairline), ocre share unchanged in spirit (~10%), Verde-and-Ocre role split intact.
+
+**Files touched**
+
+- `layouts/index.html` — featured-post hero: added category kicker, reordered to category→title→meta→summary, title `mt-2`; hero + recent-post `.post-meta` separators `border-primary` → `border-accent`
+- `layouts/partials/post.html` — grid-card `.post-meta` separator `border-primary` → `border-accent`
+- `layouts/_default/single.html` — both `.post-meta` separators `border-primary` → `border-accent`
+- `assets/scss/templates/_main.scss` — removed `.featured-post .card-title { margin-left: -10% }` overhang (mobile 30px kept); added rationale comment
+- `DESIGN.md` — §2 Nugget Ocre: byline separator as the canonical decorative line; §5 Categories: hero kicker placement + flush-left note
+- `docs/THEME.md` — this entry
+
 ### 2026-05-29 — Pagination hover made perceptible (verde underline)
 
 `/impeccable polish` flagged that the pagination hover was effectively invisible. The hover only shifted text colour from `--bs-primary` to `--bs-primary-darker`, which fails in BOTH themes:

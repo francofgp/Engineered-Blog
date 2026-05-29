@@ -29,7 +29,7 @@
         <div class="mb-3 post-meta">
             <span>By {{ .Site.Params.Author }}</span>
             {{ if not .Params.HideDate }}
-            <span class="border-bottom border-primary px-2 mx-1"></span>
+            <span class="border-bottom border-accent px-2 mx-1"></span>
             {{/* <time datetime> uses ISO 8601 in the attribute (crawler-readable) while keeping
                  the human format in the visible text. */}}
             <time datetime="{{ .PublishDate.Format `2006-01-02T15:04:05Z07:00` }}">{{ .PublishDate.Format "02 January 2006" }}</time>

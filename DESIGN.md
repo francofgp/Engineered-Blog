@@ -157,7 +157,7 @@ The brand carries action: links, headings, buttons, focus rings.
 
 ### Secondary — Nugget Ocre family
 
-The accent carries metadata: categories, dates, decorative lines. Dual-role with verde, not subordinate — verde owns the action surface, ocre owns the metadata surface; neither is a sub-tier of the other.
+The accent carries metadata: categories, dates, decorative lines. Dual-role with verde, not subordinate — verde owns the action surface, ocre owns the metadata surface; neither is a sub-tier of the other. The canonical *decorative line* is the byline separator in `.post-meta` — a short ocre `border-accent` hairline (it was verde `border-primary` until the 2026-05-29 "Ocre above the fold" pass; the verde version was the deviation).
 
 - **Nugget Bronze** (`#856814`): `a.text-accent` text role in light mode — categories, dates. 4.57:1 over cream (AA Normal pass with margin). Always rendered with the editorial label treatment (see Section 3).
 - **Nugget Bronze Deep** (`#5C440D`): hover state for accent links in light. 7.97:1 — AAA on cream.
@@ -288,6 +288,7 @@ Components are uniformly square (`border-radius: 0`), uniformly Raleway, and uni
 ### Categories — the signature
 
 - **Style:** `a.text-accent` rendered with the Editorial Label treatment — Raleway 600, 0.875rem, `text-transform: uppercase`, `letter-spacing: 0.08em`. Color is `--bs-accent` (bronze `#856814` light / vibrant `#C59922` dark). Hover transitions to `--bs-accent-darker` (`#5C440D` light / `#A8801C` dark) — AAA on respective bg.
+- **Placement:** leads the card on listings, the post header on `single.html`, **and the featured-post hero on the home**. The home hero reorders to category → title → meta → summary so the kicker sits **above the fold**; the hero title is flush-left with it (the theme's `-10%` break-out overhang was removed). See `docs/THEME.md` History → 2026-05-29 "Ocre above the fold".
 - **Why this is the signature component:** it's the one place where typography and color work together to produce the "magazine label" feel that defines the system's mood. It's also the workaround that makes the asymmetric accent ramp pass WCAG without losing brand warmth in light mode (see Section 2, *The Asymmetric-Ramp Rule*).
 
 ### Code Blocks

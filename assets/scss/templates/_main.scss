@@ -15,11 +15,13 @@
 /* /card */
 
 .featured-post {
+  /* Hero title is flush-left with the kicker, byline and summary. The theme's
+     original `margin-left: -10%` break-out was removed: once the ocre category
+     kicker sits directly above the title, the overhang read as a misalignment
+     rather than a flourish, and flush-left matches the grid cards + single-post
+     header. Mobile keeps the smaller 30px size. */
   .card-title {
-    margin-left: -10%;
-
     @include tablet {
-      margin-left: 0;
       font-size: 30px;
     }
   }
