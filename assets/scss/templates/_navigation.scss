@@ -61,9 +61,26 @@
   height: 0.32em;
   background: var(--bs-accent);
   vertical-align: 0.08em;
+  /* --wm-pulse is driven by the "Living wordmark" JS (assets/js/script.js): the
+     squares scale up a touch as the pointer nears the name, echoing the ink that
+     pools in the glyphs. Defaults to 1 (no JS / reduced motion / touch) → scale(1)
+     → pixel-identical to the static mark. transform only (post-layout, composited),
+     so it never nudges the centred masthead. */
+  transform: scale(var(--wm-pulse, 1));
 }
 .navbar-brand.text-body-emphasis::before { margin-right: 0.3em; }
 .navbar-brand.text-body-emphasis::after { margin-left: 0.3em; }
+
+/* Living wordmark — per-glyph spans emitted by partials/wordmark.html so the
+   masthead name can react to the pointer along Archivo's weight axis (700 → 800).
+   The split is visual-only (aria-hidden; the <a> carries an aria-label). At rest
+   every glyph inherits .navbar-brand's 700, so with JS off / reduced motion / a
+   coarse pointer this reads exactly like the old plain-text wordmark.
+   Glyphs stay inline (NOT inline-block) on purpose: inline preserves Archivo's
+   kerning, and font-weight is the only thing animated (no transforms here), so the
+   logotype shaping is untouched. nowrap keeps the name on one line as widths breathe. */
+.wordmark { white-space: nowrap; }
+.wordmark__space { white-space: pre; }
 
 /* Theme toggle sits in a .dropdown, OUTSIDE .navbar-nav, so the rule above can't
    reach it. Re-state the same contract and neutralise the .btn-link defaults

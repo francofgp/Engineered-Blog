@@ -454,6 +454,28 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-30 — Living wordmark (variable-weight pointer reaction)
+
+`/overdrive` on the header wordmark (the author name). The tension: overdrive wants "wow", but the brand is matte / flat / all-square / motion-quiet — so the wow here is **typographic craft, not spectacle**. Of three proposed directions, picked the one that uses the system's OWN material: Archivo is a variable font (`font-weight: 100 900`, `_fonts.scss`), so the name now thickens toward the cursor along the REAL weight axis — rest **700 → peak 800**, "ink pooling under the hand" — and the two ocre flank squares scale a touch with proximity. No new colour, no gradient, no glass, nothing scroll-driven, nothing auto-playing.
+
+**Why this is on-brand, not a category cliché.** It's a *response to interaction* (state-change motion — the only kind the system already uses), not ambient animation. It reuses the documented type axis instead of adding a new visual. The rest state is pixel-identical to the old static masthead (700). `prefers-reduced-motion`, touch / coarse pointers, and no-JS all fall back to that static 700 — pure progressive enhancement.
+
+⚠️ **Two-way guard for future audits**: do **not** strip this thinking it's "motion for its own sake" (it's interaction-driven and reduced-motion-gated — compliant with the restraint principle), and do **not** escalate it into a colour shift, a scroll-driven / auto-playing animation, or push the peak past 800 (800 is the reserved display weight; going further, or adding ambient motion, WOULD cross into the spectacle the brand rejects). Rest must stay 700.
+
+**Implementation**: the name is split into per-glyph `.wordmark__char` spans by a new `layouts/partials/wordmark.html` — visual-only (the span tree is `aria-hidden` and the `<a>` carries an `aria-label`, so screen readers still announce the name once, not letter by letter). Weight is driven by a single self-parking `requestAnimationFrame` loop in `assets/js/script.js` (gaussian falloff from the pointer + exponential-ease lerp; glyph centres measured on enter / resize / fonts-ready, never per frame, to avoid read-after-write reflow). Squares scale via a `--wm-pulse` custom property on the anchor (`_navigation.scss`), defaulting to `scale(1)` so the no-JS render is identical. Both guards are re-evaluated at runtime via `matchMedia` `'change'`.
+
+**Same-session `audit-then-fix` pass**: applied 🟡 documentation (this entry + `DESIGN.md` / `PRODUCT.md`), 🟡 a misleading "no layout property animated" code comment (weight *does* reflow the tiny wordmark box — comment corrected), and 🔵 three micro-opts (guard the `--wm-pulse` write, re-evaluate the media queries at runtime, rAF-throttle the resize remeasure). **Deferred by choice**: widening the 700→800 range and per-glyph width-locking — the centred masthead's width breathes slightly on hover by design; kept because it reads as intentional, not janky.
+
+**Files touched**
+
+- `layouts/partials/wordmark.html` — NEW; per-glyph span split with the a11y wrapper
+- `layouts/partials/header.html` — both brand anchors call the partial + carry `aria-label`
+- `assets/scss/templates/_navigation.scss` — `.wordmark` / `.wordmark__space` rules; squares scale via `--wm-pulse`
+- `assets/js/script.js` — "Living wordmark" rAF engine (guarded, self-parking, runtime-reactive)
+- `DESIGN.md` — §5 Navigation: wordmark-motion note
+- `PRODUCT.md` — reduced-motion line updated (an explicit, gated animation now exists)
+- `docs/THEME.md` — this entry
+
 ### 2026-05-29 — Self-host fonts (variable woff2) + post-typeset audit fixes
 
 An `audit-then-fix` pass over the "Typeset: Archivo" change surfaced one 🔴 regression plus perf/CLS findings. Fixes:

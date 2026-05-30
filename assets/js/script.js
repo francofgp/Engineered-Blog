@@ -254,3 +254,166 @@
       initCookieBanner();
     }
   })();
+
+  /* ============================================================
+   * Living wordmark — variable-weight pointer reaction (overdrive)
+   *
+   * Markup:  layouts/partials/wordmark.html  (.wordmark__char per glyph)
+   * Styles:  assets/scss/templates/_navigation.scss
+   *
+   * The masthead name thickens toward the cursor along Archivo's REAL weight
+   * axis (rest 700 -> peak 800), "ink pooling under the hand", and the two ocre
+   * flank squares scale a touch with proximity (via the --wm-pulse custom prop).
+   * Typographic motion only, no colour change. The ONE reflow is the wordmark's
+   * own width as glyphs gain weight (a tiny text box, held to one line by
+   * white-space: nowrap); the squares' scale is composited. Matte + all-square
+   * identity untouched (see DESIGN.md / PRODUCT.md, docs/THEME.md 2026-05-30).
+   *
+   * Progressive enhancement — the static 700 masthead is the baseline; this only
+   * enhances it. Guards (any true → plain static 700 text, no motion):
+   *   - prefers-reduced-motion: reduce
+   *   - not (hover: hover) and (pointer: fine)   [touch / coarse pointers]
+   *   - no .wordmark__char nodes present
+   * The first two are RE-EVALUATED at runtime (matchMedia 'change'): flip OS
+   * reduced-motion or attach/detach a fine pointer mid-session and the effect
+   * settles back to 700 or re-arms, no reload.
+   *
+   * Perf: one shared rAF loop that SELF-PARKS once the pointer leaves the header
+   * and every glyph has settled back to 700 (no idle CPU while reading). Glyph
+   * centres are measured on enter / resize (rAF-throttled) / fonts-ready only —
+   * never per frame — so the loop never does a read-after-write forced reflow.
+   * ============================================================ */
+  (function () {
+    'use strict';
+
+    var reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var hoverMQ  = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+    var REST   = 700;   // resting weight — matches the static .navbar-brand masthead
+    var PEAK   = 800;   // weight directly under the cursor (top of the axis we use)
+    var SPREAD = 64;    // px — gaussian radius of the "ink" influence around the cursor
+    var EASE   = 0.2;   // per-frame lerp toward target (exponential ease-out, no bounce)
+    var SQ_MAX = 0.35;  // extra scale on the flank squares at full proximity (1 -> 1.35)
+
+    var groups = [];          // one entry per .wordmark copy (mobile + desktop anchors)
+    var pointerX = -1e9, pointerY = -1e9;
+    var rafId = 0;
+    var resizeRaf = 0;
+    var header = null;
+
+    // Checked live (not cached at load) so matchMedia 'change' takes effect at runtime.
+    function enabled() { return !reduceMQ.matches && hoverMQ.matches; }
+
+    function build() {
+      var wms = document.querySelectorAll('.wordmark');
+      Array.prototype.forEach.call(wms, function (wm) {
+        var chars = Array.prototype.slice.call(wm.querySelectorAll('.wordmark__char'));
+        if (!chars.length) return;
+        groups.push({
+          host:    wm.closest('.navbar-brand'),
+          chars:   chars,
+          cur:     chars.map(function () { return REST; }),  // live float weight
+          shown:   chars.map(function () { return REST; }),  // last value written to DOM
+          centers: null,
+          pulse:   1,
+          pulseShown: '1.000'                                // last --wm-pulse value written
+        });
+        chars.forEach(function (c) { c.style.fontVariationSettings = "'wght' " + REST; });
+      });
+    }
+
+    function measure() {
+      for (var gi = 0; gi < groups.length; gi++) {
+        var g = groups[gi];
+        g.centers = g.chars.map(function (c) {
+          var r = c.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        });
+      }
+    }
+
+    function frame() {
+      var active = enabled();   // false → every target collapses to REST (settle + park)
+      var settled = true;
+      var spread2 = 2 * SPREAD * SPREAD;
+      for (var gi = 0; gi < groups.length; gi++) {
+        var g = groups[gi];
+        if (!g.centers) continue;
+        var maxF = 0;
+        for (var i = 0; i < g.chars.length; i++) {
+          var c = g.centers[i];
+          var dx = pointerX - c.x, dy = pointerY - c.y;
+          var f = Math.exp(-(dx * dx + dy * dy) / spread2);   // 0..1 gaussian falloff
+          if (f > maxF) maxF = f;
+          var target = active ? (REST + (PEAK - REST) * f) : REST;
+          var next = g.cur[i] + (target - g.cur[i]) * EASE;
+          g.cur[i] = next;
+          if (Math.abs(target - next) > 0.4) settled = false;
+          var rounded = Math.round(next);
+          if (rounded !== g.shown[i]) {
+            g.shown[i] = rounded;
+            g.chars[i].style.fontVariationSettings = "'wght' " + rounded;
+          }
+        }
+        var pulseTarget = active ? (1 + SQ_MAX * maxF) : 1;
+        var np = g.pulse + (pulseTarget - g.pulse) * EASE;
+        if (Math.abs(pulseTarget - np) > 0.002) settled = false;
+        g.pulse = np;
+        var pstr = np.toFixed(3);                            // write --wm-pulse only on change
+        if (pstr !== g.pulseShown) {
+          g.pulseShown = pstr;
+          if (g.host) g.host.style.setProperty('--wm-pulse', pstr);
+        }
+      }
+      rafId = settled ? 0 : requestAnimationFrame(frame);  // park when nothing left to move
+    }
+
+    function wake() {
+      if (!rafId) rafId = requestAnimationFrame(frame);
+    }
+
+    function settleToRest() {
+      pointerX = -1e9; pointerY = -1e9;   // push the cursor "away" → glyphs ease back to 700
+      wake();
+    }
+
+    function onMove(e) {
+      if (!enabled()) return;             // inert on touch / reduced-motion
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      wake();
+    }
+
+    function onResize() {
+      if (resizeRaf) return;              // coalesce resize bursts to one measure per frame
+      resizeRaf = requestAnimationFrame(function () { resizeRaf = 0; measure(); });
+    }
+
+    function init() {
+      build();
+      if (!groups.length) return;
+      header = document.querySelector('header.navigation');
+      var zone = header || document;
+      measure();
+      zone.addEventListener('pointerenter', measure, { passive: true });
+      zone.addEventListener('pointermove', onMove, { passive: true });
+      zone.addEventListener('pointerleave', settleToRest, { passive: true });
+      window.addEventListener('resize', onResize, { passive: true });
+      // Archivo is font-display:swap; remeasure once the real metrics land so the
+      // glyph centres match what the reader actually sees.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(measure).catch(function () {});
+      }
+      // Runtime re-evaluation of the guards: toggling OS reduced-motion or swapping
+      // to a coarse pointer mid-session settles the effect to 700 (frame() forces
+      // REST while enabled() is false) or re-arms it — no reload needed.
+      reduceMQ.addEventListener('change', settleToRest);
+      hoverMQ.addEventListener('change', settleToRest);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();

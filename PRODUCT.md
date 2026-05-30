@@ -76,7 +76,7 @@ Target: **WCAG AA Normal across the entire site, AAA on body copy.** Status quo,
 
 Additional considerations:
 
-- **Reduced motion**: motion is already restrained (`/animate` work hasn't been applied; current animations are state-change-only). No scroll-driven choreography, no parallax, no animated gradients. `prefers-reduced-motion` is implicitly respected because there's almost nothing to reduce.
+- **Reduced motion**: motion stays restrained and state-change-only. No scroll-driven choreography, no parallax, no animated gradients. The one deliberate flourish is the header's *living wordmark* (the name thickens toward the cursor along Archivo's weight axis) — and it is **explicitly** gated off under `prefers-reduced-motion` (and on touch/coarse pointers), re-evaluated at runtime, falling back to the static mark. So reduced motion is now explicitly honoured, not merely "nothing to reduce".
 - **Zoom**: `maximum-scale=1` was removed from the viewport meta (WCAG 1.4.4 fix); readers can zoom freely.
 - **Keyboard navigation**: focus rings use `--bs-primary` (the text-role token), so they're visible in both themes.
 - **AI / LLM readers**: the site treats AI assistants as first-class readers (JSON-LD `BlogPosting`, `Person`, `BreadcrumbList`; `llms.txt`; `og:image` with intrinsic dimensions). Accessibility for non-human consumers is part of the spec — see `docs/AI-SEO.md`.

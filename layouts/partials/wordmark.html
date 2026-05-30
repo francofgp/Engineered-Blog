@@ -1,0 +1,21 @@
+{{- /* Living wordmark — splits the site name into per-glyph spans so the header
+       masthead can react to the pointer along Archivo's real weight axis
+       (700 -> 800), "ink pooling under the hand". Driven by assets/js/script.js
+       ("Living wordmark" IIFE); styled in assets/scss/templates/_navigation.scss.
+
+       Visual only / accessibility: the span tree is aria-hidden and the calling
+       <a> carries an aria-label, so screen readers announce the name once, not
+       letter by letter. Spaces become their own .wordmark__space spans
+       (white-space: pre) so the word gap survives and the JS skips them.
+
+       Progressive enhancement: with JS off, reduced motion, or a touch/coarse
+       pointer, the spans simply inherit the static 700 weight from .navbar-brand
+       and read identically to plain text. Caller: layouts/partials/header.html. */ -}}
+{{- $name := . -}}
+<span class="wordmark" aria-hidden="true">
+{{- range $r := (split $name "") -}}
+{{- if eq $r " " -}}<span class="wordmark__space"> </span>
+{{- else -}}<span class="wordmark__char">{{ $r }}</span>
+{{- end -}}
+{{- end -}}
+</span>
