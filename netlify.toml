@@ -4,7 +4,7 @@ command = "hugo --minify --gc"
 
 [build.environment]
 HUGO_VERSION = "0.162.0"
-HUGO_BASEURL = "https://giulianopertile.com/"
+HUGO_BASEURL = "https://www.giulianopertile.com/"
 # Node.js usado por el build agent de Netlify (build plugins internos).
 # Hugo no consume Node (no hay package.json), pero Netlify deprecó Node 16/18 y
 # el default movió a 22 en feb 2025. Pineamos a 24 (Active LTS desde oct 2025,
