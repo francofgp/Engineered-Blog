@@ -3,7 +3,7 @@
   <div class="container">
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom ps-0">
-      {{ if .Site.Params.nameSite }} 
+      {{ if .Site.Params.nameSite }}
       <a class="navbar-brand mobile-view text-body-emphasis" href="{{ .Site.BaseURL }}" aria-label="{{ .Site.Params.nameSite }}">{{ partial "wordmark.html" .Site.Params.nameSite }}</a>
       {{else}}
       <a class="navbar-brand mobile-view" href="{{ .Site.BaseURL }}"><img class="img-fluid"
@@ -69,7 +69,7 @@
           </ul>
         </div>
 
-        {{ if .Site.Params.nameSite }} 
+        {{ if .Site.Params.nameSite }}
         <a class="navbar-brand mx-auto desktop-view text-body-emphasis" href="{{ .Site.BaseURL }}" aria-label="{{ .Site.Params.nameSite }}">{{ partial "wordmark.html" .Site.Params.nameSite }}</a>
         {{else}}
         <a class="navbar-brand mx-auto desktop-view" href="{{ .Site.BaseURL }}"><img class="img-fluid"

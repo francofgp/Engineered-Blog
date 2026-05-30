@@ -454,6 +454,26 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-30 — Header + footer polish (footer hairline, 44px tap targets)
+
+`/impeccable polish` on the chrome — small, conservative refinements only (a prior `bolder` drench was explicitly rejected and reverted; this pass keeps the original look, no colour/identity change). Three approved items:
+
+- **Footer separation.** The `<footer>` had only an ad-hoc `mt-2` margin and no top divider, so the four-column footer floated as if it were more body content (the only `border-top` was on the colophon, at the very bottom). Now a single **container-width** hairline in the shared divider token (`--eb-border` — the same one used by widgets, tables and the colophon) sits at the top of the footer's inner `.container` (matching the colophon divider's width, not a full-bleed line on the `<footer>`), and `mt-2` is replaced by `section-sm` (80px) top padding. Markup: `<footer class=" mt-2">` → `<footer class="site-footer">`; rule in `templates/_main.scss`. No background, no colour shift — just the divider + rhythm the rest of the site already uses.
+- **Header tap targets.** `#theme-toggle` and `.search-btn` were one-offs at ~30–32px, smaller than the nav links (20px padding ≈ 58px) and under the 44px best-practice. Both now get `display: inline-flex` + `min-width/height: 44px` (icon centred), consistent with each other and the nav rhythm. The visible icons are unchanged and the 44px min-height stays under the navbar row height, so there's no layout growth.
+- **Code hygiene.** Trimmed stray trailing whitespace on the `{{ if … }}` guards (`header.html` nameSite guards; `footer.html` nameSite / mobile-or / location guards and the colophon's closing `</div>`) and fixed `{{ .Site.Params.nameSite}}` → `{{ … }}` spacing. Output-invisible; cleaner source.
+
+Deferred (offered, not selected): absolutely centring the desktop wordmark, which the asymmetric social-left / nav-right clusters currently nudge off true centre.
+
+**Same-session `audit-then-fix` pass**: 🟡 the footer hairline was full-bleed on `<footer>` while the colophon divider below it is container-width — moved the border + 80px padding to the inner `.container` so the two lines match (no full-bleed line). 🔵 the hamburger (`.navbar-toggler`) was brought to the same 44×44 target as the toggle/search; 🔵 the `{{ if or  … }}` double space was collapsed; 🔵 `DESIGN.md` gained a §Footer subsection. **Deferred**: per-template variation in the air above the hairline (home `.section pb-0` sits flush vs list/single `.section-sm` ≈ 80px) — both read fine.
+
+**Files touched**
+
+- `assets/scss/templates/_main.scss` — `.site-footer > .container` hairline (container-width) + 80px top padding
+- `assets/scss/templates/_navigation.scss` — `#theme-toggle` / `.search-btn` / `.navbar-toggler` 44px hit targets
+- `layouts/partials/header.html`, `layouts/partials/footer.html` — `site-footer` class + whitespace/spacing hygiene
+- `DESIGN.md` — §Footer subsection (separation + structure)
+- `docs/THEME.md` — this entry
+
 ### 2026-05-30 — Living wordmark (variable-weight pointer reaction)
 
 `/overdrive` on the header wordmark (the author name). The tension: overdrive wants "wow", but the brand is matte / flat / all-square / motion-quiet — so the wow here is **typographic craft, not spectacle**. Of three proposed directions, picked the one that uses the system's OWN material: Archivo is a variable font (`font-weight: 100 900`, `_fonts.scss`), so the name now thickens toward the cursor along the REAL weight axis — rest **700 → peak 800**, "ink pooling under the hand" — and the two ocre flank squares scale a touch with proximity. No new colour, no gradient, no glass, nothing scroll-driven, nothing auto-playing.

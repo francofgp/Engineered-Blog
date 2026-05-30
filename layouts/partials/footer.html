@@ -20,17 +20,17 @@
 </section>
 {{ end }}
 
-<footer class=" mt-2">
+<footer class="site-footer">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-12 text-center mb-5">
-        {{ if .Site.Params.nameSite }} 
-        <a class="text-body-emphasis h3" href="{{ .Site.BaseURL }}">{{ .Site.Params.nameSite}}</a>
+        {{ if .Site.Params.nameSite }}
+        <a class="text-body-emphasis h3" href="{{ .Site.BaseURL }}">{{ .Site.Params.nameSite }}</a>
         {{else}}
         <a href="{{ .Site.BaseURL }}"><img src="{{ .Site.Params.logo | absURL }}" alt="{{ .Site.Title }}"></a>
         {{ end }}
       </div>
-      {{ if or  .Site.Params.mobile .Site.Params.location .Site.Params.email }}         
+      {{ if or .Site.Params.mobile .Site.Params.location .Site.Params.email }}
       <div class="col-lg-3 col-sm-6 mb-5">
         <h6 class="mb-4">Contact Me</h6>
         <ul class="list-unstyled">
@@ -38,7 +38,7 @@
           <li class="mb-3"><a class="text-body-emphasis" href="tel:{{ .Site.Params.mobile }}"><i
                 class="ti-mobile me-3 text-primary"></i>{{ .Site.Params.mobile }}</a></li>
           {{ end }}
-          {{ if .Site.Params.location }}           
+          {{ if .Site.Params.location }}
           <li class="mb-3"><i class="ti-location-pin me-3 text-primary"></i>{{ .Site.Params.location }}</li>
           {{ end }}
           {{ if .Site.Params.email }}
@@ -102,7 +102,7 @@
           {{- end }}
           &middot; All rights reserved
         </p>
-      </div> 
+      </div>
     </div>
   </div>
 </footer>

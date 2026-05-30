@@ -6,6 +6,17 @@
   }
 }
 
+/* Hamburger (mobile only) — same 44x44 hit target as #theme-toggle / .search-btn so the
+   primary mobile control matches its neighbours' touch comfort. inline-flex centres the
+   ti-menu glyph; only rendered below the lg breakpoint. */
+.navbar-toggler {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+}
+
 /* Header links (social cluster + main nav) share one resting/hover/focus contract.
    Resting = --eb-text-strong (same emphasis as the wordmark). Hover EASES to the
    verde $primary-color instead of snapping (the rest of the site — .social-links,
@@ -87,6 +98,14 @@
    (link colour + hover underline) so the sun/moon icon tracks the nav links
    rather than Bootstrap's link styling. */
 #theme-toggle {
+  // Comfortable 44x44 hit target (matches the nav links' generous padding; this control
+  // sits OUTSIDE .navbar-nav so it didn't inherit the 20px nav-link padding). inline-flex
+  // centres the icon; min-height stays under the navbar row height, so no layout growth.
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   color: $text-color-dark;
   text-decoration: none;
   transition: color 0.15s ease;
@@ -123,6 +142,13 @@
    optically centres the icon; the navbar's flex align-items:center does the
    vertical centring. */
 .search-btn {
+  // Comfortable 44x44 hit target, consistent with #theme-toggle and the nav links.
+  // inline-flex centres the lupa; the existing padding is kept but min-size dominates.
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   border: 0;
   background: transparent;
   color: $text-color-dark;

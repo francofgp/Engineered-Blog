@@ -498,6 +498,19 @@
 
 }
 
+/* Footer block — set off from the page body by a single hairline in the shared divider
+   token (--eb-border, the same one used by widgets, tables and the colophon below). The
+   border + `section-sm` (80px) top padding live on the inner .container (NOT the <footer>
+   element) so the hairline is CONTAINER-WIDTH — matching the colophon divider just below
+   (a col-12 .border-top, also container-width). Bordering the <footer> would draw a
+   full-bleed line edge-to-edge, inconsistent with the contained colophon. Replaces the
+   old ad-hoc `mt-2` margin (which had no divider). Hairline + rhythm only — no background,
+   no colour shift. */
+.site-footer > .container {
+  border-top: 1px solid var(--eb-border);
+  padding-top: 80px;
+}
+
 footer a {
   color: var(--eb-text-strong);
   &:hover {
