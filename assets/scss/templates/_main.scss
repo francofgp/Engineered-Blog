@@ -87,7 +87,16 @@
             height: 100%;
             opacity: 1;
             transform: none;
-            transition: 0s;
+            /* Was `transition: 0s` (instant snap, a Slick-era port). The mobile
+               dots below already animate; matching that here lets the active line
+               grow/shift in sync with the 450ms expo-out slide (same easing +
+               duration as the JS `speed`), so the indicator reads as connected to
+               the motion rather than teleporting. width/left animate an
+               absolutely-positioned 1px->6px bar — no reflow of surrounding
+               content. */
+            transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                        left 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+                        background-color 0.25s ease;
 
             &.is-active {
               background: $primary-color;
@@ -148,6 +157,20 @@
             }
           }
         }
+      }
+    }
+
+    /* Reduced-motion guard. Splide v4 already zeroes the SLIDE speed under
+       prefers-reduced-motion; mirror it on the indicator so it snaps instead of
+       gliding — covers BOTH the desktop vertical line (animates width/left) and
+       the mobile dots (animate transform). The active STATE still applies (6px
+       line / scaled dot): only the easing is dropped, so "which slide is active"
+       stays legible (the "keep functional motion, drop spatial easing" rule).
+       Selector depth (…li .splide__pagination__page) matches the two viewport
+       rules above and sits last, so it wins the cascade tie without !important. */
+    @media (prefers-reduced-motion: reduce) {
+      .splide__pagination li .splide__pagination__page {
+        transition: none;
       }
     }
   }

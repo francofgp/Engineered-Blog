@@ -187,7 +187,15 @@
         wheel       : true,
         wheelSleep  : 250,
         releaseWheel: true,
-        speed       : 600,
+        speed       : 450,
+        /* Easing + 450ms tune the "feel". Before: no easing set -> Splide's
+           default quart-out at 600ms, which read as sluggish on the 450px
+           vertical hero. Expo-out (cubic-bezier(0.16, 1, 0.3, 1)) covers most
+           of the travel early then decelerates -> snappy start, smooth landing.
+           450ms = the .splide__pagination__page transition in _main.scss, so the
+           active indicator glides in lockstep with the slide. Splide v4's
+           built-in reducedMotion still zeroes speed under prefers-reduced-motion. */
+        easing      : 'cubic-bezier(0.16, 1, 0.3, 1)',
         breakpoints : {
           600: { direction: 'ltr', height: 'auto' }
         }
