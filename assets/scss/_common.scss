@@ -32,6 +32,23 @@ select {
   }
 }
 
+/* Keyboard focus rings — site-wide fallback for content links + buttons. The reset
+   above (and the matching one in _buttons.scss) strips the browser default `outline`
+   on :focus. That's fine for mouse clicks, but it left KEYBOARD users with no visible
+   focus on content links (hero title, categories, post titles, footer links) and on
+   every .btn ("Read more", Ko-fi support, etc.) — a WCAG 2.4.7 gap, and it quietly
+   contradicted PRODUCT.md's "focus rings are visible" claim. The chrome already re-adds
+   a ring locally (nav links, theme toggle, search, pagination — _navigation.scss +
+   _main.scss); this is the catch-all so EVERY focusable surface honours it. Same 2px
+   --bs-primary token + 2px offset as those component rules, for one consistent ring.
+   :focus-visible (not :focus) shows it on Tab, not on mouse click. Lives in _common
+   (imported after _buttons) so it wins the cascade over both `outline: 0` resets. */
+a:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
 a:hover {
   color: $primary-color;
 }

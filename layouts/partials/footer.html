@@ -32,7 +32,7 @@
       </div>
       {{ if or .Site.Params.mobile .Site.Params.location .Site.Params.email }}
       <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
+        <h2 class="footer-col-title mb-4">Contact Me</h2>
         <ul class="list-unstyled">
           {{ if .Site.Params.mobile }}
           <li class="mb-3"><a class="text-body-emphasis" href="tel:{{ .Site.Params.mobile }}"><i
@@ -49,7 +49,7 @@
       </div>
       {{ end }}
       <div class="text-capitalize col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
+        <h2 class="footer-col-title mb-4">Social Contacts</h2>
         {{/* Footer social is intentionally a plain text list, NOT the .social-links icon
              pills used in the sidebar: the ghost-pill icon boxes read as washed-out squares
              on the cream footer. Author preference is text here. NOTE: this diverges from
@@ -62,7 +62,7 @@
         </ul>
       </div>
       <div class="text-capitalize col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
+        <h2 class="footer-col-title mb-4">Categories</h2>
         {{- if isset .Site.Taxonomies "categories" }}
         {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
         <ul class="list-unstyled">
@@ -76,7 +76,7 @@
         {{- end }}
       </div>
       <div class="text-capitalize col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
+        <h2 class="footer-col-title mb-4">Quick Links</h2>
         <ul class="list-unstyled">
           {{ range .Site.Menus.footer }}
           <li class="mb-3"><a class="text-body-emphasis" href="{{ .URL | absURL }}">{{ .Name }}</a></li>
@@ -127,6 +127,10 @@
 {{ if site.Params.cookies.enable }}
 <div id="js-cookie-box" class="cookie-box cookie-box-hide" role="region" aria-label="Cookie notice">
   This site uses Google Analytics and AdSense cookies.
-  <button type="button" id="js-cookie-button" class="btn btn-sm btn-primary ms-2" aria-label="Accept cookies">I Accept</button>
+  {{/* No aria-label: the visible "I Accept" IS the accessible name. A prior aria-label="Accept
+       cookies" did NOT contain the visible text, tripping axe label-content-name-mismatch
+       (WCAG 2.5.3 Label in Name). The button sits inside role="region" aria-label="Cookie
+       notice", so "I Accept" reads clearly in context. */}}
+  <button type="button" id="js-cookie-button" class="btn btn-sm btn-primary ms-2">I Accept</button>
 </div>
 {{ end }}

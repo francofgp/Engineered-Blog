@@ -3,18 +3,18 @@
     <!-- about -->
     <div class="widget">
       {{ with .Site.GetPage "/about" }}
-      <h4 class="widget-title">{{ .Title | markdownify }}</h4>
+      <h2 class="widget-title">{{ .Title | markdownify }}</h2>
       {{ if .Params.Image }}
       <img src="{{ .Params.Image | absURL }}" alt=""
         class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
       {{ end }}
       <p>{{ .Summary }}</p>
-      <a href="{{ .Permalink }}" class="btn btn-outline-primary">Know More</a>
+      <a href="{{ .Permalink }}" class="btn btn-outline-primary" aria-label="Know More about {{ .Site.Params.Author }}">Know More</a>
       {{ end }}
     </div>
     <!-- category -->
     <div class="widget">
-      <h4 class="widget-title">Category</h4>
+      <h2 class="widget-title">Category</h2>
       {{- if isset .Site.Taxonomies "categories" }}
       {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
       <ul class="list-unstyled">
@@ -29,7 +29,7 @@
     </div>
     <!-- Tags -->
     <div class="widget">
-      <h4 class="widget-title">Tag</h4>
+      <h2 class="widget-title">Tag</h2>
       {{- if isset .Site.Taxonomies "tags" }}
       {{- if not (eq (len .Site.Taxonomies.tags) 0) }}
       <ul class="list-inline">
@@ -43,7 +43,7 @@
     </div>
     <!-- social -->
     <div class="widget">
-      <h4 class="widget-title">Social</h4>
+      <h2 class="widget-title">Social</h2>
       <ul class="list-inline social-links">
         {{ range .Site.Params.social }}
         <li class="list-inline-item"><a href="{{ .link | safeURL }}" aria-label="{{ .title | title }}"><i class="{{ .icon }}" aria-hidden="true"></i></a></li>

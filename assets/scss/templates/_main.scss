@@ -26,20 +26,13 @@
     }
   }
 
-  /* Cover image column — add breathing room on the left so the cover
-     doesn't sit flush against the slider's edge. The row uses g-0 (no
-     gutters) by design to keep the image+text grid tight on desktop;
-     this padding restores just the outer breathing room without
-     re-introducing the inter-column gap. Reset on mobile/tablet, where
-     the col-md-5 stacks full-width on top and centering matters more
-     than left padding. */
-  .col-md-5 {
-    padding-left: 30px;
-
-    @include tablet {
-      padding-left: 0;
-    }
-  }
+  /* Cover image column sits flush at the container's left edge — no inset.
+     (It carried `padding-left: 30px` when the hero lived inset in col-10, to keep
+     the cover off the slider's edge. The hero is now full-width (col-12), so the
+     image must align with the container's left edge to share the page's left spine
+     with the recent strip + the main feed. See THEME.md History 2026-05-30 "Home
+     layout".) The row stays g-0 so the image+text grid keeps its tight rhythm; the
+     text column's `offset-md-1` provides the gap between the cover and the copy. */
 
   /* Splide pagination — two distinct designs by viewport:
      - Desktop (≥600px): vertical thin-line scroll on the right edge of the
@@ -174,6 +167,19 @@
 }
 
 /* recent post */
+
+/* Two-zone home rhythm: the featured hero (section-sm, now pb-0) and this recent
+   strip read as ONE "highlights" cluster, tied together by a tight 50px gap (the
+   `xl` spacing token). The big editorial break (150px — the `.section` top on the
+   paginated feed below) is reserved for the jump to the main feed, so the page reads
+   as [hero + recent] … major break … [feed]: a hierarchy built from space alone.
+   Replaces the previous BORROWED spacing — the bare <section> had no padding and
+   inherited 80px from the hero's section-sm bottom. See THEME.md History 2026-05-30
+   "Home layout". */
+.recent-posts {
+  padding-top: 50px;
+}
+
 .recent-post-thumb {
   height: 100px;
   width: 100px;
@@ -217,6 +223,9 @@
 
   &-title {
     display: inline-block;
+    // <h2> element (was <h4>) so the shared sidebar keeps a skip-free heading order under the
+    // page <h1>; pinned to 1.25rem so the rendered size is unchanged (an h2's clamp is far larger).
+    font-size: 1.25rem;
     border-top: .5px solid $primary-color;
     border-bottom: .5px solid $primary-color;
     padding: 10px 0;
@@ -519,6 +528,14 @@ footer a {
   }
 }
 
+/* Footer column headings (Contact Me / Social Contacts / Categories / Quick Links) are <h2>
+   elements (were <h6>) so the document heading order is skip-free on every page that renders
+   this footer (page <h1> → <h2> sidebar → <h2> footer). Pinned to 1rem so the rendered size
+   matches the previous <h6>. */
+.footer-col-title {
+  font-size: 1rem;
+}
+
 /* Footer colophon — the bottom copyright bar. Muted body text so the page's last line
    reads as quiet metadata; the year carries the ocre accent (.text-accent, the system's
    metadata role — see DESIGN.md §Verde-and-Ocre) so the one auto-updating value gets the
@@ -527,6 +544,14 @@ footer a {
 .footer-colophon {
   color: var(--eb-text-muted);
   font-size: 0.9rem;
+
+  // The copyright holder link sits INSIDE the colophon sentence, so give it a resting
+  // underline: a link inside a text block must be distinguishable without relying on colour
+  // alone (WCAG 1.4.1 / axe link-in-text-block). The footer COLUMN links are standalone list
+  // items (not in a text block), so they intentionally keep the hover-only underline above.
+  a {
+    text-decoration: underline;
+  }
 
   .footer-colophon__year {
     font-weight: 600;

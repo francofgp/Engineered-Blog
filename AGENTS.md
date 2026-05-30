@@ -133,7 +133,7 @@ These are the **current production values**. If you change them, update this tab
 | Body images (markdown) | `layouts/_default/_markup/render-image.html` | partial default | q92 | q92 | partial default |
 | Hero post (cover, above-the-fold) | `layouts/_default/single.html` | 480, 800, 1200, 1600 | q92 | q92 | `(min-width: 1400px) 880px, (min-width: 1200px) 760px, (min-width: 992px) 640px, (min-width: 768px) 720px, 100vw` |
 | Card thumb (list views, paginated grid) | `layouts/partials/post.html` | 400, 800 | q92 | q92 | `(min-width: 1400px) 440px, (min-width: 1200px) 380px, (min-width: 992px) 320px, (min-width: 768px) 360px, 100vw` |
-| Featured slider (home) | `layouts/index.html` | 600, 1000 | q92 | q92 | `(min-width: 1400px) 500px, (min-width: 1200px) 430px, (min-width: 992px) 370px, (min-width: 768px) 310px, 100vw` |
+| Featured slider (home) | `layouts/index.html` | 600, 800, 1100 | q92 | q92 | `(min-width: 1400px) 540px, (min-width: 1200px) 465px, (min-width: 992px) 390px, (min-width: 768px) 300px, 100vw` |
 | Recent-post circle thumb (home, 100×100) | `layouts/index.html` | 200 (single, no srcset) | q90 | n/a | n/a (background-image) |
 
 **Why q92 (raised from q82, the Hugo/community default)** — q82 produced visible blur on hero images at xl/xxl. q92 is near-lossless to the eye and roughly 3× heavier than q82, but the resulting files are still ~30× smaller than the raw source. Trade-off was explicitly chosen: **prefer quality over bandwidth**. To tune, edit the `q92` literals in `layouts/partials/picture.html` (in the `range` block) and the `q90` literal in the recent-thumb block in `layouts/index.html`.

@@ -454,6 +454,68 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-30 — Home a11y quick wins (Lighthouse Accessibility 91 → 97)
+
+A Lighthouse pass (mobile, production build served locally) on the home flagged a set of binary a11y fails. Fixed the genuine, low-risk ones; the score went **91 → 97**.
+
+- **🟡 `landmark-one-main`.** The page had no `<main>`. Wrapped the `{{ block "main" }}` in `layouts/_default/baseof.html` with `<main>`. Every page gets the landmark (it's in the base template).
+- **🟡 `heading-order` + no `<h1>` on the home.** The hero was an `<a class="h1">` (presentational), so the home had NO `<h1>` and the first real heading was a footer `<h6>` (after the sidebar `<h4>`) — a skip. Gave the home a single **visually-hidden `<h1>`** at the top of `<main>` (the visible hero is a Splide *loop* slider that clones slides, so a real `<h1>` there would emit duplicates — refined in Fase 2 below). To keep the chain skip-free across the *shared* sidebar/footer, promoted **sidebar widget titles `<h4>` → `<h2>`** and **footer column headings `<h6>` → `<h2>`**, each pinned to its previous size (`.widget-title { font-size: 1.25rem }`, new `.footer-col-title { font-size: 1rem }`) so the visuals are unchanged. Chain is now `h1 → h2 (sidebar) → h2 (footer)` — skip-free, and robust on every page (going up a level is always allowed; the only descents are by 1).
+- **🟡 `label-content-name-mismatch`.** The cookie button showed "I Accept" but carried `aria-label="Accept cookies"` (the visible text wasn't contained in the name — WCAG 2.5.3). Removed the aria-label so the visible "I Accept" IS the accessible name (it sits inside `role="region" aria-label="Cookie notice"`).
+- **🟡 `link-text` (the real instance).** The sidebar "Know More" link was generic. Added `aria-label="Know More about {{ .Site.Params.Author }}"` (descriptive, and still *contains* the visible text so it doesn't trip Label-in-Name).
+- **🟡 `link-in-text-block`.** The copyright-holder link in the colophon sentence relied on colour alone. Gave `.footer-colophon a` a resting underline (WCAG 1.4.1). The footer COLUMN links are standalone list items (not in a text block), so they keep the hover-only underline.
+
+**Not fixed — not real / out of scope:**
+
+- **`color-contrast`** flags the `aria-hidden` `.wordmark` span against `<body>`. The wordmark text is `--eb-text-strong` over the body bg — **~15:1 in light, ~14:1 in dark**, comfortably AAA. It's a false positive: the navbar is `bg-transparent`, so axe can't resolve the effective background and flags it. Fixing it would mean giving the header an opaque background (a design change for an audit artifact) — declined.
+- **`link-text`** reported 10 empty-name links, but the report carried no node snippets/selectors AND a regex over the rendered HTML found **0** empty `/blog//tags/` anchors (every post link has text or an aria-label). Flaky/JS-transient capture, not a DOM issue.
+- **`third-party-cookies` / `inspector-issues` / Performance 53** are GA + AdSense (load in `<head>` before consent) — a product decision, not a markup fix. CLS is 0.01; the layout work didn't regress perf (mobile hero is full-width regardless of the desktop col change).
+
+⚠️ **Guard**: don't revert the sidebar `<h2>` / footer `<h2>` headings back to `<h4>`/`<h6>` — the pinned font-sizes keep them visually identical, and the levels are what keep `heading-order` skip-free under the page `<h1>`. Don't "fix" the wordmark `color-contrast` by backgrounding the header.
+
+**Fase 2 (audit follow-up).** The hero was first made a real `<h1>`, but the featured slider runs Splide in **loop** mode, which clones slides → multiple/duplicate `<h1>`s in the DOM. Switched to a single **visually-hidden `<h1>`** at the top of `<main>` with the visible hero back to a presentational `<a class="h1">` — one clean h1, heading-order still skip-free, no visual change. Also bumped the featured image `widths` `[600, 1100]` → `[600, 800, 1100]` so mid-size / retina-mobile picks a closer variant (`AGENTS.md` table updated). Deferred from the audit: focus-ring double-line on outline buttons (standard/acceptable) and the pre-existing about/contact heading gaps (separate pass, other pages).
+
+**Files touched**
+
+- `layouts/_default/baseof.html` — `<main>` landmark
+- `layouts/index.html` — visually-hidden `<h1>` at top of `<main>`; hero stays a presentational `<a class="h1">`; featured `widths` `[600, 800, 1100]`
+- `layouts/partials/sidebar.html` — widget titles `<h4>` → `<h2>`; "Know More" `aria-label`
+- `layouts/partials/footer.html` — column headings `<h6>` → `<h2>` (`.footer-col-title`); cookie button mismatched `aria-label` removed
+- `assets/scss/templates/_main.scss` — `.widget-title` + `.footer-col-title` font-size pins; `.footer-colophon a` resting underline
+- `docs/THEME.md` — this entry
+
+### 2026-05-30 — Home polish: hero display weight, site-wide focus rings, summary ellipsis
+
+`/impeccable polish` follow-up to the "Home layout" pass below. Three fixes, all alignment-to-system (no new tokens or patterns invented):
+
+- **🔴 The hero was rendering at the wrong weight.** The home hero title (`layouts/index.html`) carried Bootstrap's `fw-bold` (`font-weight: 700 !important`), which silently overrode the `.h1` Display-800 weight from `_typography.scss`. So the single biggest type on the site — the one element the Display-800 rule reserves for weight 800 (`DESIGN.md` §3) — was shipping at 700. Removed `fw-bold`; the documented 800 now applies. Colour was already right (`.text-body-emphasis` → `--bs-emphasis-color` → `--eb-text-strong` = verde profundo) so it stays. Added a guard comment so `fw-bold` doesn't creep back.
+- **🟡 Keyboard focus was invisible on content links + buttons (WCAG 2.4.7).** `_common.scss` (`a:focus { outline: 0 }`) and `_buttons.scss` (`.btn:focus { outline: 0 }`) strip the default outline, but only the chrome re-added a `:focus-visible` ring (nav links, theme toggle, search, pagination). Content links (hero title, categories, post titles, footer links) and every `.btn` ("Read more", Ko-fi support) had NO visible keyboard focus — which contradicted both PRODUCT.md's "focus rings are visible" claim *and* `DESIGN.md` §Buttons ("Focus ring is the standard browser outline scoped via `--bs-primary`"). Added one site-wide `a:focus-visible, .btn:focus-visible` fallback in `_common.scss` (imported after `_buttons`, so it wins the cascade) reusing the exact documented 2px `--bs-primary` + 2px-offset ring already used by the chrome. Now every focusable surface honours it; mouse clicks still show no ring (`:focus-visible`, not `:focus`). This realises the spec the docs already described — it's alignment, not a new decision.
+- **🔵 Hero summary ellipsis.** `<p class="card-text">{{.Summary}}...</p>` appended a literal three-dot `...` unconditionally — wrong when a post defines a complete manual `summary`, and a different glyph from the feed's typographic `…` (Hugo's `truncate` in `partials/post.html`). Now `{{ .Summary }}{{ if .Truncated }}…{{ end }}`: a real `…`, and only when Hugo actually truncated.
+
+⚠️ **Guard for future audits**: don't re-add `fw-bold` (or any `fw-*`) to the hero title — `.h1` already carries the reserved 800 weight. Don't remove the `:focus-visible` block thinking the chrome covers focus; it only covers nav / pagination, not content links or `.btn`.
+
+**Files touched**
+
+- `layouts/index.html` — hero title dropped `fw-bold` (+ guard comment); hero summary uses conditional `…` via `.Truncated`
+- `assets/scss/_common.scss` — site-wide `a:focus-visible, .btn:focus-visible` ring (WCAG 2.4.7; realises `DESIGN.md` §Buttons)
+- `docs/THEME.md` — this entry
+
+### 2026-05-30 — Home layout: full-width hero spine + two-zone rhythm
+
+`/impeccable layout` on the home page (`layouts/index.html`). Two structural fixes, no colour / component / chrome change:
+
+- **Consistent left spine.** The featured hero was inset (`col-10`, centered) while the recent strip and the paginated feed span the full container — so the page had no shared left edge: the hero floated ~8% inward, then the content jumped to the container edge. `col-10` was an inherited Liva default with no documented rationale (unlike, say, the wordmark squares). Widened the hero to `col-12` (dropped `justify-content-center`) so all three home zones share one left spine. The hero's `.col-md-5` cover also dropped its `padding-left: 30px` — that inset only made sense inside col-10; at full width the cover has to sit flush at the container edge to align with the rest. Bigger, more substantial hero as a bonus.
+- **Two-zone rhythm (hierarchy from space).** The recent-posts `<section>` was bare — no padding, *borrowing* 80px from the hero's `section-sm` bottom above and 150px from the feed's `.section` top below. Now the hero is `section-sm pb-0` and `.recent-posts` carries an explicit `padding-top: 50px` (the `xl` token), so featured + recent read as ONE "highlights" cluster (tight 50px gap) and the 150px major break is reserved for the jump to the main feed: `[hero + recent] … break … [feed]`.
+- **Image pipeline kept in sync.** Widening the hero changed the `col-md-5` slot size, so the featured `sizes` was re-derived (`540 / 465 / 390 / 300px` across xxl / xl / lg / md) and `widths` bumped `[600, 1000]` → `[600, 1100]` to cover xxl retina (~540px @2x). `AGENTS.md`'s image-pipeline table row was updated to match — the standing rule is to re-derive `sizes` whenever an image's column grid changes.
+
+⚠️ **Guard for future audits**: the full-width hero is deliberate (the left spine). Don't "restore" the `col-10` inset or the `.col-md-5` `padding-left: 30px` thinking they went missing — both were removed on purpose. The 50px hero→recent gap vs the 150px break is the intended two-zone hierarchy; keep them distinct (don't flatten both to one value).
+
+**Files touched**
+
+- `layouts/index.html` — featured `section-sm` → `section-sm pb-0`; slider `col-10` → `col-12`; dropped `justify-content-center`; recent `<section>` → `<section class="recent-posts">`; featured image `sizes` / `widths` + comment
+- `assets/scss/templates/_main.scss` — removed the `.featured-post .col-md-5` left inset; added `.recent-posts { padding-top: 50px }` (two-zone rhythm)
+- `AGENTS.md` — image-pipeline table: Featured slider row (`widths` + `sizes`)
+- `docs/THEME.md` — this entry
+
 ### 2026-05-30 — Header + footer polish (footer hairline, 44px tap targets)
 
 `/impeccable polish` on the chrome — small, conservative refinements only (a prior `bolder` drench was explicitly rejected and reverted; this pass keeps the original look, no colour/identity change). Three approved items:
@@ -495,6 +557,8 @@ Deferred (offered, not selected): absolutely centring the desktop wordmark, whic
 - `DESIGN.md` — §5 Navigation: wordmark-motion note
 - `PRODUCT.md` — reduced-motion line updated (an explicit, gated animation now exists)
 - `docs/THEME.md` — this entry
+
+**Follow-up fix (2026-05-30) — square symmetry.** The span split introduced a subtle regression: the partial's trailing newline became a whitespace text node inside the brand `<a>`, between the `.wordmark` span and the `::after` ocre square (the `<a>`'s last child), pushing the RIGHT square ~1 space farther than the LEFT (the `::before` has no preceding text node). The old plain-text name had no trailing node, so it only surfaced once the partial shipped — caught by comparing local vs prod. Fixed by trimming the partial's trailing newline so its output ends exactly at `</span>` (dash-trimmed comment at the foot of `layouts/partials/wordmark.html`). Symmetric ▪ mark restored, living-wordmark behaviour untouched.
 
 ### 2026-05-29 — Self-host fonts (variable woff2) + post-typeset audit fixes
 

@@ -19,3 +19,11 @@
 {{- end -}}
 {{- end -}}
 </span>
+{{- /* No trailing newline. Hugo otherwise includes the file's final newline in the
+       partial output, landing a whitespace text node inside the calling <a> — between
+       this .wordmark span and the ::after ocre square (the <a>'s last child). That
+       space plus the square's margin-left pushed the RIGHT square ~1 space farther than
+       the LEFT, breaking the symmetric ▪ Giuliano Pertile ▪ mark (visible only once the
+       living-wordmark span split replaced the old plain-text name). The dash-trims on
+       this comment remove the newline after </span> and the file's final newline, so
+       the partial ends exactly at </span>. See THEME.md History "Living wordmark". */ -}}
