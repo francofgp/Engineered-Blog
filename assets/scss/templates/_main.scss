@@ -528,6 +528,33 @@
     border-radius: 0;
   }
 
+  /* Center figures (images + Mermaid diagrams) in the body column. The theme shipped
+     them flush-left: raster images render as <picture><img class="img-fluid"> where the
+     <img> is inline (img-fluid only caps width), so it hugged the left of its wrapping
+     <p>. Two separate cases, one visual result — see the .mermaid rule below for the other.
+     Images that already fill the column read identically; this only re-centers narrow
+     images (logos, small shots). img-fluid still caps width at 100%, so nothing overflows. */
+  img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* <picture> wraps the raster <img> and is inline by default; promote it to block so the
+     block <img>'s auto margins resolve against the full column width (deterministic across
+     browsers — an inline element wrapping a block child is otherwise ill-defined). */
+  picture {
+    display: block;
+  }
+
+  /* Mermaid diagrams render client-side into <div class="mermaid"> whose <svg> sat left.
+     The <svg> is inline-level (shrink-to-fit), so text-align:center on the container
+     centers it — the standard mermaid-centering fix. Forcing the svg to display:block +
+     auto margins would also work but couples to mermaid's output for no gain here. */
+  .mermaid {
+    text-align: center;
+  }
+
 }
 
 /* Footer block — set off from the page body by a single hairline in the shared divider

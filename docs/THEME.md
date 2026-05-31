@@ -454,6 +454,17 @@ Then add a 4th button to the `data-bs-theme-value` group in the navbar toggle (`
 
 ## History
 
+### 2026-05-30 — Center body images + Mermaid diagrams
+
+Content figures shipped flush-left and read as misaligned, worst on small ones — logos and the BFS Mermaid tree in *The Definitive Guide to Graph Problems* hugged the left margin with dead space to their right. Centered both, by default, inside `.content` (`assets/scss/templates/_main.scss`) — the universal blog convention (Medium, Ghost, dev.to), zero authoring friction (`![]()` just works).
+
+Two DOM cases, one visual result:
+
+- **Raster images** render as `<picture><img class="img-fluid">`; the `<img>` is inline (`img-fluid` only caps width), so it hugged the left of its wrapping `<p>`. Fix: `img { display:block; margin-left/right:auto }` + `picture { display:block }` so the block img's auto margins resolve against the full column width (an inline `<picture>` wrapping a block child is otherwise ill-defined across browsers). SVG logos (`![](go-logo.svg)`) render as `<img>` too, so they center via the same rule.
+- **Mermaid diagrams** render client-side into `<div class="mermaid">` whose `<svg>` is inline-level. Fix: `.mermaid { text-align:center }` — the standard mermaid-centering approach. (An earlier draft also forced `svg { display:block; margin:auto }` as a fallback; dropped in audit as redundant + coupling to mermaid's output.)
+
+Scope: only `.content` (post + `about`/`contact` bodies). The hero cover (in `<header>`), featured slider, card thumbs, recent-post thumbs and author avatar all sit OUTSIDE `.content` — untouched. Images that already fill the column read identically; this only re-centers narrow images and diagrams. `img-fluid` still caps width at 100%, so nothing overflows. Verified no inline images or linked images (`[![…]]`) exist in `content/`, so forcing `display:block` breaks no existing flow.
+
 ### 2026-05-30 — Home a11y quick wins (Lighthouse Accessibility 91 → 97)
 
 A Lighthouse pass (mobile, production build served locally) on the home flagged a set of binary a11y fails. Fixed the genuine, low-risk ones; the score went **91 → 97**.
